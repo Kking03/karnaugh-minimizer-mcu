@@ -23,5 +23,6 @@ int isFull(struct stack* pt);
 void push(struct stack* pt, int x);
 int peek(struct stack* pt);
 int pop(struct stack* pt);
+bool include(struct stack* pt, int x);
 
 #endif // STACK_H

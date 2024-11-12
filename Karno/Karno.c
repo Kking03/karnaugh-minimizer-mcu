@@ -10,7 +10,7 @@ void TestStack();
 
 unsigned char* ones;      // глобальное объявление массива единиц
 unsigned char  size_ones; // глобальное объявление размера массива единиц
-unsigned char A, B;       // размерность карты Карно
+unsigned char  A, B;      // размерность карты Карно
 
 // Структура для хранения двух массивов для карты Карно
 typedef struct {
@@ -81,6 +81,61 @@ KarnaughMaps create_karnaugh_map(int N) {
     return maps;
 }
 
+// создание двумерного массива с кодом Грея
+char** generate_gray_code(int N, int* rows, int* cols) {
+    // Определяем размер матрицы для данного N
+    if (N == 2) {
+        *rows = 2;
+        *cols = 2;
+    }
+    else if (N == 3) {
+        *rows = 2;
+        *cols = 4;
+    }
+    else if (N == 4) {
+        *rows = 4;
+        *cols = 4;
+    }
+    else {
+        printf("Неподдерживаемое значение N\n");
+        return NULL;
+    }
+
+    // Генерация последовательности кода Грея для N бит
+    int total_codes = 1 << N; // 2^N возможных значений
+    char** gray_code = (char**)malloc(total_codes * sizeof(char*));
+
+    for (int i = 0; i < total_codes; i++) {
+        gray_code[i] = (char*)malloc((N + 1) * sizeof(char)); // +1 для завершающего '\0'
+        int gray_value = i ^ (i >> 1); // генерируем значение в коде Грея
+        for (int j = N - 1; j >= 0; j--) {
+            gray_code[i][N - 1 - j] = (gray_value & (1 << j)) ? '1' : '0';
+        }
+        gray_code[i][N] = '\0'; // завершаем строку
+    }
+
+    // Формируем матрицу из последовательностей
+    char** gray_matrix = (char**)malloc(*rows * sizeof(char*));
+    for (int i = 0; i < *rows; i++) {
+        gray_matrix[i] = (char*)malloc((*cols) * (N + 1) * sizeof(char)); // выделяем память для каждой строки
+        for (int j = 0; j < *cols; j++) {
+            // Копируем символы вручную, вместо strcpy
+            for (int k = 0; k < N + 1; k++) {
+                gray_matrix[i][j * (N + 1) + k] = gray_code[i * (*cols) + j][k];
+            }
+        }
+    }
+
+    // Освобождение памяти для временного массива gray_code
+    for (int i = 0; i < total_codes; i++) {
+        free(gray_code[i]);
+    }
+    free(gray_code);
+
+    return gray_matrix;
+}
+
+
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void printOnes(unsigned char* ones, unsigned char size) // вывод ones
 {
@@ -111,6 +166,20 @@ void print_karnaugh_map_bool(unsigned char** map, unsigned char A, int B) {
     }
 }
 
+// Функция для печати матрицы кода Грея
+void print_gray_matrix(char** gray_matrix, int rows, int cols, int N) {
+    printf("Матрица кода Грея для %d переменных:\n", N);
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            for (int k = 0; k < N; k++) {
+                printf("%c", gray_matrix[i][j * (N + 1) + k]);
+            }
+            printf(" ");
+        }
+        printf("\n");
+    }
+}
+
 
 unsigned char code[4] = { 0b00, 0b01, 0b11, 0b10 }; // последовательность значений для карты Карно
 
@@ -119,8 +188,8 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "1 3 5 7 9 15";                     
-    unsigned char N = 4;                      // количество переменных
+    const char* str = "1";                     
+    unsigned char N = 2;                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
 
@@ -142,10 +211,22 @@ int main()
         print_karnaugh_map_bool(maps.kmap, A, B);
     }
 
+    int rows, cols;
 
+    // Генерация и вывод матрицы кода Грея
+    char** gray_matrix = generate_gray_code(N, &rows, &cols);
+    if (gray_matrix) {
+        print_gray_matrix(gray_matrix, rows, cols, N);
+
+        // Освобождение памяти
+        for (int i = 0; i < rows; i++) {
+            free(gray_matrix[i]);
+        }
+        free(gray_matrix);
+    }
 
     // Освобождение памяти
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < A; i++) {
         free(maps.kmap[i]);
         free(maps.kmap_bool[i]);
     }
@@ -154,7 +235,7 @@ int main()
     
     if (ones) free(ones) ; // Освобождаем память
 
-    // TestStack();
+    TestStack();
 
     return 0;
 }
@@ -168,6 +249,9 @@ void TestStack()
     push(pt, 1);
     push(pt, 2);
     push(pt, 3);
+
+    bool res = include(pt, 4);
+    printf("%s\n", res ? "найден" : "не найден");
 
     printf("The top element is %d\n", peek(pt));
     printf("The stack size is %d\n", size(pt));

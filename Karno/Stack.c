@@ -73,3 +73,12 @@ int pop(struct stack* pt)
     // уменьшаем размер stack на 1 и (необязательно) возвращаем извлеченный элемент
     return pt->items[pt->top--];
 }
+
+// Вспомогательная функция для проверки наличия элемента в stack
+bool include(struct stack* pt, int x)
+{
+    for (int i = 0; i < size(pt); i++)
+        if (pt->items[i] == x)
+            return true;
+    return false;
+}
