@@ -9,7 +9,7 @@ struct stack* newStack(int capacity)
 
     pt->maxsize = capacity;
     pt->top = -1;
-    pt->items = (int*)malloc(sizeof(int) * capacity);
+    pt->items = (IndexPair*)malloc(sizeof(IndexPair) * capacity);
 
     return pt;
 }
@@ -30,7 +30,7 @@ int isFull(struct stack* pt) {
 }
 
 // Вспомогательная функция для добавления элемента 'x' в stack
-void push(struct stack* pt, int x)
+void push(struct stack* pt, IndexPair pos)
 {
     // проверяем, не заполнен ли уже stack. Тогда вставка элемента
     // приведёт к переполнению stack
@@ -40,14 +40,14 @@ void push(struct stack* pt, int x)
         exit(EXIT_FAILURE);
     }
 
-    printf("Inserting %d\n", x);
+    printf("Inserting (%d, %d)\n", pos.row, pos.col);
 
     // добавляем элемент и увеличиваем индекс вершины
-    pt->items[++pt->top] = x;
+    pt->items[++pt->top] = pos;
 }
 
 // Вспомогательная функция для возврата верхнего элемента stack
-int peek(struct stack* pt)
+IndexPair  peek(struct stack* pt)
 {
     // проверка на пустой stack
     if (!isEmpty(pt)) {
@@ -59,7 +59,7 @@ int peek(struct stack* pt)
 }
 
 // Вспомогательная функция для извлечения верхнего элемента из stack
-int pop(struct stack* pt)
+IndexPair  pop(struct stack* pt)
 {
     // проверка на опустошение stack
     if (isEmpty(pt))
@@ -68,17 +68,21 @@ int pop(struct stack* pt)
         exit(EXIT_FAILURE);
     }
 
-    printf("Removing %d\n", peek(pt));
+    IndexPair topItem = peek(pt);
+    printf("Removing (%d, %d)\n", topItem.row, topItem.col);
 
-    // уменьшаем размер stack на 1 и (необязательно) возвращаем извлеченный элемент
-    return pt->items[pt->top--];
+    // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
+    pt->top--;
+    return topItem;
 }
 
 // Вспомогательная функция для проверки наличия элемента в stack
-bool include(struct stack* pt, int x)
+bool include(struct stack* pt, IndexPair pos)
 {
-    for (int i = 0; i < size(pt); i++)
-        if (pt->items[i] == x)
+    for (int i = 0; i <= pt->top; i++) {
+        if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {
             return true;
+        }
+    }
     return false;
 }

@@ -18,6 +18,13 @@ typedef struct {
     bool** kmap_bool;         // Массив false
 } KarnaughMaps;
 
+// Структура для узла списка
+typedef struct ListNode {
+    int stackSize;           // Размер стека на момент создания узла
+    IndexPair* stackItems;   // Копия элементов стека
+    struct ListNode* next;   // Указатель на следующий элемент списка
+} ListNode;
+
 // функция для создания массива единиц булевой функции
 unsigned char* parse_numbers(const char* input, unsigned char* size) {
     // Подсчитываем количество чисел в строке
@@ -135,6 +142,47 @@ char** generate_gray_code(int N, int* rows, int* cols) {
     return gray_matrix;
 }
 
+// Функция для создания нового элемента списка
+ListNode* createListNode(struct stack* pt) {
+    if (isEmpty(pt)) {
+        return NULL;  // Если стек пустой, ничего не создаём
+    }
+
+    // Создаем новый элемент списка
+    ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));
+    if (!newNode) {
+        printf("Ошибка выделения памяти\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Устанавливаем размер стека
+    newNode->stackSize = size(pt);
+
+    // Выделяем память под массив с элементами стека
+    newNode->stackItems = (IndexPair*)malloc(newNode->stackSize * sizeof(IndexPair));
+    if (!newNode->stackItems) {
+        printf("Ошибка выделения памяти\n");
+        free(newNode);
+        exit(EXIT_FAILURE);
+    }
+
+    // Копируем элементы из стека в массив stackItems
+    for (int i = 0; i < newNode->stackSize; i++) {
+        newNode->stackItems[i] = pt->items[i];
+    }
+
+    newNode->next = NULL;  // Изначально следующий элемент отсутствует
+    return newNode;
+}
+
+// Функция для добавления нового узла в начало списка
+void addNodeToList(ListNode** head, struct stack* pt) {
+    ListNode* newNode = createListNode(pt);
+    if (newNode) {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
 
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void printOnes(unsigned char* ones, unsigned char size) // вывод ones
@@ -180,6 +228,28 @@ void print_gray_matrix(char** gray_matrix, int rows, int cols, int N) {
     }
 }
 
+// Отладочная функция для вывода содержимого списка
+void printList(ListNode* head) {
+    ListNode* current = head;
+    int nodeIndex = 1;
+    while (current != NULL) {
+        printf("Элемент %d:\n", nodeIndex++);
+        printf("  Размер стека: %d\n", current->stackSize);
+        printf("  Элементы стека: ");
+        for (int i = 0; i < current->stackSize; i++) {
+            printf("(%d, %d) ", current->stackItems[i].row, current->stackItems[i].col);
+        }
+        printf("\n");
+        current = current->next;
+    }
+    if (nodeIndex == 1) {
+        printf("Список пуст\n");
+    }
+}
+
+// функция тестирования списка (можно удалить)
+void TestList();
+
 
 unsigned char code[4] = { 0b00, 0b01, 0b11, 0b10 }; // последовательность значений для карты Карно
 
@@ -188,8 +258,8 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "1";                     
-    unsigned char N = 2;                      // количество переменных
+    const char* str = "1 3 5 7 9";                     
+    unsigned char N = 4;                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
 
@@ -236,6 +306,7 @@ int main()
     if (ones) free(ones) ; // Освобождаем память
 
     TestStack();
+    TestList();
 
     return 0;
 }
@@ -243,30 +314,75 @@ int main()
 // функция тестирования стека (можно удалить)
 void TestStack()
 {
-    // создаем stack емкостью 5
     struct stack* pt = newStack(5);
 
-    push(pt, 1);
-    push(pt, 2);
-    push(pt, 3);
+    // Пример добавления координат в стек
+    push(pt, (IndexPair) { 1, 2 });
+    push(pt, (IndexPair) { 3, 4 });
+    push(pt, (IndexPair) { 5, 6 });
 
-    bool res = include(pt, 4);
+    // Проверка, содержит ли стек определенную позицию
+    bool res = include(pt, (IndexPair) { 3, 4 });
     printf("%s\n", res ? "найден" : "не найден");
 
-    printf("The top element is %d\n", peek(pt));
+    // Печать верхнего элемента
+    IndexPair top = peek(pt);
+    printf("The top element is (%d, %d)\n", top.row, top.col);
     printf("The stack size is %d\n", size(pt));
 
+    // Удаление элементов из стека
     pop(pt);
-    printf("The top element is %d\n", peek(pt));
+    top = peek(pt);
+    printf("The top element is (%d, %d)\n", top.row, top.col);
 
     pop(pt);
     pop(pt);
 
     if (isEmpty(pt)) {
-        printf("The stack is empty");
+        printf("The stack is empty\n");
     }
     else {
-        printf("The stack is not empty");
+        printf("The stack is not empty\n");
     }
 
+    // Освобождение памяти
+    free(pt->items);
+    free(pt);
+
+}
+
+void TestList()
+{
+    struct stack* pt = newStack(5);
+
+    // Добавляем элементы в стек
+    push(pt, (IndexPair) { 1, 2 });
+    push(pt, (IndexPair) { 3, 4 });
+    push(pt, (IndexPair) { 5, 6 });
+
+    // Указатель на начало списка
+    ListNode* head = NULL;
+
+    // Создаём элемент списка на основе текущего состояния стека
+    addNodeToList(&head, pt);
+    pop(pt);
+    addNodeToList(&head, pt);
+
+    // Вывод списка
+    printList(head);
+
+    // Освобождение памяти (пример)
+    ListNode* current = head;
+    while (current) {
+        ListNode* temp = current;
+        current = current->next;
+        free(temp->stackItems);
+        free(temp);
+    }
+
+    // Освобождение памяти стека
+    free(pt->items);
+    free(pt);
+
+    return 0;
 }
