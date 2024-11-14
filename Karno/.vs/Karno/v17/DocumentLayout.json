@@ -35,7 +35,7 @@
               "RelativeDocumentMoniker": "Karno.c",
               "ToolTip": "C:\\\u0424\u043B\u0435\u0448\u043A\u0430\\\u0418\u043D\u0441\u0442\u0438\u0442\u0443\u0442\\4 \u043A\u0443\u0440\u0441\\Karno\\Karno\\Karno.c",
               "RelativeToolTip": "Karno.c",
-              "ViewState": "AgIAALIBAAAAAAAAAAAAAMIBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEQBAAAAAAAAAADgv0sBAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-11-10T20:30:33.907Z",
               "IsPinned": true,
@@ -49,7 +49,7 @@
               "RelativeDocumentMoniker": "Stack.c",
               "ToolTip": "C:\\\u0424\u043B\u0435\u0448\u043A\u0430\\\u0418\u043D\u0441\u0442\u0438\u0442\u0443\u0442\\4 \u043A\u0443\u0440\u0441\\Karno\\Karno\\Stack.c",
               "RelativeToolTip": "Stack.c",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAAB0AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAADgvxMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-11-11T16:06:17.646Z",
               "IsPinned": true,
@@ -79,8 +79,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt\\stdio.h",
               "ViewState": "AgIAAHQCAAAAAAAAAAAnwIUCAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-13T18:56:42.578Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-13T18:56:42.578Z"
             }
           ]
         }

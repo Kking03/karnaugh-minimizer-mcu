@@ -9,13 +9,15 @@ unsigned char  A, B;      // размерность карты Карно
 char*** gray_matrix;      // матрица кодов Грея
 unsigned char N;          // количество переменных
 
-const char* code_gray[] = { "00", "01", "11", "10" }; // Предопределённый код Грея для 2 бит
+const char* code_gray[] = { "00", "01", "11", "10" }; // Код Грея для 2 бит (используем как базовый)
 
 // Структура для хранения двух массивов для карты Карно
 typedef struct {
     unsigned char** kmap;     // Карта Карно
     bool** kmap_bool;         // Массив false
 } KarnaughMaps;
+
+KarnaughMaps maps;
 
 // Структура для узла списка
 typedef struct ListNode {
@@ -122,18 +124,35 @@ char*** generate_gray_code_matrix(int N, int* rows, int* cols) {
         for (int j = 0; j < *cols; j++) {
             gray_matrix[i][j] = (char*)malloc((N + 1) * sizeof(char)); // N бит + '\0'
 
-            // Вручную копируем символы из code_gray[i] и code_gray[j]
-            gray_matrix[i][j][0] = code_gray[i][0];
-            gray_matrix[i][j][1] = code_gray[i][1];
-            gray_matrix[i][j][2] = code_gray[j][0];
-            gray_matrix[i][j][3] = code_gray[j][1];
-            gray_matrix[i][j][4] = '\0'; // Завершаем строку
+            // Объединяем код Грея для строки и столбца, создавая строку длиной N
+            if (N == 2) {
+                // Для 2 переменных используем строки и столбцы напрямую из code_gray
+                gray_matrix[i][j][0] = code_gray[i][0];
+                gray_matrix[i][j][1] = code_gray[j][1];
+                gray_matrix[i][j][2] = '\0';
+            }
+            else if (N == 3) {
+                // Для 3 переменных используем один бит для строки и два бита для столбца
+                gray_matrix[i][j][0] = (i == 0) ? '0' : '1'; // 1 бит для строки
+                gray_matrix[i][j][1] = code_gray[j][0];
+                gray_matrix[i][j][2] = code_gray[j][1];
+                gray_matrix[i][j][3] = '\0';
+            }
+            else if (N == 4) {
+                // Для 4 переменных используем два бита для строки и два бита для столбца
+                gray_matrix[i][j][0] = code_gray[i][0];
+                gray_matrix[i][j][1] = code_gray[i][1];
+                gray_matrix[i][j][2] = code_gray[j][0];
+                gray_matrix[i][j][3] = code_gray[j][1];
+                gray_matrix[i][j][4] = '\0';
+            }
         }
     }
 
     return gray_matrix;
 }
 
+struct stack* pt;
 
 // Функция для создания нового элемента списка
 ListNode* createListNode(struct stack* pt) {
@@ -209,6 +228,59 @@ int count_common_bits(struct stack* pt) {
     return common_bits_count;
 }
 
+bool minimize(unsigned char x, unsigned char y)
+{
+    // добавляем элементв в стек
+    push(pt, (IndexPair) { x, y });
+
+    int bits;           // число одинаковых бит
+    bool match = false; // флаг, что является импликантой
+
+    switch (size(pt))
+    {
+    case 2:
+        match = true;
+        break;
+    case 4:
+        bits = count_common_bits(pt);
+        if (bits == 2)
+            match = true;
+        break;
+    case 8:
+        bits = count_common_bits(pt);
+        if (bits == 1)
+            match = true;
+        else
+            return false;
+        break;
+    default:
+        break;
+    }
+
+    // Смещения для четырех направлений: вправо, вниз, влево, вверх
+    int dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
+    int dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+    // Проходим по каждому направлению
+    for (int k = 0; k < 4; k++) {
+        int nx = (x + dx[k] + A) % A;  // Новая координата по строке
+        int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+
+        if ((maps.kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
+            bool res = minimize(nx, ny);
+            if (res)  // найдена наибольшая импликанта
+                return true;
+        }
+           
+    }
+
+    if (match)
+        return true; // является импликантой
+
+    pop(pt);         // удаляем элемент
+    return false;    // соседи отсутствуют
+}
+
 
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void TestStack();                                                          // функция тестирования стека
@@ -225,7 +297,7 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "3";                     
+    const char* str = "0 1 2 3";                     
     N = 4;                                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
@@ -244,10 +316,10 @@ int main()
         print_gray_matrix(gray_matrix, rows, cols);
 
         // УДАЛИТЬ! ТЕСТИРОВАНИЕ ПОДСЧЁТА БИТ
-        TestBitCountFunc();
+        // TestBitCountFunc(); // ДЛЯ ФУНКЦИИ ПОИСКА БИТ СТРОКИ ДОЛЖНЫ СУЩЕСТВОВАТЬ
     }
 
-    KarnaughMaps maps = create_karnaugh_map(N);
+    maps = create_karnaugh_map(N);
 
     if (maps.kmap != NULL) {
         printf("Карта Карно (в виде бинарной матрицы):\n");
@@ -258,6 +330,20 @@ int main()
         printf("Карта Карно (в виде бинарной логической матрицы):\n");
         print_karnaugh_map_bool(maps.kmap, A, B);
     }
+
+    // ОСНОВНОЙ АЛГОРИТМ
+    int size = 1;                      // максимальный размер искомой импликанты
+    for (int i = 0; i < N-1; i++)
+        size *= 2;
+    pt = newStack(size);
+
+    for (int i = 0; i < A; i++) {
+        for (int j = 0; j < B; j++) {
+            if (maps.kmap[i][j] == 1)
+                printf("Вызвана функция минимизации: %d\n", minimize(i, j));
+        }
+    }
+
 
     // Освобождение памяти
     if (gray_matrix) {
@@ -279,8 +365,8 @@ int main()
     
     if (ones) free(ones) ; // Освобождаем память
 
-    TestStack();
-    TestList();
+    // TestStack();
+    // TestList();
 
     return 0;
 }

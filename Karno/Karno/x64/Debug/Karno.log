@@ -1,5 +1,5 @@
 ﻿  Karno.c
-C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(47,28): warning C4244: =: преобразование "long" в "unsigned char", возможна потеря данных
-C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(187,22): warning C4013: strlen: нет определения; предполагается "extern" с возвратом типа "int"
-C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(425,5): warning C4098: TestList: функция типа "void", возвращающая значение
+C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(49,28): warning C4244: =: преобразование "long" в "unsigned char", возможна потеря данных
+C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(206,22): warning C4013: strlen: нет определения; предполагается "extern" с возвратом типа "int"
+C:\Флешка\Институт\4 курс\Karno\Karno\Karno.c(511,5): warning C4098: TestList: функция типа "void", возвращающая значение
   Karno.vcxproj -> C:\Флешка\Институт\4 курс\Karno\Karno\x64\Debug\Karno.exe
