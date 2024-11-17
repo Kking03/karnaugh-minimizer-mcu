@@ -30,6 +30,7 @@ int isFull(struct stack* pt);
 void push(struct stack* pt, IndexPair pos);
 IndexPair peek(struct stack* pt);
 IndexPair pop(struct stack* pt);
+void clear(struct stack* pt);
 bool include(struct stack* pt, IndexPair pos);
 
 #endif // STACK_H

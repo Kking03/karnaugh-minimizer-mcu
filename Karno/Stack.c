@@ -76,6 +76,11 @@ IndexPair  pop(struct stack* pt)
     return topItem;
 }
 
+void clear(struct stack* pt)
+{
+    pt->top = -1;
+}
+
 // Вспомогательная функция для проверки наличия элемента в stack
 bool include(struct stack* pt, IndexPair pos)
 {

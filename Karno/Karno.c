@@ -88,7 +88,7 @@ KarnaughMaps create_karnaugh_map(int N) {
 
                 if (gray_value == target_index) {
                     map[row][col] = 1;
-                    found = true;
+                    // found = true;
                 }
             }
         }
@@ -228,14 +228,16 @@ int count_common_bits(struct stack* pt) {
     return common_bits_count;
 }
 
+// Функция для поиска импликант
 bool minimize(unsigned char x, unsigned char y)
 {
-    // добавляем элементв в стек
+    // добавление элемента в стек
     push(pt, (IndexPair) { x, y });
 
     int bits;           // число одинаковых бит
-    bool match = false; // флаг, что является импликантой
+    bool match = (size(pt) == 1) ? true : false; // флаг единицы в импликанте
 
+    // Размер рассматриваемой импликанты
     switch (size(pt))
     {
     case 2:
@@ -253,8 +255,6 @@ bool minimize(unsigned char x, unsigned char y)
         else
             return false;
         break;
-    default:
-        break;
     }
 
     // Смещения для четырех направлений: вправо, вниз, влево, вверх
@@ -269,7 +269,10 @@ bool minimize(unsigned char x, unsigned char y)
         if ((maps.kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
             bool res = minimize(nx, ny);
             if (res)  // найдена наибольшая импликанта
+            {
+                maps.kmap_bool[nx][ny] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
                 return true;
+            }
         }
            
     }
@@ -297,7 +300,7 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "0 1 2 3";                     
+    const char* str = "0 1 2 3 4 5 6 7 11 12";                     
     N = 4;                                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
@@ -326,11 +329,6 @@ int main()
         print_karnaugh_map(maps.kmap, A, B);
     }
 
-    if (maps.kmap_bool != NULL) {
-        printf("Карта Карно (в виде бинарной логической матрицы):\n");
-        print_karnaugh_map_bool(maps.kmap, A, B);
-    }
-
     // ОСНОВНОЙ АЛГОРИТМ
     int size = 1;                      // максимальный размер искомой импликанты
     for (int i = 0; i < N-1; i++)
@@ -339,11 +337,20 @@ int main()
 
     for (int i = 0; i < A; i++) {
         for (int j = 0; j < B; j++) {
-            if (maps.kmap[i][j] == 1)
-                printf("Вызвана функция минимизации: %d\n", minimize(i, j));
+            if ((maps.kmap[i][j] == 1) && (!maps.kmap_bool[i][j])) {
+                printf("Вызвана функция минимизации:\n");
+                if (minimize(i, j))
+                    clear(pt);                   // очитска стека
+                    maps.kmap_bool[i][j] = true; // единица принадлежит импликанте
+            }
         }
     }
 
+    // Печать карты Карно с помеченными единицами
+    if (maps.kmap_bool != NULL) {
+        printf("Карта Карно (в виде бинарной логической матрицы):\n");
+        print_karnaugh_map_bool(maps.kmap_bool, A, B);
+    }
 
     // Освобождение памяти
     if (gray_matrix) {
