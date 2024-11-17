@@ -9,7 +9,12 @@ unsigned char  A, B;      // размерность карты Карно
 char*** gray_matrix;      // матрица кодов Грея
 unsigned char N;          // количество переменных
 
-const char* code_gray[] = { "00", "01", "11", "10" }; // Код Грея для 2 бит (используем как базовый)
+const char* code_gray[] = { "00", "01", "11", "10" };  // Код Грея для 2 бит (используем как базовый)
+// ВРЕМЕННО
+const char* code_gray2[2][2] = {
+    {"00", "01"},
+    {"10", "11"}
+}; // Код Грея для 2 переменных
 
 // Структура для хранения двух массивов для карты Карно
 typedef struct {
@@ -126,10 +131,9 @@ char*** generate_gray_code_matrix(int N, int* rows, int* cols) {
 
             // Объединяем код Грея для строки и столбца, создавая строку длиной N
             if (N == 2) {
+                // ИСПРАВИТЬ ГЕНЕРАЦИЮ
                 // Для 2 переменных используем строки и столбцы напрямую из code_gray
-                gray_matrix[i][j][0] = code_gray[i][0];
-                gray_matrix[i][j][1] = code_gray[j][1];
-                gray_matrix[i][j][2] = '\0';
+                gray_matrix[i][j] = code_gray2[i][j];
             }
             else if (N == 3) {
                 // Для 3 переменных используем один бит для строки и два бита для столбца
@@ -228,57 +232,66 @@ int count_common_bits(struct stack* pt) {
     return common_bits_count;
 }
 
+// СДЕЛАТЬ ПОИСК БОЛЕЕ ЭФФЕКТИВНЫМ (ЛИНЕЙНО)
 // Функция для поиска импликант
 bool minimize(unsigned char x, unsigned char y)
 {
     // добавление элемента в стек
     push(pt, (IndexPair) { x, y });
 
-    int bits;           // число одинаковых бит
-    bool match = (size(pt) == 1) ? true : false; // флаг единицы в импликанте
-
-    // Размер рассматриваемой импликанты
-    switch (size(pt))
-    {
-    case 2:
-        match = true;
-        break;
-    case 4:
-        bits = count_common_bits(pt);
-        if (bits == 2)
+    int bits;                                     // число одинаковых бит
+    bool match = (size(pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+    bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
+    
+    bits = (size(pt) == 1) ? 4 : count_common_bits(pt);  // проверяем количество совпадаемых бит
+    if (bits == 0)
+        break_flag = true;         // единица не подходит
+    else
+        switch (size(pt))
+        {
+        case 2:
             match = true;
-        break;
-    case 8:
-        bits = count_common_bits(pt);
-        if (bits == 1)
-            match = true;
-        else
-            return false;
-        break;
-    }
-
-    // Смещения для четырех направлений: вправо, вниз, влево, вверх
-    int dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
-    int dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
-
-    // Проходим по каждому направлению
-    for (int k = 0; k < 4; k++) {
-        int nx = (x + dx[k] + A) % A;  // Новая координата по строке
-        int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
-
-        if ((maps.kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
-            bool res = minimize(nx, ny);
-            if (res)  // найдена наибольшая импликанта
-            {
-                maps.kmap_bool[nx][ny] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
-                return true;
-            }
+            break;
+        case 4:
+            bits = count_common_bits(pt); // УДАЛИТЬ!
+            if (bits == 2)
+                match = true;
+            break;
+        case 8:
+            bits = count_common_bits(pt);
+            if (bits == 1) 
+                match = true;
+            break_flag = true;    // тупик, дальше 8 единиц не ищем
+            break;
         }
-           
+
+    if (!break_flag) // можно продолжить поиск
+    {
+        // Смещения для четырех направлений: вправо, вниз, влево, вверх
+        int dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
+        int dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+        // Проходим по каждому направлению
+        for (int k = 0; k < 4; k++) {
+            int nx = (x + dx[k] + A) % A;  // Новая координата по строке
+            int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+
+            if ((maps.kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
+                bool res = minimize(nx, ny);
+                if (res)  // найдена наибольшая импликанта
+                {
+                    match = true;    // единица подходит для импликанты                  
+                    break;           // завершаем поиск
+                }
+            }
+
+        }
     }
 
-    if (match)
-        return true; // является импликантой
+    if (match) {
+        maps.kmap_bool[x][y] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
+        return true; // является импликантой   
+    }
 
     pop(pt);         // удаляем элемент
     return false;    // соседи отсутствуют
@@ -300,7 +313,7 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "0 1 2 3 4 5 6 7 11 12";                     
+    const char* str = "0 2 4 6";                     
     N = 4;                                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
@@ -353,7 +366,7 @@ int main()
     }
 
     // Освобождение памяти
-    if (gray_matrix) {
+    if (gray_matrix && N != 2) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 free(gray_matrix[i][j]);
