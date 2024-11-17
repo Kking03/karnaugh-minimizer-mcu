@@ -261,7 +261,10 @@ bool minimize(unsigned char x, unsigned char y)
             break;
         case 4:
             if (bits == 1 && N == 3)        // для трёх переменных
+            {
                 match = true;
+                break_flag = true;
+            }
             if (bits == 2 && N == 4)        // для четырёх переменных
                 match = true;
             break;
@@ -320,8 +323,8 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "0 1 2 3";                     
-    N = 2;                                      // количество переменных
+    const char* str = "0 2 4 6 8 10 12 14";                     
+    N = 4;                                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
 
