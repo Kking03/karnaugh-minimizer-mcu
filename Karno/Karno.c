@@ -243,7 +243,7 @@ bool minimize(unsigned char x, unsigned char y)
     bool match = (size(pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
     bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
     
-    bits = (size(pt) == 1) ? 4 : count_common_bits(pt);  // проверяем количество совпадаемых бит
+    bits = (size(pt) == 1) ? N : count_common_bits(pt);  // проверяем количество совпадаемых бит
     if (bits == 0)
         break_flag = true;         // единица не подходит
     else
@@ -251,14 +251,15 @@ bool minimize(unsigned char x, unsigned char y)
         {
         case 2:
             match = true;
+            if (N == 2) break_flag = true;  // для двух переменных
             break;
         case 4:
-            bits = count_common_bits(pt); // УДАЛИТЬ!
-            if (bits == 2)
+            if (bits == 1 && N == 3)        // для трёх переменных
+                match = true;
+            if (bits == 2 && N == 4)        // для четырёх переменных
                 match = true;
             break;
         case 8:
-            bits = count_common_bits(pt);
             if (bits == 1) 
                 match = true;
             break_flag = true;    // тупик, дальше 8 единиц не ищем
@@ -313,8 +314,8 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "0 2 4 6";                     
-    N = 4;                                      // количество переменных
+    const char* str = "0 1 2 3";                     
+    N = 2;                                      // количество переменных
 
     printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
 

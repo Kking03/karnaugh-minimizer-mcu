@@ -2,5 +2,5 @@
 C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\Karno.c(54,28): warning C4244: =: преобразование "long" в "unsigned char", возможна потеря данных
 C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\Karno.c(136,35): warning C4090: "=": разные квалификаторы "const"
 C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\Karno.c(210,22): warning C4013: strlen: нет определения; предполагается "extern" с возвратом типа "int"
-C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\Karno.c(531,5): warning C4098: TestList: функция типа "void", возвращающая значение
+C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\Karno.c(532,5): warning C4098: TestList: функция типа "void", возвращающая значение
   Karno.vcxproj -> C:\Флешка\Институт\4 курс\Курсовая МПС\Karno\Karno\x64\Debug\Karno.exe
