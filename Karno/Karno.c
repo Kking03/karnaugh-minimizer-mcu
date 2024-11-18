@@ -5,15 +5,20 @@
 */
 
 // Karno.c
+
+// макросы
+#define MAX_ONES 16                            // максимальное количество единиц функции
+#define INVALID_VALUE 255
+#define isdigit(c) ((c) >= '0' && (c) <= '9')
+
 #include <locale.h>
 
 #include "Stack.h"
 
-unsigned char* ones;      // глобальное объявление массива единиц
-unsigned char  size_ones; // глобальное объявление размера массива единиц
-unsigned char  A, B;      // размерность карты Карно
-char*** gray_matrix;      // матрица кодов Грея
-unsigned char N;          // количество переменных
+unsigned char ones[MAX_ONES];  // глобальный массив для хранения позиций единиц
+unsigned char  A, B;           // размерность карты Карно
+char*** gray_matrix;           // матрица кодов Грея
+unsigned char N;               // количество переменных
 
 const char* code_gray[] = { "00", "01", "11", "10" };  // Код Грея для 2 бит (используем как базовый)
 // ВРЕМЕННО
@@ -38,30 +43,73 @@ typedef struct ListNode {
 } ListNode;
 
 // функция для создания массива единиц булевой функции
-unsigned char* parse_numbers(const char* input, unsigned char* size) {
-    // Подсчитываем количество чисел в строке
-    *size = 0;
-    for (unsigned char i = 0; input[i] != '\0'; i++) {
-        if (input[i] == ' ') (*size)++;
-    }
-    (*size)++; // Количество чисел = количество пробелов + 1
+bool parse_numbers(char input[]) {
+    unsigned char index = 0; // индекс для массива 'ones'
 
-    // Создаем массив для чисел
-    unsigned char* numbers = (unsigned char*)malloc(*size * sizeof(unsigned char));
-    if (!numbers) {
-        printf("Ошибка выделения памяти\n");
-        return NULL;
+    // Заполняем массив ones флагами
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+        ones[i] = INVALID_VALUE;
     }
 
-    // Разбираем строку и заполняем массив чисел
-    unsigned char index = 0;
-    char* endptr;
-    for (const char* token = input; *token != '\0'; token = endptr) {
-        numbers[index++] = strtol(token, &endptr, 10);
-        if (*endptr == ' ') endptr++;
+    // пропуск пробелов в начале строки
+    while (*input == ' ') input++;
+
+    // проверка на цифру
+    if (!isdigit(*input)) {
+        return false;       // некорректное количество переменных
+    }
+    N = *input - '0';       // преобразование символа в число
+    if (N < 1 || N > 4) {
+        return false;       // некорректное количество переменных
+    }
+    input++; // переходим к следующему символу
+
+    // пропускаем пробелов
+    while (*input == ' ') input++;
+
+    // Максимальная позиция для единицы: 2^N - 1
+    unsigned char max_position = (1 << N) - 1;
+
+    // Читаем позиции единиц
+    while (*input != '\0') {
+        // Проверяем, является ли текущий символ цифрой
+        if (!isdigit(*input)) {
+            return false;
+        }
+
+        // Преобразуем число
+        unsigned char value = 0;
+        while (isdigit(*input)) {
+            value = value * 10 + (*input - '0');
+            input++;
+        }
+
+        // Проверяем, что значение в допустимом диапазоне
+        if (value < 0 || value > max_position) {
+            printf("Ошибка: значение %d выходит за пределы допустимого диапазона (0-%d)\n", value, max_position);
+            return false;
+        }
+
+        // Проверяем на дублирование
+        for (unsigned char i = 0; i < index; i++) {
+            if (ones[i] == value) {
+                printf("Ошибка: повторяющееся значение %d\n", value);
+                return false;
+            }
+        }
+
+        // Сохраняем значение в массив 'ones'
+        if (index >= MAX_ONES) {
+            printf("Ошибка: слишком много единиц (максимум %d)\n", MAX_ONES);
+            return false;
+        }
+        ones[index++] = value;
+
+        // Пропускаем пробелы
+        while (*input == ' ') input++;
     }
 
-    return numbers;
+    return true;
 }
 
 // Функция для создания двумерного массива
@@ -87,7 +135,7 @@ KarnaughMaps create_karnaugh_map(int N) {
     }
 
     // Устанавливаем единицы по индексам из массива ones
-    for (size_t i = 0; i < size_ones; i++) {
+    for (size_t i = 0; i < MAX_ONES; i++) {
         int target_index = ones[i];
 
         // Поиск позиции (row, col) для target_index в gray_matrix
@@ -323,13 +371,21 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    const char* str = "0 2 4 6 8 10 12 14";                     
-    N = 4;                                      // количество переменных
+    char str[] = " 4  1  2 3 4 5 6 7  ";
 
-    printf("Исходная строка: %s\n", str);       // ОТЛАДОЧНЫЙ ВЫВОД СТРОКИ
-
-    ones = parse_numbers(str, &size_ones);    // получаем массив чисел и его размер
-    printOnes(ones, size_ones);               // ОТЛАДОЧНЫЙ ВЫВОД
+    if (parse_numbers(str)) {
+        printf("Количество переменных: %d\n", N);
+        printf("Массив единиц: ");
+        for (int i = 0; i < MAX_ONES; i++) {
+            if (ones[i] != INVALID_VALUE) {
+                printf("%d ", ones[i]);
+            }
+        }
+        printf("\n");
+    }
+    else {
+        printf("Ошибка в формате строки\n");
+    }
 
     A = (N / 2) * 2;                          // количество строки массива для N переменных
     B = (N - (N / 2)) * 2;                    // количество столбцов массива для N переменных
@@ -393,7 +449,7 @@ int main()
     free(maps.kmap);
     free(maps.kmap_bool);
     
-    if (ones) free(ones) ; // Освобождаем память
+    // if (ones) free(ones) ; // Освобождаем память
 
     // TestStack();
     // TestList();
