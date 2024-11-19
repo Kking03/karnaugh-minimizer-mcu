@@ -1,0 +1,6 @@
+.vs/
+*.exe
+*.log
+*.db
+*.ilk
+*.pdb
