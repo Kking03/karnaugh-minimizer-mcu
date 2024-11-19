@@ -4,8 +4,10 @@
 #define STACK_H
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
+
+// Максимальный размер стека
+#define STACK_CAPACITY 8
 
 // Структура для хранения пары индексов двумерного массива
 typedef struct 
@@ -15,22 +17,18 @@ typedef struct
 } IndexPair;
 
 // Структура данных для представления stack
-struct stack
+typedef struct stack
 {
-    int maxsize;       // определяем максимальную емкость stack
-    int top;           // вершина(размер) stack
-    IndexPair* items;  // элементы stack
-};
+    int top;                          // вершина(размер) stack
+    IndexPair items[STACK_CAPACITY];  // элементы stack
+} Stack;
 
 // Прототипы функций, работающих со стеком
-struct stack* newStack(int capacity);
-int size(struct stack* pt);
-int isEmpty(struct stack* pt);
-int isFull(struct stack* pt);
-void push(struct stack* pt, IndexPair pos);
-IndexPair peek(struct stack* pt);
-IndexPair pop(struct stack* pt);
-void clear(struct stack* pt);
-bool include(struct stack* pt, IndexPair pos);
+void initStack(Stack* pt);
+int size(const Stack* pt);
+void push(Stack* pt, IndexPair pos);
+IndexPair pop(Stack* pt);
+void clear(Stack* pt);
+bool include(const Stack* pt, IndexPair pos);
 
 #endif // STACK_H

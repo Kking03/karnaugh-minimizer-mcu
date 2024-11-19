@@ -23,7 +23,7 @@ unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];  // глобальная матрица кодов Грея
 unsigned char kmap[MAX_SIZE][MAX_SIZE];         // глобальная матрица для карты Карно
 bool kmap_bool[MAX_SIZE][MAX_SIZE] = { {0} };   // глобальная логическая матрица для карты Карно
 unsigned char values[4];                        // Глобальный массив для хранения совпадающих бит
-struct stack* pt;                               // глобальное объявление указателя стека
+Stack pt;                                      // глобальное объявление указателя стека
 
 
 // Массив для генерации кода Грея
@@ -165,14 +165,6 @@ void fill_karnaugh_map() {
 
 // Функция для подсчета количества одинаковых битов во всех строках из стека
 int count_common_bits() {
-    // Если стек пустой, возвращаем 0
-    if (isEmpty(pt)) {
-        for (unsigned char i = 0; i < 4; i++) {
-            values[i] = 0; // Инициализируем значения нулями
-        }
-        return 0;
-    }
-
     int common_bits_count = 0;
 
     // Инициализация массива values нулями
@@ -183,14 +175,14 @@ int count_common_bits() {
     // Проверяем каждый бит (позицию) в строках кода Грея
     for (unsigned char bit = 0; bit < N; bit++) {
         // Получаем значение первого элемента из стека
-        unsigned char first_value = gray_matrix[pt->items[0].row][pt->items[0].col];
+        unsigned char first_value = gray_matrix[pt.items[0].row][pt.items[0].col];
         unsigned char first_bit = (first_value >> bit) & 1;
 
         bool all_match = true;
 
         // Проверяем этот бит у всех элементов стека
-        for (int i = 1; i < size(pt); i++) {
-            unsigned char current_value = gray_matrix[pt->items[i].row][pt->items[i].col];
+        for (int i = 1; i < size(&pt); i++) {
+            unsigned char current_value = gray_matrix[pt.items[i].row][pt.items[i].col];
             unsigned char current_bit = (current_value >> bit) & 1;
 
             if (current_bit != first_bit) {
@@ -213,17 +205,17 @@ int count_common_bits() {
 bool minimize(unsigned char x, unsigned char y)
 {
     // добавление элемента в стек
-    push(pt, (IndexPair) { x, y });
+    push(&pt, (IndexPair) { x, y });
 
     int bits;                                     // число одинаковых бит
-    bool match = (size(pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+    bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
     bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
 
-    bits = (size(pt) == 1) ? N : count_common_bits(pt);  // проверяем количество совпадаемых бит
+    bits = (size(&pt) == 1) ? N : count_common_bits();  // проверяем количество совпадаемых бит
     if (bits == 0)
         break_flag = true;         // единица не подходит
     else
-        switch (size(pt))
+        switch (size(&pt))
         {
         case 2:
             match = true;
@@ -256,7 +248,7 @@ bool minimize(unsigned char x, unsigned char y)
             int nx = (x + dx[k] + A) % A;  // Новая координата по строке
             int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
 
-            if ((kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
+            if ((kmap[nx][ny] == 1) && (!include(&pt, (IndexPair) { nx, ny }))) {
                 bool res = minimize(nx, ny);
                 if (res)  // найдена наибольшая импликанта
                 {
@@ -273,7 +265,7 @@ bool minimize(unsigned char x, unsigned char y)
         return true; // является импликантой   
     }
 
-    pop(pt);         // удаляем элемент
+    pop(&pt);         // удаляем элемент
     return false;    // соседи отсутствуют
 }
 
@@ -290,7 +282,7 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    char str[] = " 4  0 3 5 6 9 10 12 15  ";
+    char str[] = " 2 0  1 2  ";
 
     if (parse_numbers(str)) {
         printf("Количество переменных: %d\n", N);
@@ -315,19 +307,21 @@ int main()
 
     // TestBitCountFunc(); // ТЕСТИРОВАНИЕ ФУНКЦИИ ПОДСЧЁТА КОЛИЧЕСТВА БИТ
 
-        // ОСНОВНОЙ АЛГОРИТМ
-    int size = 1;                      // максимальный размер искомой импликанты
-    for (int i = 0; i < N - 1; i++)
-        size *= 2;
-    pt = newStack(size);
+    // ОСНОВНОЙ АЛГОРИТМ
+    initStack(&pt); // инициализация стека
 
     for (int i = 0; i < A; i++) {
         for (int j = 0; j < B; j++) {
             if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
                 printf("Вызвана функция минимизации:\n");
-                if (minimize(i, j))
-                    clear(pt);                   // очитска стека
-                kmap_bool[i][j] = true; // единица принадлежит импликанте
+                if (minimize(i, j)) {
+                    clear(&pt);                   // очитска стека
+                    printf("Массив совпадений: ");
+                    for (unsigned char i = 0; i < N; i++) {
+                        printf("%d ", values[i]);
+                    }
+                    printf("\n");
+                }
             }
         }
     }
@@ -395,16 +389,18 @@ void TestBitCountFunc()
 {
     printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
 
-    pt = newStack(4);
+    Stack sp;
+
+    initStack(&sp);
 
     // Добавления координат в стек
-    push(pt, (IndexPair) { 0, 0 });
-    push(pt, (IndexPair) { 0, 1 });
+    push(&sp, (IndexPair) { 0, 0 });
+    push(&sp, (IndexPair) { 0, 1 });
     //push(pt, (IndexPair) { 1, 0 });
     //push(pt, (IndexPair) { 1, 1 });
 
     // Проверка функции подсчёта
-    printf("одинаковых бит: %d\n", count_common_bits(pt));
+    printf("одинаковых бит: %d\n", count_common_bits());
     printf("Массив совпадений: ");
     for (unsigned char i = 0; i < 4; i++) {
         printf("%d ", values[i]);
@@ -412,55 +408,36 @@ void TestBitCountFunc()
     printf("\n");
 
     // Удаление элементов из стека
-    pop(pt);
-    pop(pt);
+    pop(&sp);
+    pop(&sp);
     //pop(pt);
     //pop(pt);
 
     // Освобождение памяти
-    free(pt->items);
-    free(pt);
 }
 
 // функция тестирования стека (можно удалить)
 void TestStack()
 {
     printf("-----ТЕСТИРОВАНИЕ стека-----\n");
+    Stack sp;
 
-    struct stack* pt = newStack(5);
+    initStack(&sp);
 
     // Пример добавления координат в стек
-    push(pt, (IndexPair) { 1, 2 });
-    push(pt, (IndexPair) { 3, 4 });
-    push(pt, (IndexPair) { 5, 6 });
+    push(&sp, (IndexPair) { 1, 2 });
+    push(&sp, (IndexPair) { 3, 4 });
+    push(&sp, (IndexPair) { 5, 6 });
 
     // Проверка, содержит ли стек определенную позицию
-    bool res = include(pt, (IndexPair) { 3, 4 });
+    bool res = include(&pt, (IndexPair) { 3, 4 });
     printf("%s\n", res ? "найден" : "не найден");
 
-    // Печать верхнего элемента
-    IndexPair top = peek(pt);
-    printf("The top element is (%d, %d)\n", top.row, top.col);
-    printf("The stack size is %d\n", size(pt));
+    printf("The stack size is %d\n", size(&pt));
 
     // Удаление элементов из стека
-    pop(pt);
-    top = peek(pt);
-    printf("The top element is (%d, %d)\n", top.row, top.col);
-
-    pop(pt);
-    pop(pt);
-
-    if (isEmpty(pt)) {
-        printf("The stack is empty\n");
-    }
-    else {
-        printf("The stack is not empty\n");
-    }
-
-    // Освобождение памяти
-    free(pt->items);
-    free(pt);
-
+    pop(&pt);
+    pop(&pt);
+    pop(&pt);
 }
 
