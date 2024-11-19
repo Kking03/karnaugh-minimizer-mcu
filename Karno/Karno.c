@@ -7,40 +7,27 @@
 // Karno.c
 
 // макросы
-#define MAX_ONES 16                            // максимальное количество единиц функции
-#define INVALID_VALUE 255
-#define isdigit(c) ((c) >= '0' && (c) <= '9')
+#define MAX_ONES 16                              // максимальное количество единиц функции
+#define MAX_SIZE 4                               // максимальный размер карты Карно
+#define INVALID_VALUE 255                        // 
+#define isdigit(c) ((c) >= '0' && (c) <= '9')    // проверка символа на соответствие цифре
 
 #include <locale.h>
 
 #include "Stack.h"
 
-unsigned char ones[MAX_ONES];  // глобальный массив для хранения позиций единиц
-unsigned char  A, B;           // размерность карты Карно
-char*** gray_matrix;           // матрица кодов Грея
-unsigned char N;               // количество переменных
+unsigned char ones[MAX_ONES];                   // глобальный массив для хранения позиций единиц
+unsigned char N;                                // количество переменных
+unsigned char A, B;                             // размерность карты Карно
+unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];  // глобальная матрица кодов Грея
+unsigned char kmap[MAX_SIZE][MAX_SIZE];         // глобальная матрица для карты Карно
+bool kmap_bool[MAX_SIZE][MAX_SIZE] = { {0} };   // глобальная логическая матрица для карты Карно
+unsigned char values[4];                        // Глобальный массив для хранения совпадающих бит
+struct stack* pt;                               // глобальное объявление указателя стека
 
-const char* code_gray[] = { "00", "01", "11", "10" };  // Код Грея для 2 бит (используем как базовый)
-// ВРЕМЕННО
-const char* code_gray2[2][2] = {
-    {"00", "01"},
-    {"10", "11"}
-}; // Код Грея для 2 переменных
 
-// Структура для хранения двух массивов для карты Карно
-typedef struct {
-    unsigned char** kmap;     // Карта Карно
-    bool** kmap_bool;         // Массив false
-} KarnaughMaps;
-
-KarnaughMaps maps;
-
-// Структура для узла списка
-typedef struct ListNode {
-    int stackSize;           // Размер стека на момент создания узла
-    IndexPair* stackItems;   // Копия элементов стека
-    struct ListNode* next;   // Указатель на следующий элемент списка
-} ListNode;
+// Массив для генерации кода Грея
+const unsigned char code_gray[] = { 0b00, 0b01, 0b11, 0b10 };
 
 // функция для создания массива единиц булевой функции
 bool parse_numbers(char input[]) {
@@ -112,173 +99,109 @@ bool parse_numbers(char input[]) {
     return true;
 }
 
-// Функция для создания двумерного массива
-KarnaughMaps create_karnaugh_map(int N) {
-    // Выделяем память для двумерного массива
-    unsigned char** map = (unsigned char**)malloc(A * sizeof(unsigned char*));
-    for (int i = 0; i < A; i++) {
-        map[i] = (unsigned char*)malloc(B * sizeof(unsigned char));
-    }
+// Функция для создания двумерной матрицы кода Грея для карты Карно
+void generate_gray_code_matrix(unsigned char N) {
+    // Размеры карты Карно
+    unsigned char A = (N / 2) * 2;   // количество строк
+    unsigned char B = (N - (N / 2)) * 2; // количество столбцов
 
-    // Выделяем память для массива false
-    bool** map_false = (bool**)malloc(A * sizeof(bool*));
-    for (int i = 0; i < A; i++) {
-        map_false[i] = (bool*)malloc(B * sizeof(bool));
-    }
-
-    // Заполняем массивы нулями и false
-    for (int i = 0; i < A; i++) {
-        for (int j = 0; j < B; j++) {
-            map[i][j] = 0;
-            map_false[i][j] = false;
+    // Инициализация всей матрицы нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            gray_matrix[i][j] = 0;
         }
     }
 
-    // Устанавливаем единицы по индексам из массива ones
-    for (size_t i = 0; i < MAX_ONES; i++) {
-        int target_index = ones[i];
+    // Заполнение матрицы в зависимости от количества переменных
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+            if (N == 2) {
+                // Для 2 переменных используем последовательность 00, 01, 10, 11
+                gray_matrix[i][j] = i * 2 + j;
+            }
+            else {
+                // Для 3 и 4 переменных используем `code_gray` для строк и столбцов
+                unsigned char row_code = code_gray[i]; // Код строки
+                unsigned char col_code = code_gray[j]; // Код столбца
 
-        // Поиск позиции (row, col) для target_index в gray_matrix
-        bool found = false;
-        for (int row = 0; row < A && !found; row++) {
-            for (int col = 0; col < B && !found; col++) {
-                // Преобразуем строку кода Грея в число для сравнения с target_index
-                int gray_value = (int)strtol(gray_matrix[row][col], NULL, 2);
+                // Для 3 переменных объединяем 1 бит строки и 2 бита столбца
+                if (N == 3) {
+                    gray_matrix[i][j] = (row_code << 2) | col_code;
+                }
 
-                if (gray_value == target_index) {
-                    map[row][col] = 1;
-                    // found = true;
+                // Для 4 переменных объединяем 2 бита строки и 2 бита столбца
+                if (N == 4) {
+                    gray_matrix[i][j] = (row_code << 2) | col_code;
                 }
             }
         }
     }
-
-    KarnaughMaps maps = { map, map_false };
-    return maps;
 }
 
-// Функция для создания двумерной матрицы кода Грея для карты Карно
-char*** generate_gray_code_matrix(int N, int* rows, int* cols) {
-    if (N == 2) {
-        *rows = 2;
-        *cols = 2;
-    }
-    else if (N == 3) {
-        *rows = 2;
-        *cols = 4;
-    }
-    else if (N == 4) {
-        *rows = 4;
-        *cols = 4;
-    }
-    else {
-        printf("Неподдерживаемое значение N\n");
-        return NULL;
-    }
-
-    // Создаём матрицу для хранения комбинаций кода Грея
-    char*** gray_matrix = (char***)malloc(*rows * sizeof(char**));
-    for (int i = 0; i < *rows; i++) {
-        gray_matrix[i] = (char**)malloc(*cols * sizeof(char*));
-        for (int j = 0; j < *cols; j++) {
-            gray_matrix[i][j] = (char*)malloc((N + 1) * sizeof(char)); // N бит + '\0'
-
-            // Объединяем код Грея для строки и столбца, создавая строку длиной N
-            if (N == 2) {
-                // ИСПРАВИТЬ ГЕНЕРАЦИЮ
-                // Для 2 переменных используем строки и столбцы напрямую из code_gray
-                gray_matrix[i][j] = code_gray2[i][j];
-            }
-            else if (N == 3) {
-                // Для 3 переменных используем один бит для строки и два бита для столбца
-                gray_matrix[i][j][0] = (i == 0) ? '0' : '1'; // 1 бит для строки
-                gray_matrix[i][j][1] = code_gray[j][0];
-                gray_matrix[i][j][2] = code_gray[j][1];
-                gray_matrix[i][j][3] = '\0';
-            }
-            else if (N == 4) {
-                // Для 4 переменных используем два бита для строки и два бита для столбца
-                gray_matrix[i][j][0] = code_gray[i][0];
-                gray_matrix[i][j][1] = code_gray[i][1];
-                gray_matrix[i][j][2] = code_gray[j][0];
-                gray_matrix[i][j][3] = code_gray[j][1];
-                gray_matrix[i][j][4] = '\0';
-            }
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            kmap[i][j] = 0;
         }
     }
 
-    return gray_matrix;
+    // Устанавливаем единицы в соответствии с массивом ones
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+            for (unsigned char j = 0; j < B; j++) {
+                if (gray_matrix[i][j] == target_index) {
+                    kmap[i][j] = 1; // Устанавливаем единицу
+                    break;
+                }
+            }
+        }
+    }
 }
 
-struct stack* pt;
-
-// Функция для создания нового элемента списка
-ListNode* createListNode(struct stack* pt) {
+// Функция для подсчета количества одинаковых битов во всех строках из стека
+int count_common_bits() {
+    // Если стек пустой, возвращаем 0
     if (isEmpty(pt)) {
-        return NULL;  // Если стек пустой, ничего не создаём
-    }
-
-    // Создаем новый элемент списка
-    ListNode* newNode = (ListNode*)malloc(sizeof(ListNode));
-    if (!newNode) {
-        printf("Ошибка выделения памяти\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Устанавливаем размер стека
-    newNode->stackSize = size(pt);
-
-    // Выделяем память под массив с элементами стека
-    newNode->stackItems = (IndexPair*)malloc(newNode->stackSize * sizeof(IndexPair));
-    if (!newNode->stackItems) {
-        printf("Ошибка выделения памяти\n");
-        free(newNode);
-        exit(EXIT_FAILURE);
-    }
-
-    // Копируем элементы из стека в массив stackItems
-    for (int i = 0; i < newNode->stackSize; i++) {
-        newNode->stackItems[i] = pt->items[i];
-    }
-
-    newNode->next = NULL;  // Изначально следующий элемент отсутствует
-    return newNode;
-}
-
-// Функция для добавления нового узла в начало списка
-void addNodeToList(ListNode** head, struct stack* pt) {
-    ListNode* newNode = createListNode(pt);
-    if (newNode) {
-        newNode->next = *head;
-        *head = newNode;
-    }
-}
-
-// Функция для подсчета количества одинаковых битов на всех строках из стека
-int count_common_bits(struct stack* pt) {
-    if (isEmpty(pt)) {
-        return 0; // Если стек пустой, возвращаем 0
+        for (unsigned char i = 0; i < 4; i++) {
+            values[i] = 0; // Инициализируем значения нулями
+        }
+        return 0;
     }
 
     int common_bits_count = 0;
-    int bit_length = strlen(gray_matrix[0][0]); // Длина строки кода Грея (N бит)
 
-    // Проверяем каждый бит (позицию) в строках
-    for (int bit = 0; bit < bit_length; bit++) {
-        // Получаем бит из первой строки в стеке
-        char first_bit = gray_matrix[pt->items[0].row][pt->items[0].col][bit];
+    // Инициализация массива values нулями
+    for (unsigned char i = 0; i < 4; i++) {
+        values[i] = 0;
+    }
+
+    // Проверяем каждый бит (позицию) в строках кода Грея
+    for (unsigned char bit = 0; bit < N; bit++) {
+        // Получаем значение первого элемента из стека
+        unsigned char first_value = gray_matrix[pt->items[0].row][pt->items[0].col];
+        unsigned char first_bit = (first_value >> bit) & 1;
+
         bool all_match = true;
 
-        // Сравниваем бит с аналогичными битами во всех строках из стека
+        // Проверяем этот бит у всех элементов стека
         for (int i = 1; i < size(pt); i++) {
-            if (gray_matrix[pt->items[i].row][pt->items[i].col][bit] != first_bit) {
+            unsigned char current_value = gray_matrix[pt->items[i].row][pt->items[i].col];
+            unsigned char current_bit = (current_value >> bit) & 1;
+
+            if (current_bit != first_bit) {
                 all_match = false;
                 break;
             }
         }
 
-        // Если на данной позиции биты совпадают у всех строк, увеличиваем счетчик
+        // Если на данной позиции биты совпадают у всех, обновляем values и счётчик
         if (all_match) {
+            values[N - 1 - bit] = 1;
             common_bits_count++;
         }
     }
@@ -286,7 +209,6 @@ int count_common_bits(struct stack* pt) {
     return common_bits_count;
 }
 
-// СДЕЛАТЬ ПОИСК БОЛЕЕ ЭФФЕКТИВНЫМ (ЛИНЕЙНО)
 // Функция для поиска импликант
 bool minimize(unsigned char x, unsigned char y)
 {
@@ -296,7 +218,7 @@ bool minimize(unsigned char x, unsigned char y)
     int bits;                                     // число одинаковых бит
     bool match = (size(pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
     bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
-    
+
     bits = (size(pt) == 1) ? N : count_common_bits(pt);  // проверяем количество совпадаемых бит
     if (bits == 0)
         break_flag = true;         // единица не подходит
@@ -317,7 +239,7 @@ bool minimize(unsigned char x, unsigned char y)
                 match = true;
             break;
         case 8:
-            if (bits == 1) 
+            if (bits == 1)
                 match = true;
             break_flag = true;    // тупик, дальше 8 единиц не ищем
             break;
@@ -334,7 +256,7 @@ bool minimize(unsigned char x, unsigned char y)
             int nx = (x + dx[k] + A) % A;  // Новая координата по строке
             int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
 
-            if ((maps.kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
+            if ((kmap[nx][ny] == 1) && (!include(pt, (IndexPair) { nx, ny }))) {
                 bool res = minimize(nx, ny);
                 if (res)  // найдена наибольшая импликанта
                 {
@@ -347,7 +269,7 @@ bool minimize(unsigned char x, unsigned char y)
     }
 
     if (match) {
-        maps.kmap_bool[x][y] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
+        kmap_bool[x][y] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
         return true; // является импликантой   
     }
 
@@ -355,15 +277,12 @@ bool minimize(unsigned char x, unsigned char y)
     return false;    // соседи отсутствуют
 }
 
-
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void TestStack();                                                          // функция тестирования стека
-void printOnes(unsigned char* ones, unsigned char size);                   // Фукнция для вывода массива единиц
-void print_karnaugh_map(unsigned char** map, unsigned char A, int B);      // Функция для печати карты Карно
-void print_karnaugh_map_bool(unsigned char** map, unsigned char A, int B); // Функция для печати логической карты Карно
-void print_gray_matrix(char*** gray_matrix, int rows, int cols);           // Функция для печати матрицы кода Грея
-void printList(ListNode* head);                                            // Отладочная функция для вывода содержимого списка
-void TestList();                                                           // функция тестирования списка
+void printOnes();                                                          // Фукнция для вывода массива единиц
+void print_karnaugh_map();                                                 // Функция для печати карты Карно
+void print_karnaugh_map_bool(unsigned char A, unsigned char  B);           // Функция для печати логической карты Карно
+void print_gray_matrix(unsigned char A, unsigned char B);                  // Функция для печати матрицы кода Грея
 void TestBitCountFunc();                                                   // функция тестирования подсчета одинаковых бит
 
 int main()
@@ -371,151 +290,136 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    char str[] = " 4  1  2 3 4 5 6 7  ";
+    char str[] = " 4  0 3 5 6 9 10 12 15  ";
 
     if (parse_numbers(str)) {
         printf("Количество переменных: %d\n", N);
-        printf("Массив единиц: ");
-        for (int i = 0; i < MAX_ONES; i++) {
-            if (ones[i] != INVALID_VALUE) {
-                printf("%d ", ones[i]);
-            }
-        }
-        printf("\n");
+        printOnes();
     }
     else {
         printf("Ошибка в формате строки\n");
     }
 
-    A = (N / 2) * 2;                          // количество строки массива для N переменных
-    B = (N - (N / 2)) * 2;                    // количество столбцов массива для N переменных
+    // Размеры карты Карно
+    A = (N / 2) * 2;         // количество строк массива для N переменных
+    B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
 
-    int rows, cols;
+    generate_gray_code_matrix(N);  // Генерация и вывод матрицы кода Грея
+    print_gray_matrix(A, B);       // ОТЛАДОЧНЫЙ ВЫВОД
 
-    // Генерация и вывод матрицы кода Грея
-    gray_matrix = generate_gray_code_matrix(N, &rows, &cols);
-    if (gray_matrix) {
-        print_gray_matrix(gray_matrix, rows, cols);
+    // Заполнение карты Карно
+    fill_karnaugh_map();
+    // Печать карты Карно
+    print_karnaugh_map();
 
-        // УДАЛИТЬ! ТЕСТИРОВАНИЕ ПОДСЧЁТА БИТ
-        // TestBitCountFunc(); // ДЛЯ ФУНКЦИИ ПОИСКА БИТ СТРОКИ ДОЛЖНЫ СУЩЕСТВОВАТЬ
-    }
 
-    maps = create_karnaugh_map(N);
+    // TestBitCountFunc(); // ТЕСТИРОВАНИЕ ФУНКЦИИ ПОДСЧЁТА КОЛИЧЕСТВА БИТ
 
-    if (maps.kmap != NULL) {
-        printf("Карта Карно (в виде бинарной матрицы):\n");
-        print_karnaugh_map(maps.kmap, A, B);
-    }
-
-    // ОСНОВНОЙ АЛГОРИТМ
+        // ОСНОВНОЙ АЛГОРИТМ
     int size = 1;                      // максимальный размер искомой импликанты
-    for (int i = 0; i < N-1; i++)
+    for (int i = 0; i < N - 1; i++)
         size *= 2;
     pt = newStack(size);
 
     for (int i = 0; i < A; i++) {
         for (int j = 0; j < B; j++) {
-            if ((maps.kmap[i][j] == 1) && (!maps.kmap_bool[i][j])) {
+            if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
                 printf("Вызвана функция минимизации:\n");
                 if (minimize(i, j))
                     clear(pt);                   // очитска стека
-                    maps.kmap_bool[i][j] = true; // единица принадлежит импликанте
+                kmap_bool[i][j] = true; // единица принадлежит импликанте
             }
         }
     }
 
     // Печать карты Карно с помеченными единицами
-    if (maps.kmap_bool != NULL) {
+    if (kmap_bool != NULL) {
         printf("Карта Карно (в виде бинарной логической матрицы):\n");
-        print_karnaugh_map_bool(maps.kmap_bool, A, B);
+        print_karnaugh_map_bool(A, B);
     }
-
-    // Освобождение памяти
-    if (gray_matrix && N != 2) {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                free(gray_matrix[i][j]);
-            }
-            free(gray_matrix[i]);
-        }
-        free(gray_matrix);
-    }
-
-    for (int i = 0; i < A; i++) {
-        free(maps.kmap[i]);
-        free(maps.kmap_bool[i]);
-    }
-    free(maps.kmap);
-    free(maps.kmap_bool);
-    
-    // if (ones) free(ones) ; // Освобождаем память
-
-    // TestStack();
-    // TestList();
 
     return 0;
 }
 
 //------------------------------------------реализация------------------------------------------
 // Фукнция для вывода массива единиц
-void printOnes(unsigned char* ones, unsigned char size)
+void printOnes()
 {
-    printf("Массив из строки: ");
-    for (unsigned char i = 0; i < size; i++) {
-        printf("%d ", ones[i]);
+    printf("Массив единиц: ");
+    for (int i = 0; i < MAX_ONES; i++) {
+        if (ones[i] != INVALID_VALUE) {
+            printf("%d ", ones[i]);
+        }
     }
     printf("\n");
 }
 
-// Функция для печати карты Карно (для отладки)
-void print_karnaugh_map(unsigned char** map, unsigned char A, int B) {
-    for (int i = 0; i < A; i++) {
-        for (int j = 0; j < B; j++) {
-            printf("%d ", map[i][j]);
+// Функция для печати матрицы кода Грея
+void print_gray_matrix(unsigned char A, unsigned char B) {
+    printf("Матрица кода Грея:\n");
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+            // Преобразуем значение в двоичный вид вручную
+            for (int bit = N - 1; bit >= 0; bit--) {
+                putchar((gray_matrix[i][j] & (1 << bit)) ? '1' : '0');
+            }
+            printf(" "); // Разделяем элементы пробелом
+        }
+        printf("\n");
+    }
+}
+
+
+// Функция для печати карты Карно
+void print_karnaugh_map() {
+    printf("Карта Карно:\n");
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+            printf("%d ", kmap[i][j]);
         }
         printf("\n");
     }
 }
 
 // Функция для печати логической карты Карно (для отладки)
-void print_karnaugh_map_bool(unsigned char** map, unsigned char A, int B) {
+void print_karnaugh_map_bool(unsigned char A, int B) {
     for (int i = 0; i < A; i++) {
         for (int j = 0; j < B; j++) {
-            printf("%5s ", map[i][j] ? "true" : "false");
+            printf("%5s ", kmap_bool[i][j] ? "true" : "false");
         }
         printf("\n");
     }
 }
 
-// Функция для печати матрицы кода Грея
-void print_gray_matrix(char*** gray_matrix, int rows, int cols) {
-    printf("Матрица кода Грея:\n");
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            printf("%s ", gray_matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
+void TestBitCountFunc()
+{
+    printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
 
-// Отладочная функция для вывода содержимого списка
-void printList(ListNode* head) {
-    ListNode* current = head;
-    int nodeIndex = 1;
-    while (current != NULL) {
-        printf("Элемент %d:\n", nodeIndex++);
-        printf("  Размер стека: %d\n", current->stackSize);
-        printf("  Элементы стека: ");
-        for (int i = 0; i < current->stackSize; i++) {
-            printf("(%d, %d) ", current->stackItems[i].row, current->stackItems[i].col);
-        }
-        printf("\n");
-        current = current->next;
+    pt = newStack(4);
+
+    // Добавления координат в стек
+    push(pt, (IndexPair) { 0, 0 });
+    push(pt, (IndexPair) { 0, 1 });
+    //push(pt, (IndexPair) { 1, 0 });
+    //push(pt, (IndexPair) { 1, 1 });
+
+    // Проверка функции подсчёта
+    printf("одинаковых бит: %d\n", count_common_bits(pt));
+    printf("Массив совпадений: ");
+    for (unsigned char i = 0; i < 4; i++) {
+        printf("%d ", values[i]);
     }
-    if (nodeIndex == 1) {
-        printf("Список пуст\n");
-    }
+    printf("\n");
+
+    // Удаление элементов из стека
+    pop(pt);
+    pop(pt);
+    //pop(pt);
+    //pop(pt);
+
+    // Освобождение памяти
+    free(pt->items);
+    free(pt);
 }
 
 // функция тестирования стека (можно удалить)
@@ -560,63 +464,3 @@ void TestStack()
 
 }
 
-void TestList()
-{
-    printf("-----ТЕСТИРОВАНИЕ списка-----\n");
-    struct stack* pt = newStack(5);
-
-    // Добавляем элементы в стек
-    push(pt, (IndexPair) { 1, 2 });
-    push(pt, (IndexPair) { 3, 4 });
-    push(pt, (IndexPair) { 5, 6 });
-
-    // Указатель на начало списка
-    ListNode* head = NULL;
-
-    // Создаём элемент списка на основе текущего состояния стека
-    addNodeToList(&head, pt);
-    pop(pt);
-    addNodeToList(&head, pt);
-
-    // Вывод списка
-    printList(head);
-
-    // Освобождение памяти (пример)
-    ListNode* current = head;
-    while (current) {
-        ListNode* temp = current;
-        current = current->next;
-        free(temp->stackItems);
-        free(temp);
-    }
-
-    // Освобождение памяти стека
-    free(pt->items);
-    free(pt);
-
-    return 0;
-}
-
-void TestBitCountFunc()
-{
-    printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
-
-    struct stack* pt = newStack(4);
-
-    // Добавления координат в стек
-    push(pt, (IndexPair) { 0, 0 });
-    push(pt, (IndexPair) { 0, 1 });
-    push(pt, (IndexPair) { 1, 0 });
-    push(pt, (IndexPair) { 1, 1 });
-
-    // Проверка функции подсчёта
-    printf("одинаковых бит: %d\n", count_common_bits(pt));
-
-    // Удаление элементов из стека
-    pop(pt);
-    pop(pt);
-
-    // Освобождение памяти
-    free(pt->items);
-    free(pt);
-}
