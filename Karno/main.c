@@ -1,36 +1,23 @@
-// ЗАДАНИЕ
-/*
-1 Минимизация для f = Const
-2 Добавление импликант в список
-*/
-
-// Karno.c
-
 // макросы
 #define MAX_ONES 16                              // максимальное количество единиц функции
 #define MAX_SIZE 4                               // максимальный размер карты Карно
-#define INVALID_VALUE 255                        // 
+#define INVALID_VALUE 255                        // флаг для ненужных элементов
 #define isdigit(c) ((c) >= '0' && (c) <= '9')    // проверка символа на соответствие цифре
 
 #include <locale.h>
-
 #include "Stack.h"
 
-unsigned char ones[MAX_ONES];                   // глобальный массив для хранения позиций единиц
-unsigned char N;                                // количество переменных
-unsigned char A, B;                             // размерность карты Карно
-unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];  // глобальная матрица кодов Грея
-unsigned char kmap[MAX_SIZE][MAX_SIZE];         // глобальная матрица для карты Карно
-bool kmap_bool[MAX_SIZE][MAX_SIZE] = { {0} };   // глобальная логическая матрица для карты Карно
-unsigned char values[4];                        // Глобальный массив для хранения совпадающих бит
-Stack pt;                                      // глобальное объявление указателя стека
-
-
-// Массив для генерации кода Грея
-const unsigned char code_gray[] = { 0b00, 0b01, 0b11, 0b10 };
+unsigned char ones[MAX_ONES];                          // глобальный массив для хранения позиций единиц
+unsigned char N;                                       // количество переменных
+unsigned char A, B;                                    // размерность карты Карно
+unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];         // глобальная матрица кодов Грея
+unsigned char kmap[MAX_SIZE][MAX_SIZE];                // глобальная матрица для карты Карно
+unsigned char kmap_bool[MAX_SIZE][MAX_SIZE] = { {0} }; // глобальная логическая матрица для карты Карно
+unsigned char values[4];                               // Глобальный массив для хранения совпадающих бит
+Stack pt;                                              // глобальное объявление указателя стека
 
 // функция для создания массива единиц булевой функции
-bool parse_numbers(char input[]) {
+_Bool parse_numbers(char input[]) {
     unsigned char index = 0; // индекс для массива 'ones'
 
     // Заполняем массив ones флагами
@@ -100,7 +87,10 @@ bool parse_numbers(char input[]) {
 }
 
 // Функция для создания двумерной матрицы кода Грея для карты Карно
-void generate_gray_code_matrix(unsigned char N) {
+void generate_gray_code_matrix() {
+    // Массив для генерации кода Грея
+    const unsigned char code_gray[] = { 0b00, 0b01, 0b11, 0b10 };
+
     // Размеры карты Карно
     unsigned char A = (N / 2) * 2;   // количество строк
     unsigned char B = (N - (N / 2)) * 2; // количество столбцов
@@ -178,7 +168,7 @@ int count_common_bits() {
         unsigned char first_value = gray_matrix[pt.items[0].row][pt.items[0].col];
         unsigned char first_bit = (first_value >> bit) & 1;
 
-        bool all_match = true;
+        _Bool all_match = true;
 
         // Проверяем этот бит у всех элементов стека
         for (int i = 1; i < size(&pt); i++) {
@@ -202,14 +192,14 @@ int count_common_bits() {
 }
 
 // Функция для поиска импликант
-bool minimize(unsigned char x, unsigned char y)
+_Bool minimize(unsigned char x, unsigned char y)
 {
     // добавление элемента в стек
     push(&pt, (IndexPair) { x, y });
 
     int bits;                                     // число одинаковых бит
-    bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
-    bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
+    _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+    _Bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
 
     bits = (size(&pt) == 1) ? N : count_common_bits();  // проверяем количество совпадаемых бит
     if (bits == 0)
@@ -249,7 +239,7 @@ bool minimize(unsigned char x, unsigned char y)
             int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
 
             if ((kmap[nx][ny] == 1) && (!include(&pt, (IndexPair) { nx, ny }))) {
-                bool res = minimize(nx, ny);
+                _Bool res = minimize(nx, ny);
                 if (res)  // найдена наибольшая импликанта
                 {
                     match = true;    // единица подходит для импликанты                  
@@ -269,12 +259,39 @@ bool minimize(unsigned char x, unsigned char y)
     return false;    // соседи отсутствуют
 }
 
+void generate_implicant_string(char result[8]) {
+    // Инициализация строки как пустой
+    for (unsigned char i = 0; i < 8; i++) {
+        result[i] = '\0';
+    }
+
+    // Получаем код Грея из первого элемента стека
+    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+        if (values[i] == 1) {
+            result[index++] = 'A' + i; // Добавляем переменную
+            if (((gray_value >> (N - 1 - i)) & 1) == 0) { // Проверяем бит переменной
+                result[index++] = '\''; // Добавляем апостроф, если бит == 0
+            }
+        }
+    }
+
+    // Завершаем строку символом конца строки
+    result[index] = '\0';
+}
+
+
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void TestStack();                                                          // функция тестирования стека
 void printOnes();                                                          // Фукнция для вывода массива единиц
 void print_karnaugh_map();                                                 // Функция для печати карты Карно
 void print_karnaugh_map_bool(unsigned char A, unsigned char  B);           // Функция для печати логической карты Карно
-void print_gray_matrix(unsigned char A, unsigned char B);                  // Функция для печати матрицы кода Грея
+void print_gray_matrix();                                                  // Функция для печати матрицы кода Грея
 void TestBitCountFunc();                                                   // функция тестирования подсчета одинаковых бит
 
 int main()
@@ -282,51 +299,69 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    char str[] = " 2 0  1 2  ";
+    char str[] = " 4 0 2  ";
 
-    if (parse_numbers(str)) {
+    if (!parse_numbers(str)) {   // получена некорректная строка
+        // ОТЛАДКА
         printf("Количество переменных: %d\n", N);
         printOnes();
-    }
-    else {
-        printf("Ошибка в формате строки\n");
+
+        return 0;
     }
 
     // Размеры карты Карно
     A = (N / 2) * 2;         // количество строк массива для N переменных
     B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
 
-    generate_gray_code_matrix(N);  // Генерация и вывод матрицы кода Грея
-    print_gray_matrix(A, B);       // ОТЛАДОЧНЫЙ ВЫВОД
+    generate_gray_code_matrix();  // Генерация и вывод матрицы кода Грея
 
     // Заполнение карты Карно
     fill_karnaugh_map();
-    // Печать карты Карно
+
+    _Bool f_const = true;
+
+    // Проверка на функцию-константу
+    for (int i = 0; i < A; i++)
+        for (int j = 0; j < B; j++)
+            if (kmap[i][j] == 0) {
+                f_const = false;  // значит, f != C
+                break;
+            }
+
+    // ОТЛАДКА
+    print_gray_matrix();
     print_karnaugh_map();
 
-
-    // TestBitCountFunc(); // ТЕСТИРОВАНИЕ ФУНКЦИИ ПОДСЧЁТА КОЛИЧЕСТВА БИТ
-
     // ОСНОВНОЙ АЛГОРИТМ
-    initStack(&pt); // инициализация стека
+    if (!f_const) {
+        initStack(&pt); // инициализация стека
 
-    for (int i = 0; i < A; i++) {
-        for (int j = 0; j < B; j++) {
-            if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
-                printf("Вызвана функция минимизации:\n");
-                if (minimize(i, j)) {
-                    clear(&pt);                   // очитска стека
-                    printf("Массив совпадений: ");
-                    for (unsigned char i = 0; i < N; i++) {
-                        printf("%d ", values[i]);
+        char implicant[8]; // массив для результата
+
+        for (int i = 0; i < A; i++) {
+            for (int j = 0; j < B; j++) {
+                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+                    printf("Вызвана функция минимизации:\n");
+                    if (minimize(i, j)) {
+                        generate_implicant_string(implicant);
+                        printf("Импликанта: %s\n", implicant);
+                        clear(&pt);                   // очистка стека
+                        printf("Массив совпадений: ");
+                        for (unsigned char i = 0; i < N; i++) {
+                            printf("%d ", values[i]);
+                        }
+                        printf("\n");
                     }
-                    printf("\n");
                 }
             }
         }
     }
+    else
+    {
+        printf("Введённая функция f = 1:\n");
+    }
 
-    // Печать карты Карно с помеченными единицами
+    // ОТЛАДКА
     if (kmap_bool != NULL) {
         printf("Карта Карно (в виде бинарной логической матрицы):\n");
         print_karnaugh_map_bool(A, B);
@@ -349,7 +384,7 @@ void printOnes()
 }
 
 // Функция для печати матрицы кода Грея
-void print_gray_matrix(unsigned char A, unsigned char B) {
+void print_gray_matrix() {
     printf("Матрица кода Грея:\n");
     for (unsigned char i = 0; i < A; i++) {
         for (unsigned char j = 0; j < B; j++) {
@@ -430,7 +465,7 @@ void TestStack()
     push(&sp, (IndexPair) { 5, 6 });
 
     // Проверка, содержит ли стек определенную позицию
-    bool res = include(&pt, (IndexPair) { 3, 4 });
+    _Bool res = include(&pt, (IndexPair) { 3, 4 });
     printf("%s\n", res ? "найден" : "не найден");
 
     printf("The stack size is %d\n", size(&pt));

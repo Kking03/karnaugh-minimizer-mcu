@@ -3,8 +3,10 @@
 #ifndef STACK_H
 #define STACK_H
 
+#define true  1
+#define false 0
+
 #include <stdio.h>
-#include <stdbool.h>
 
 // Максимальный размер стека
 #define STACK_CAPACITY 8
@@ -29,6 +31,6 @@ int size(const Stack* pt);
 void push(Stack* pt, IndexPair pos);
 IndexPair pop(Stack* pt);
 void clear(Stack* pt);
-bool include(const Stack* pt, IndexPair pos);
+_Bool include(const Stack* pt, IndexPair pos);
 
 #endif // STACK_H

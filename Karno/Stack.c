@@ -1,18 +1,18 @@
-// stack.c
-
 #include "stack.h"
 
-// Вспомогательная функция для инициализации stack
+
+
+// вспомогательная функция для инициализации stack
 void initStack(Stack* pt) {
     pt->top = -1; // указывает на пустой стек
 }
 
-// Вспомогательная функция для возврата размера stack
+// вспомогательная функция для возврата размера stack
 int size(const Stack* pt) {
     return pt->top + 1;
 }
 
-// Вспомогательная функция для добавления элемента 'pos' в stack
+// вспомогательная функция для добавления элемента 'pos' в stack
 void push(Stack* pt, IndexPair pos)
 {
     printf("Inserting (%d, %d)\n", pos.row, pos.col);  // ОТЛАДОЧНЫЙ ВЫВОД
@@ -21,7 +21,7 @@ void push(Stack* pt, IndexPair pos)
     pt->items[++pt->top] = pos;
 }
 
-// Вспомогательная функция для извлечения верхнего элемента из stack
+// вспомогательная функция для извлечения верхнего элемента из stack
 IndexPair pop(Stack* pt)
 {
     printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
@@ -36,7 +36,7 @@ void clear(Stack* pt)
 }
 
 // Вспомогательная функция для проверки наличия элемента в stack
-bool include(const Stack* pt, IndexPair pos)
+_Bool include(const Stack* pt, IndexPair pos)
 {
     for (int i = 0; i <= pt->top; i++) {
         if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {

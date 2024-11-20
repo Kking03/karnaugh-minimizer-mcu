@@ -128,7 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Karno.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="Stack.c" />
   </ItemGroup>
   <ItemGroup>
