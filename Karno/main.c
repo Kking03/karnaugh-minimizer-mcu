@@ -1,3 +1,11 @@
+/*
+ * Project: Karnaugh Map Minimizer on AVR
+ * Description: Minimization of boolean functions using Karnaugh maps.
+ * Author: Kirill Korolev
+ * License: MIT
+ * Year: 2025
+*/
+
 #include "Stack.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
