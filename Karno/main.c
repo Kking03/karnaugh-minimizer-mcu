@@ -4,11 +4,12 @@
 #define INVALID_VALUE 255                        // флаг для ненужных элементов
 #define isdigit(c) ((c) >= '0' && (c) <= '9')    // проверка символа на соответствие цифре
 
-#include <locale.h>
+#include <locale.h>  // ОТЛАДКА
 #include "Stack.h"
 
 unsigned char ones[MAX_ONES];                          // глобальный массив для хранения позиций единиц
 unsigned char N;                                       // количество переменных
+unsigned char neighbors[MAX_ONES][MAX_SIZE];           // глобальное объявление матрицы соседних единиц
 unsigned char A, B;                                    // размерность карты Карно
 unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];         // глобальная матрица кодов Грея
 unsigned char kmap[MAX_SIZE][MAX_SIZE];                // глобальная матрица для карты Карно
@@ -33,7 +34,7 @@ _Bool parse_numbers(char input[]) {
         return false;       // некорректное количество переменных
     }
     N = *input - '0';       // преобразование символа в число
-    if (N < 1 || N > 4) {
+    if (N < 2 || N > 4) {
         return false;       // некорректное количество переменных
     }
     input++; // переходим к следующему символу
@@ -134,6 +135,7 @@ void fill_karnaugh_map() {
     for (unsigned char i = 0; i < MAX_SIZE; i++) {
         for (unsigned char j = 0; j < MAX_SIZE; j++) {
             kmap[i][j] = 0;
+            kmap_bool[i][j] = 0;
         }
     }
 
@@ -191,6 +193,40 @@ int count_common_bits() {
     return common_bits_count;
 }
 
+void generate_implicant_string(char result[9]) {
+    // Инициализация строки как пустой
+    for (unsigned char i = 0; i < 8; i++) {
+        result[i] = '\0';
+    }
+
+    // Помечаем единицы как склеенные
+    for (unsigned char i = 0; i <= pt.top; i++) {
+        unsigned char row = pt.items[i].row;
+        unsigned char col = pt.items[i].col;
+        kmap_bool[row][col] = true;
+    }
+
+    // Получаем код Грея из первого элемента стека
+    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+        if (values[i] == 1) {
+            result[index++] = 'A' + i; // Добавляем переменную
+            if (((gray_value >> (N - 1 - i)) & 1) == 0) { // Проверяем бит переменной
+                result[index++] = '\''; // Добавляем апостроф, если бит == 0
+            }
+        }
+    }
+
+    // Завершаем строку символом конца строки
+    result[index] = '\0';
+}
+
+/*
 // Функция для поиска импликант
 _Bool minimize(unsigned char x, unsigned char y)
 {
@@ -207,7 +243,7 @@ _Bool minimize(unsigned char x, unsigned char y)
     else
         switch (size(&pt))
         {
-        case 2:
+        case 2: // перенести match для 2 вниз???
             match = true;
             if (N == 2) break_flag = true;  // для двух переменных
             break;
@@ -233,16 +269,36 @@ _Bool minimize(unsigned char x, unsigned char y)
         int dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
         int dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
 
-        // Проходим по каждому направлению
+        // Формирование массива соседних элементов для просмотра
+        unsigned char l_ind = 0;
+        unsigned char r_ind = 3;
+        unsigned char coord[4][2];
+
         for (int k = 0; k < 4; k++) {
             int nx = (x + dx[k] + A) % A;  // Новая координата по строке
             int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
 
+            if (kmap_bool[nx][ny] == false) { // приоритетная непомеченная единица
+                coord[l_ind][0] = nx;
+                coord[l_ind][1] = ny;
+                l_ind++;
+            }
+            else {
+                coord[r_ind][0] = nx;
+                coord[r_ind][1] = ny;
+                r_ind -= 1;
+            }
+        }
+
+        // Проходим по каждому направлению
+        for (int k = 0; k < 4; k++) {
+            unsigned char nx = coord[k][0];
+            unsigned char ny = coord[k][1];
             if ((kmap[nx][ny] == 1) && (!include(&pt, (IndexPair) { nx, ny }))) {
                 _Bool res = minimize(nx, ny);
                 if (res)  // найдена наибольшая импликанта
                 {
-                    match = true;    // единица подходит для импликанты                  
+                    match = true;    // единица подходит для импликанты
                     break;           // завершаем поиск
                 }
             }
@@ -252,39 +308,170 @@ _Bool minimize(unsigned char x, unsigned char y)
 
     if (match) {
         kmap_bool[x][y] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
-        return true; // является импликантой   
+        return true; // является импликантой
     }
 
     pop(&pt);         // удаляем элемент
     return false;    // соседи отсутствуют
 }
+*/
 
-void generate_implicant_string(char result[8]) {
-    // Инициализация строки как пустой
-    for (unsigned char i = 0; i < 8; i++) {
-        result[i] = '\0';
-    }
+/*
 
-    // Получаем код Грея из первого элемента стека
-    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+*/
+// цикл 
+_Bool minimize(unsigned char x, unsigned char y)
+{
+    IndexPair coord;              // координаты единицы
+    _Bool added_flag = false;     // флаг, что элемент уже в стеке
+    _Bool twoOnes_flag = false;   // флаг разрешения склеики двух единиц
 
-    // Индекс для записи в строку
-    unsigned char index = 0;
-
-    // Формируем строку на основе values и gray_value
-    for (unsigned char i = 0; i < N; i++) {
-        if (values[i] == 1) {
-            result[index++] = 'A' + i; // Добавляем переменную
-            if (((gray_value >> (N - 1 - i)) & 1) == 0) { // Проверяем бит переменной
-                result[index++] = '\''; // Добавляем апостроф, если бит == 0
-            }
+    while (1) {
+        // добавление элемента в стек
+        if (!added_flag) {
+            push(&pt, (IndexPair) { x, y });
         }
-    }
 
-    // Завершаем строку символом конца строки
-    result[index] = '\0';
+        added_flag = false;
+
+        int bits;                                       // число одинаковых бит
+        _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+        _Bool break_flag = false;                       // флаг устанавливается для тупиковой единицы
+        _Bool next_flag = false;                        // флаг для продолжения поиска
+        unsigned char ind = x * 4 + y;                  // Индекс для массива соседей
+
+        bits = (size(&pt) == 1) ? N : count_common_bits();  // проверяем количество совпадаемых бит
+        if (bits == 0)
+            break_flag = true;         // единица не подходит
+        else
+            switch (size(&pt))
+            {
+            case 2:
+                if (twoOnes_flag) {
+                    match = true;      
+                    break_flag = true;
+                }
+                    
+                if (N == 2) break_flag = true;  // для двух переменных
+                break;
+            case 4:
+                if (bits == 1 && N == 3)        // для трёх переменных
+                {
+                    match = true;
+                    break_flag = true;
+                }
+                if (bits == 2 && N == 4)        // для четырёх переменных
+                    match = true;
+                break;
+            case 8:
+                if (bits == 1)
+                    match = true;
+                break_flag = true;    // тупик, дальше 8 единиц не ищем
+                break;
+            }
+
+        if (!break_flag) // можно продолжить поиск
+        {
+            _Bool priority_flag;
+            // Смещения для четырех направлений: вправо, вниз, влево, вверх
+            unsigned char dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
+            unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+            // Проходим по направлению несклеенных единиц
+    two_ones:
+            priority_flag = true;                  // если включен, то в приоритете несклееные единицы
+            for (int k = 0; k < 4; k++) {
+                unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
+                unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+
+                if ((kmap[nx][ny] == 1) && (!kmap_bool[nx][ny] + !priority_flag) && (!include(&pt, (IndexPair) { nx, ny })) && (neighbors[ind][k] == 0)) {
+
+                    // запоминаем соседей
+                    neighbors[ind][k] = 1;
+                    x = nx;
+                    y = ny;
+                    next_flag = true; // продолжить поиск для соседней единицы
+                    break;
+                }
+                if (priority_flag && k == 3) { // попытка поиска без приоритета
+                    priority_flag = false;
+                    k = -1;
+                }
+            }
+
+            if (next_flag) continue;
+
+            // склейка для двух единиц
+            if ((size(&pt)) == 1 && !twoOnes_flag) {
+                twoOnes_flag = true;
+                // удаление просмотренных соседей
+                for (unsigned char i = 0; i < 4; i++) {
+                    neighbors[ind][i] = 0;
+                }
+                goto two_ones;
+            }
+        }  
+
+        // найдена наибольшая импликанта
+        if (match) {
+            return true;      // является импликантой   
+        }
+
+        // удаление просмотренных соседей
+        for (unsigned char i = 0; i < 4; i++) {
+            neighbors[ind][i] = 0;
+        }
+        pop(&pt);                  // удаление неподходящего элемента
+
+        coord = peek(&pt);         // вовзращаемся к предыдущей единице
+        x = coord.row;
+        y = coord.col;
+        added_flag = true;
+    }
 }
 
+void init_neighbors() {
+    // Обнуление матрицы соседей
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            neighbors[i][j] = 0;
+        }
+    }
+}
+
+/*
+// Функция для создания динамической матрицы neighbors
+IndexPair** create_neighbors() {
+    // Выделение памяти для массива указателей на строки
+    IndexPair** neighbors = (IndexPair**)malloc(n_ones * sizeof(IndexPair*));
+
+    // Выделение памяти для каждой строки (по 5 элементов)
+    for (unsigned char i = 0; i < n_ones; i++) {
+        neighbors[i] = (IndexPair*)malloc(5 * sizeof(IndexPair));
+    }
+
+    
+    // Заполнение матрицы
+    unsigned char ind = 0;
+    for (unsigned char i = 0; i < A; i++)
+        for (unsigned char j = 0; j < B; j++)
+            if (kmap[i][j] == 1) {
+                neighbors[ind][0].row = i;
+                neighbors[ind][0].col = j;
+                ind++;
+            }
+
+    return neighbors;
+}
+
+// Функция для освобождения памяти, выделенной для neighbors
+void free_neighbors() {
+    for (unsigned char i = 0; i < n_ones; i++) {
+        free(neighbors[i]); // Освобождаем каждую строку
+    }
+    free(neighbors); // Освобождаем массив указателей
+}
+*/
 
 //---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
 void TestStack();                                                          // функция тестирования стека
@@ -299,74 +486,106 @@ int main()
     setlocale(LC_ALL, "Rus");
 
     // вводимая пользователем строка
-    char str[] = " 4 0 2  ";
+    char str[10][40] = {
+    "4 0 2 8 10 1 5",
+    "4 3 7 11 15", // 3 столбец
+    "4 2 6 10 14", // 4 столбец
+    "4 1 5 9 13",  // 2 столбец
+    "4 0 4 8 12"   // 1 столбец
+    };
 
-    if (!parse_numbers(str)) {   // получена некорректная строка
-        // ОТЛАДКА
-        printf("Количество переменных: %d\n", N);
+
+    for (int i = 0; i < 1; i++)
+    {
+
+        printf("\nВведённая строка: %s\n", str[i]);
+
+        if (!parse_numbers(str[i])) {   // получена некорректная строка
+            // ОТЛАДКА
+            printf("Ошибка в строке:\n");
+
+            continue;
+        }
+
+        // печать единиц
         printOnes();
 
-        return 0;
-    }
+        // Размеры карты Карно
+        A = (N / 2) * 2;         // количество строк массива для N переменных
+        B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
 
-    // Размеры карты Карно
-    A = (N / 2) * 2;         // количество строк массива для N переменных
-    B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
+        generate_gray_code_matrix();  // Генерация и вывод матрицы кода Грея
 
-    generate_gray_code_matrix();  // Генерация и вывод матрицы кода Грея
+        // Заполнение карты Карно
+        fill_karnaugh_map();
 
-    // Заполнение карты Карно
-    fill_karnaugh_map();
+        _Bool f_const = true;
 
-    _Bool f_const = true;
+        // Проверка на функцию-константу
+        for (int i = 0; i < A; i++)
+            for (int j = 0; j < B; j++)
+                if (kmap[i][j] == 0) {
+                    f_const = false;  // значит, f != C
+                    break;
+                }
 
-    // Проверка на функцию-константу
-    for (int i = 0; i < A; i++)
-        for (int j = 0; j < B; j++)
-            if (kmap[i][j] == 0) {
-                f_const = false;  // значит, f != C
-                break;
-            }
+        // ОТЛАДКА
+        print_gray_matrix();
+        print_karnaugh_map();
 
-    // ОТЛАДКА
-    print_gray_matrix();
-    print_karnaugh_map();
+        // ОСНОВНОЙ АЛГОРИТМ
+        if (!f_const) {
+            initStack(&pt); // инициализация стека
+            init_neighbors();
 
-    // ОСНОВНОЙ АЛГОРИТМ
-    if (!f_const) {
-        initStack(&pt); // инициализация стека
+            char implicant[9]; // массив для результата
 
-        char implicant[8]; // массив для результата
 
-        for (int i = 0; i < A; i++) {
-            for (int j = 0; j < B; j++) {
-                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
-                    printf("Вызвана функция минимизации:\n");
-                    if (minimize(i, j)) {
-                        generate_implicant_string(implicant);
-                        printf("Импликанта: %s\n", implicant);
-                        clear(&pt);                   // очистка стека
-                        printf("Массив совпадений: ");
-                        for (unsigned char i = 0; i < N; i++) {
-                            printf("%d ", values[i]);
+            int num = 1; // ОТЛАДКА
+
+            // основной алгоритм
+            for (int i = 0; i < A; i++) {
+                for (int j = 0; j < B; j++) {
+                    if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+                        printf("Вызвана функция минимизации:\n");
+                        if (minimize(i, j)) {
+
+                            count_common_bits();
+                            generate_implicant_string(implicant);
+
+
+                            // ОТЛАДКА
+                            printf("Получена импликанта %d: %s\n", num++, implicant);;
+                            // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
+                            printf("Stack: \n");
+                            for (unsigned char i = 0; i <= pt.top; i++) {
+                                printf("%d", pt.items[i].row);
+                                printf("%d\n", pt.items[i].col);
+                            }
+                            printf("Массив совпадений: ");
+                            for (unsigned char i = 0; i < N; i++) {
+                                printf("%d ", values[i]);
+                            }
+                            printf("\n\n");
+
+                            init_neighbors();             // очистка матрицы соседних единиц
+                            clear(&pt);                   // очистка стека
                         }
-                        printf("\n");
                     }
                 }
             }
         }
-    }
-    else
-    {
-        printf("Введённая функция f = 1:\n");
-    }
+        else
+        {
+            printf("Введённая функция f = 1:\n");
+        }
 
-    // ОТЛАДКА
-    if (kmap_bool != NULL) {
-        printf("Карта Карно (в виде бинарной логической матрицы):\n");
-        print_karnaugh_map_bool(A, B);
+        // ОТЛАДКА
+        if (kmap_bool != NULL) {
+            printf("Карта Карно (в виде бинарной логической матрицы):\n");
+            print_karnaugh_map_bool(A, B);
+        }
     }
-
     return 0;
 }
 
@@ -430,9 +649,9 @@ void TestBitCountFunc()
 
     // Добавления координат в стек
     push(&sp, (IndexPair) { 0, 0 });
-    push(&sp, (IndexPair) { 0, 1 });
-    //push(pt, (IndexPair) { 1, 0 });
-    //push(pt, (IndexPair) { 1, 1 });
+    push(&sp, (IndexPair) { 1, 0 });
+    push(&sp, (IndexPair) { 2, 0 });
+    push(&sp, (IndexPair) { 3, 0 });
 
     // Проверка функции подсчёта
     printf("одинаковых бит: %d\n", count_common_bits());
@@ -445,8 +664,8 @@ void TestBitCountFunc()
     // Удаление элементов из стека
     pop(&sp);
     pop(&sp);
-    //pop(pt);
-    //pop(pt);
+    pop(&sp);
+    pop(&sp);
 
     // Освобождение памяти
 }
@@ -476,3 +695,131 @@ void TestStack()
     pop(&pt);
 }
 
+/*
+clear(&pt);
+push(&pt, (IndexPair) { 0, 0 });
+push(&pt, (IndexPair) { 1, 0 });
+push(&pt, (IndexPair) { 2, 0 });
+push(&pt, (IndexPair) { 3, 0 });
+
+printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
+
+// Проверка функции подсчёта
+printf("одинаковых бит: %d\n", count_common_bits());
+printf("Массив совпадений: ");
+for (unsigned char i = 0; i < 4; i++) {
+    printf("%d ", values[i]);
+}
+printf("\n");
+*/
+// ТЕСТ
+
+// линейный поиск импликант
+
+            /*
+            if (N == 4) {
+                _Bool full_line;
+                unsigned char find[4] = { {0} };
+
+                // по строкам
+            printf("-----------------------ПОИСК ПО СТРОКАМ\n");
+            for (unsigned char row = 0; row < 4; row++) {
+                full_line = true;
+                for (unsigned char col = 0; col < 4; col++) {
+                    if (kmap[row][col] != 1) {
+                        full_line = false;
+                        break;
+                    }
+                }
+                if (full_line) {
+                    find[row] = 1;
+                }
+            }
+
+            // отмечаем импликанты
+            for (unsigned char i = 0; i < 4; i++) {
+                if (find[i] == 1 && find[(i + 1) % 4] != 1 && find[(i + 3) % 4] != 1) {
+                    for (unsigned char j = 0; j < 4; j++) {
+                        kmap_bool[i][j] = true;
+                        push(&pt, (IndexPair) { i, j });
+                    }
+
+                    count_common_bits();
+                    generate_implicant_string(implicant);
+
+                    // ОТЛАДКА
+                    printf("Получена импликанта %d: %s\n", num++, implicant);;
+                    // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
+                    printf("Stack: \n");
+                    for (unsigned char i = 0; i <= pt.top; i++) {
+                        printf("%d", pt.items[i].row);
+                        printf("%d\n", pt.items[i].col);
+                    }
+                    printf("Массив совпадений: ");
+                    for (unsigned char i = 0; i < N; i++) {
+                        printf("%d ", values[i]);
+                    }
+                    printf("\n");
+
+                    clear(&pt);
+                }
+            }
+            // отладка
+            printf("Массив подходящих строк: ");
+            for (int i = 0; i < 4; i++) {
+                printf("%d ", find[i]);
+                find[i] = 0;
+            }
+
+            // по столбцам
+
+                printf("\n\n-----------------------ПОИСК ПО СТОЛБЦАМ\n");
+                for (unsigned char col = 0; col < 4; col++) {
+                    full_line = true;
+                    for (unsigned char row = 0; row < 4; row++) {
+                        if (kmap[row][col] != 1) {
+                            full_line = false;
+                            break;
+                        }
+                    }
+                    if (full_line) {
+                        find[col] = 1;
+                    }
+                }
+
+                // отмечаем импликанты
+                for (unsigned char col = 0; col < 4; col++) {
+                    if (find[col] == 1 && find[(col + 1) % 4] != 1 && find[(col + 3) % 4] != 1) {
+                        for (unsigned char row = 0; row < 4; row++) {
+                            kmap_bool[row][col] = true;
+                            push(&pt, (IndexPair) { row, col });
+                        }
+
+                        count_common_bits();
+                        generate_implicant_string(implicant);
+
+                        // ОТЛАДКА
+                        printf("Получена импликанта %d: %s\n", num++, implicant);;
+                        // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
+                        printf("Stack: \n");
+                        for (unsigned char i = 0; i <= pt.top; i++) {
+                            printf("%d", pt.items[i].row);
+                            printf("%d\n", pt.items[i].col);
+                        }
+                        printf("Массив совпадений: ");
+                        for (unsigned char i = 0; i < N; i++) {
+                            printf("%d ", values[i]);
+                        }
+                        printf("\n");
+
+                        clear(&pt);
+                    }
+                }
+                printf("Массив подходящих столбцов: ");
+                for (int i = 0; i < 4; i++) {
+                    printf("%d ", find[i]);
+                }
+
+                printf("\n\n-----------------------ПОИСК ПО СТОЛБЦАМ\n\n");
+            }
+            */

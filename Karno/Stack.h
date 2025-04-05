@@ -29,6 +29,7 @@ typedef struct stack
 void initStack(Stack* pt);
 int size(const Stack* pt);
 void push(Stack* pt, IndexPair pos);
+IndexPair peek(Stack* pt);
 IndexPair pop(Stack* pt);
 void clear(Stack* pt);
 _Bool include(const Stack* pt, IndexPair pos);

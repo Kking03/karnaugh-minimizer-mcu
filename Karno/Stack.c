@@ -1,7 +1,5 @@
 #include "stack.h"
 
-
-
 // вспомогательная функция для инициализации stack
 void initStack(Stack* pt) {
     pt->top = -1; // указывает на пустой стек
@@ -15,16 +13,25 @@ int size(const Stack* pt) {
 // вспомогательная функция для добавления элемента 'pos' в stack
 void push(Stack* pt, IndexPair pos)
 {
-    printf("Inserting (%d, %d)\n", pos.row, pos.col);  // ОТЛАДОЧНЫЙ ВЫВОД
+    // printf("Inserting (%d, %d)\n", pos.row, pos.col);  // ОТЛАДОЧНЫЙ ВЫВОД
 
     // добавляем элемент и увеличиваем индекс вершины
     pt->items[++pt->top] = pos;
 }
 
+// вспомогательная функция для получения верхнего элемента из stack
+IndexPair peek(Stack* pt)
+{
+    //printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
+
+    // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
+    return pt->items[pt->top];
+}
+
 // вспомогательная функция для извлечения верхнего элемента из stack
 IndexPair pop(Stack* pt)
 {
-    printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
+    // printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
 
     // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
     return pt->items[pt->top--];
