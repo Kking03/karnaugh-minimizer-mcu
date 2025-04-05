@@ -1,24 +1,47 @@
-// макросы
+#include "Stack.h"
+#include <util/delay.h>
+#include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+
+// макросы для минимизации
 #define MAX_ONES 16                              // максимальное количество единиц функции
 #define MAX_SIZE 4                               // максимальный размер карты Карно
 #define INVALID_VALUE 255                        // флаг для ненужных элементов
 #define isdigit(c) ((c) >= '0' && (c) <= '9')    // проверка символа на соответствие цифре
 
-#include <locale.h>  // ОТЛАДКА
-#include "Stack.h"
+// макросы для дисплея
+#define DATA_PORT PORTA // Порт данных (DB0–DB7)
+#define DATA_DDR DDRA   // Направление порта данных
 
+#define RS PC0          // RS - Команда/Данные
+#define RW PC1          // RW - Чтение/Запись
+#define E  PC2          // Enable (строб)
+#define CS1 PC3         // Выбор первого чипа
+#define CS2 PC4         // Выбор второго чипа
+
+#define CONTROL_PORT PORTC // Порт управления
+#define CONTROL_DDR DDRC   // Направление порта управления
+
+#define min(a, b) ((a) < (b) ? (a) : (b)) // макрос для вычисления границ
+
+// глобальные переменные для минимизации
 unsigned char ones[MAX_ONES];                          // глобальный массив для хранения позиций единиц
 unsigned char N;                                       // количество переменных
-unsigned char neighbors[MAX_ONES][MAX_SIZE];           // глобальное объявление матрицы соседних единиц
 unsigned char A, B;                                    // размерность карты Карно
+unsigned char neighbors[MAX_ONES][MAX_SIZE];           // глобальное объявление матрицы соседних единиц
 unsigned char gray_matrix[MAX_SIZE][MAX_SIZE];         // глобальная матрица кодов Грея
 unsigned char kmap[MAX_SIZE][MAX_SIZE];                // глобальная матрица для карты Карно
 unsigned char kmap_bool[MAX_SIZE][MAX_SIZE] = { {0} }; // глобальная логическая матрица для карты Карно
 unsigned char values[4];                               // Глобальный массив для хранения совпадающих бит
 Stack pt;                                              // глобальное объявление указателя стека
 
+// -------------------------------------- Реализация алгоритма минимизации --------------------------------------
 // функция для создания массива единиц булевой функции
 _Bool parse_numbers(char input[]) {
+
+	// USARTTransmitStringLn("Вызвана функция для строки: ");
+	// USARTTransmitString(input);
+
     unsigned char index = 0; // индекс для массива 'ones'
 
     // Заполняем массив ones флагами
@@ -31,10 +54,12 @@ _Bool parse_numbers(char input[]) {
 
     // проверка на цифру
     if (!isdigit(*input)) {
+		// USARTTransmitStringLn("Выход 1");   // ОТЛАДКА
         return false;       // некорректное количество переменных
     }
     N = *input - '0';       // преобразование символа в число
     if (N < 2 || N > 4) {
+		// USARTTransmitStringLn("Выход 2"); // ОТЛАДКА
         return false;       // некорректное количество переменных
     }
     input++; // переходим к следующему символу
@@ -49,6 +74,7 @@ _Bool parse_numbers(char input[]) {
     while (*input != '\0') {
         // Проверяем, является ли текущий символ цифрой
         if (!isdigit(*input)) {
+			// USARTTransmitStringLn("Выход 3"); // ОТЛАДКА
             return false;
         }
 
@@ -61,21 +87,24 @@ _Bool parse_numbers(char input[]) {
 
         // Проверяем, что значение в допустимом диапазоне
         if (value < 0 || value > max_position) {
-            printf("Ошибка: значение %d выходит за пределы допустимого диапазона (0-%d)\n", value, max_position);
+            // printf("Ошибка: значение %d выходит за пределы допустимого диапазона (0-%d)\n", value, max_position);
+			// USARTTransmitStringLn("Выход 4"); // ОТЛАДКА
             return false;
         }
 
         // Проверяем на дублирование
         for (unsigned char i = 0; i < index; i++) {
             if (ones[i] == value) {
-                printf("Ошибка: повторяющееся значение %d\n", value);
+                // printf("Ошибка: повторяющееся значение %d\n", value);
+				// USARTTransmitStringLn("Выход 5"); // ОТЛАДКА
                 return false;
             }
         }
 
         // Сохраняем значение в массив 'ones'
         if (index >= MAX_ONES) {
-            printf("Ошибка: слишком много единиц (максимум %d)\n", MAX_ONES);
+            // printf("Ошибка: слишком много единиц (максимум %d)\n", MAX_ONES);
+			// USARTTransmitStringLn("Выход 6"); // ОТЛАДКА
             return false;
         }
         ones[index++] = value;
@@ -135,7 +164,7 @@ void fill_karnaugh_map() {
     for (unsigned char i = 0; i < MAX_SIZE; i++) {
         for (unsigned char j = 0; j < MAX_SIZE; j++) {
             kmap[i][j] = 0;
-            kmap_bool[i][j] = 0;
+			kmap_bool[i][j] = 0;
         }
     }
 
@@ -155,9 +184,19 @@ void fill_karnaugh_map() {
     }
 }
 
+// инициализации матрицы соседних единиц
+void init_neighbors() {
+    // Обнуление матрицы соседей
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            neighbors[i][j] = 0;
+        }
+    }
+}
+
 // Функция для подсчета количества одинаковых битов во всех строках из стека
-int count_common_bits() {
-    int common_bits_count = 0;
+uint8_t count_common_bits() {
+     uint8_t common_bits_count = 0;
 
     // Инициализация массива values нулями
     for (unsigned char i = 0; i < 4; i++) {
@@ -173,7 +212,7 @@ int count_common_bits() {
         _Bool all_match = true;
 
         // Проверяем этот бит у всех элементов стека
-        for (int i = 1; i < size(&pt); i++) {
+        for (unsigned char i = 1; i < size(&pt); i++) {
             unsigned char current_value = gray_matrix[pt.items[i].row][pt.items[i].col];
             unsigned char current_bit = (current_value >> bit) & 1;
 
@@ -196,10 +235,10 @@ int count_common_bits() {
 void generate_implicant_string(char result[9]) {
     // Инициализация строки как пустой
     for (unsigned char i = 0; i < 8; i++) {
-        result[i] = '\0';
+        result[i] = '0';
     }
 
-    // Помечаем единицы как склеенные
+	// Помечаем единицы как склеенные
     for (unsigned char i = 0; i <= pt.top; i++) {
         unsigned char row = pt.items[i].row;
         unsigned char col = pt.items[i].col;
@@ -226,105 +265,12 @@ void generate_implicant_string(char result[9]) {
     result[index] = '\0';
 }
 
-/*
-// Функция для поиска импликант
-_Bool minimize(unsigned char x, unsigned char y)
-{
-    // добавление элемента в стек
-    push(&pt, (IndexPair) { x, y });
-
-    int bits;                                     // число одинаковых бит
-    _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
-    _Bool break_flag = false;                      // флаг устанавливается для тупиковой единицы
-
-    bits = (size(&pt) == 1) ? N : count_common_bits();  // проверяем количество совпадаемых бит
-    if (bits == 0)
-        break_flag = true;         // единица не подходит
-    else
-        switch (size(&pt))
-        {
-        case 2: // перенести match для 2 вниз???
-            match = true;
-            if (N == 2) break_flag = true;  // для двух переменных
-            break;
-        case 4:
-            if (bits == 1 && N == 3)        // для трёх переменных
-            {
-                match = true;
-                break_flag = true;
-            }
-            if (bits == 2 && N == 4)        // для четырёх переменных
-                match = true;
-            break;
-        case 8:
-            if (bits == 1)
-                match = true;
-            break_flag = true;    // тупик, дальше 8 единиц не ищем
-            break;
-        }
-
-    if (!break_flag) // можно продолжить поиск
-    {
-        // Смещения для четырех направлений: вправо, вниз, влево, вверх
-        int dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
-        int dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
-
-        // Формирование массива соседних элементов для просмотра
-        unsigned char l_ind = 0;
-        unsigned char r_ind = 3;
-        unsigned char coord[4][2];
-
-        for (int k = 0; k < 4; k++) {
-            int nx = (x + dx[k] + A) % A;  // Новая координата по строке
-            int ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
-
-            if (kmap_bool[nx][ny] == false) { // приоритетная непомеченная единица
-                coord[l_ind][0] = nx;
-                coord[l_ind][1] = ny;
-                l_ind++;
-            }
-            else {
-                coord[r_ind][0] = nx;
-                coord[r_ind][1] = ny;
-                r_ind -= 1;
-            }
-        }
-
-        // Проходим по каждому направлению
-        for (int k = 0; k < 4; k++) {
-            unsigned char nx = coord[k][0];
-            unsigned char ny = coord[k][1];
-            if ((kmap[nx][ny] == 1) && (!include(&pt, (IndexPair) { nx, ny }))) {
-                _Bool res = minimize(nx, ny);
-                if (res)  // найдена наибольшая импликанта
-                {
-                    match = true;    // единица подходит для импликанты
-                    break;           // завершаем поиск
-                }
-            }
-
-        }
-    }
-
-    if (match) {
-        kmap_bool[x][y] = true; // единица принадлежит импликанте ПРОВЕРИТЬ
-        return true; // является импликантой
-    }
-
-    pop(&pt);         // удаляем элемент
-    return false;    // соседи отсутствуют
-}
-*/
-
-/*
-
-*/
-// цикл 
+// Функция для поиска импликант (цикл)
 _Bool minimize(unsigned char x, unsigned char y)
 {
     IndexPair coord;              // координаты единицы
     _Bool added_flag = false;     // флаг, что элемент уже в стеке
-    _Bool twoOnes_flag = false;   // флаг разрешения склеики двух единиц
+	_Bool twoOnes_flag = false;   // флаг разрешения склеики двух единиц
 
     while (1) {
         // добавление элемента в стек
@@ -334,7 +280,7 @@ _Bool minimize(unsigned char x, unsigned char y)
 
         added_flag = false;
 
-        int bits;                                       // число одинаковых бит
+        unsigned char bits;                             // число одинаковых бит
         _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
         _Bool break_flag = false;                       // флаг устанавливается для тупиковой единицы
         _Bool next_flag = false;                        // флаг для продолжения поиска
@@ -347,11 +293,10 @@ _Bool minimize(unsigned char x, unsigned char y)
             switch (size(&pt))
             {
             case 2:
-                if (twoOnes_flag) {
+            	if (twoOnes_flag) { // разрешаем скелить две единицы
                     match = true;      
                     break_flag = true;
                 }
-                    
                 if (N == 2) break_flag = true;  // для двух переменных
                 break;
             case 4:
@@ -372,15 +317,16 @@ _Bool minimize(unsigned char x, unsigned char y)
 
         if (!break_flag) // можно продолжить поиск
         {
-            _Bool priority_flag;
+			 _Bool priority_flag;	// если включен, то в приоритете несклееные единицы
+
             // Смещения для четырех направлений: вправо, вниз, влево, вверх
             unsigned char dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
             unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
 
             // Проходим по направлению несклеенных единиц
-    two_ones:
-            priority_flag = true;                  // если включен, то в приоритете несклееные единицы
-            for (int k = 0; k < 4; k++) {
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
                 unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
                 unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
 
@@ -401,7 +347,7 @@ _Bool minimize(unsigned char x, unsigned char y)
 
             if (next_flag) continue;
 
-            // склейка для двух единиц
+			// склейка для двух единиц
             if ((size(&pt)) == 1 && !twoOnes_flag) {
                 twoOnes_flag = true;
                 // удаление просмотренных соседей
@@ -410,13 +356,14 @@ _Bool minimize(unsigned char x, unsigned char y)
                 }
                 goto two_ones;
             }
-        }  
+        }
 
         // найдена наибольшая импликанта
         if (match) {
-            return true;      // является импликантой   
+            return true; // является импликантой   
         }
 
+        // push(&invalid, pop(&pt));  // помечаем как неподходящий и удаляем элемент
         // удаление просмотренных соседей
         for (unsigned char i = 0; i < 4; i++) {
             neighbors[ind][i] = 0;
@@ -430,396 +377,472 @@ _Bool minimize(unsigned char x, unsigned char y)
     }
 }
 
-void init_neighbors() {
-    // Обнуление матрицы соседей
-    for (unsigned char i = 0; i < MAX_ONES; i++) {
-        for (unsigned char j = 0; j < MAX_SIZE; j++) {
-            neighbors[i][j] = 0;
+// Функция для перевода цифру в строку
+void digit_to_string(char* digit, uint8_t num) {
+    digit[0] = num + '0';
+    digit[1] = '\0';
+}
+
+// -------------------------------------- Реализация работы с дисплеем ------------------------------------------
+// глобальные переменные для работы с дисплеем
+uint8_t displayBuffer[8][64] = {{0}};  // буфер для отображени карты Карно
+
+// Шрифт для символов (5x7 пикселей)
+const uint8_t customFont[][5] PROGMEM = {
+    {0x00, 0x3E, 0x41, 0x41, 0x3E}, // '0'
+    {0x00, 0x42, 0x7F, 0x40, 0x00}, // '1'
+	{0x00, 0x00, 0x7E, 0x00, 0x00}, // '1' без основания
+    {0x7E, 0x11, 0x11, 0x11, 0x7E}, // 'A'
+    {0x7F, 0x49, 0x49, 0x49, 0x36}, // 'B'
+    {0x3E, 0x41, 0x41, 0x41, 0x22}, // 'C'
+    {0x7F, 0x41, 0x41, 0x22, 0x1C}, // 'D'
+    {0x00, 0x06, 0x00, 0x00, 0x00}  // `'` (апостроф)
+};
+
+// Маппинг символов к индексу массива
+const char validChars[] = {'0', '1', '2', 'A', 'B', 'C', 'D', '\''}; // выводимые символы
+
+// Отправка команды
+void KS0108_Command(uint8_t cmd, uint8_t chip) {
+    DATA_PORT = cmd;             // Отправляем команду
+    CONTROL_PORT &= ~(1 << RS);  // RS = 0 (команда), исп. побитовую маску
+    CONTROL_PORT &= ~(1 << RW);  // RW = 0 (запись)
+
+    // Выбираем чип
+    if (chip == 1) {
+        CONTROL_PORT |= (1 << CS1);
+        CONTROL_PORT &= ~(1 << CS2);
+    } else {
+        CONTROL_PORT |= (1 << CS2);
+        CONTROL_PORT &= ~(1 << CS1);
+    }
+
+    // Строб для записи готовой команды
+    CONTROL_PORT |= (1 << E);
+    _delay_us(1);
+    CONTROL_PORT &= ~(1 << E);
+
+    // Задержка для выполнения команды контроллером дисплея
+    _delay_ms(1);
+}
+
+// Отправка данных
+void KS0108_Data(uint8_t data, uint8_t chip) {
+    DATA_PORT = data;            // Отправляем данные
+    CONTROL_PORT |= (1 << RS);   // RS = 1 (данные)
+    CONTROL_PORT &= ~(1 << RW);  // RW = 0 (запись)
+
+    // Выбираем чип
+    if (chip == 1) {
+        CONTROL_PORT |= (1 << CS1);
+        CONTROL_PORT &= ~(1 << CS2);
+    } else {
+        CONTROL_PORT |= (1 << CS2);
+        CONTROL_PORT &= ~(1 << CS1);
+    }
+
+    // Строб
+    CONTROL_PORT |= (1 << E);
+    _delay_us(1);
+    CONTROL_PORT &= ~(1 << E);
+
+    // Задержка
+    _delay_ms(1);
+}
+
+// Инициализация дисплея
+void KS0108_Init() {
+	// Порт D и C на выход
+    DATA_DDR = 0xFF;
+    CONTROL_DDR |= (1 << RS) | (1 << RW) | (1 << E) | (1 << CS1) | (1 << CS2);
+
+    KS0108_Command(0x3F, 1); // Включение первого чипа
+    KS0108_Command(0x3F, 2); // Включение второго чипа
+}
+
+// Очистка дисплея
+void KS0108_Clear() {
+    for (uint8_t page = 0; page < 8; page++) {
+        KS0108_Command(0xB8 + page, 1); // Устанавливаем страницу на первом чипе
+        KS0108_Command(0x40, 1);       // Адрес столбца 0
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 1);
+        }
+        KS0108_Command(0xB8 + page, 2); // Устанавливаем страницу на втором чипе
+        KS0108_Command(0x40, 2);       // Адрес столбца 0
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 2);
         }
     }
 }
 
-/*
-// Функция для создания динамической матрицы neighbors
-IndexPair** create_neighbors() {
-    // Выделение памяти для массива указателей на строки
-    IndexPair** neighbors = (IndexPair**)malloc(n_ones * sizeof(IndexPair*));
+// Установка курсора
+void KS0108_SetCursor(uint8_t x, uint8_t line) {
+    uint8_t chip = (x < 64) ? 1 : 2;
+    uint8_t address = (x < 64) ? x : (x - 64);
 
-    // Выделение памяти для каждой строки (по 5 элементов)
-    for (unsigned char i = 0; i < n_ones; i++) {
-        neighbors[i] = (IndexPair*)malloc(5 * sizeof(IndexPair));
+    KS0108_Command(0xB8 + line, chip);
+    KS0108_Command(0x40 + address, chip);
+}
+
+// Функция для вывода буфера на дисплей
+void RefreshDisplay() {
+    for (uint8_t page = 0; page < 8; page++) {        // Проходим по всем страницам
+        KS0108_Command(0xB8 + page, 1);              // Устанавливаем страницу
+        KS0108_Command(0x40, 1);                     // Устанавливаем столбец 0
+
+        for (uint8_t column = 0; column < 64; column++) {
+            KS0108_Data(displayBuffer[page][column], 1); // Отправляем данные столбца
+        }
+    }
+}
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+    // Проверяем, является ли символ допустимым
+    uint8_t found = 0xFF;
+    for (uint8_t i = 0; i < sizeof(validChars); i++) {
+        if (c == validChars[i]) {
+            found = i;
+            break;
+        }
     }
 
+    KS0108_SetCursor(x, y); // Устанавливаем курсор
+
+    // Выводим символ из массива customFont
+    for (uint8_t i = 0; i < 5; i++) {
+        uint8_t line = pgm_read_byte(&customFont[found][i]);
+        KS0108_Data(line, (x < 64) ? 1 : 2); // Отправляем данные
+    }
+
+    KS0108_Data(0x00, (x < 64) ? 1 : 2); // Пробел между символами
+}
+
+// вывод строки с импликантой
+void KS0108_WriteString(const char* str, uint8_t x, uint8_t y) {
+    while (*str) {
+        char c = *str++;
+        if (c == '\'') {
+            // Выводим апостроф чуть правее предыдущего символа
+            KS0108_WriteChar(c, x - 1, y); // Апостроф ближе к букве
+			x += 2;
+        } else {
+            // Выводим обычный символ
+            KS0108_WriteChar(c, x, y);
+            x += 6; // Сдвигаем позицию вправо для следующего символа
+        }
+    }
+}
+
+// Добавление пикселя (точки) на дисплей
+void DrawPoint(uint8_t x, uint8_t y, _Bool clear) {
+    uint8_t page = y / 8;       // Определяем страницу
+    uint8_t bit = y % 8;        // Определяем бит в байте
+
+    if (clear) {
+        displayBuffer[page][x] &= ~(1 << bit); // Сбрасываем бит в буфере
+    } else {
+        displayBuffer[page][x] |= (1 << bit); // Устанавливаем бит в буфере
+    }
+}
+
+// Рисование горищонтальной линии
+void DrawHorizontalLine(uint8_t x1, uint8_t x2, uint8_t y, _Bool clear) {
+    for (uint8_t x = x1; x <= x2; x++) {
+        DrawPoint(x, y, clear); // Рисуем каждую точку на линии
+    }
+}
+
+// Рисование вертикальной линии
+void DrawVerticalLine(uint8_t x, uint8_t y1, uint8_t y2) {
+    for (uint8_t y = y1; y <= y2; y++) {
+        DrawPoint(x, y, false); // Рисуем каждую точку на линии
+    }
+}
+
+
+// Функция для вывода символа
+void DrawChar(char c, uint8_t x, uint8_t y) {
+    if (c < '0' || c > '9') return; // Поддерживаются только цифры '0'-'9'
+
+    uint8_t basePage = y / 8;             // Нижняя страница
+    uint8_t bitOffset = y % 8;            // Смещение битов для нижней страницы
+
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+
+        // Разделяем данные для нижней и верхней страницы
+        uint8_t lowerData = colData << bitOffset;       // Нижняя страница
+        uint8_t upperData = colData >> (8 - bitOffset); // Верхняя страница
+
+        // Обновляем буфер для нижней страницы
+        if (basePage < 8) { // Проверка на выход за пределы
+            displayBuffer[basePage][x + i] |= lowerData;
+        }
+
+        // Обновляем буфер для верхней страницы, если данные выходят за пределы
+        if (bitOffset > 0 && (basePage + 1) < 8) { // Проверка на существование верхней страницы
+            displayBuffer[basePage + 1][x + i] |= upperData;
+        }
+    }
+}
+
+// Рисование карты Карно
+void DrawKarno(uint8_t N) {
+	uint8_t A = (N / 2) * 2;                     // количество строк массива для N переменных
+	uint8_t B = (N - (N / 2)) * 2;               // количество столбцов массива для N переменных
+	uint8_t end_line = min((B + 1) * 13, 63);    // координата конца горизонтальной линии
+	uint8_t end_column = min((A + 1) * 13, 63);  // координата конца вертикальной линии
+	
+	uint8_t code_gray[4] = { 0b00, 0b01, 0b11, 0b10 };
+
+	// рисуем линии строк
+	for (uint8_t line = 1; line <= A; line++) {
+		DrawHorizontalLine(0, end_line, line * 13, false);
+		// заполнение заголовков для строк для 4 переменных
+		if (N == 4) {
+			DrawChar(((code_gray[line-1] >> 1) & 1) + '0', 0, line * 13 + 4);
+	    	DrawChar((code_gray[line-1] & 1) + '0', 5, line * 13 + 4);
+		} else {
+		    DrawChar((line-1) + '0', 3, line * 13 + 4);
+		}
+
+	}
+	 // рисуем линии столбцов
+	for (uint8_t column = 1; column <= B; column++) {
+		DrawVerticalLine(column * 13, 0, end_column);
+		// заполнение заголовков для столбцов для 3 и 4 переменных
+		if (N == 3 || N == 4) {
+			DrawChar(((code_gray[column-1] >> 1) & 1) + '0', column * 13 + 2, 4);
+		    DrawChar((code_gray[column-1] & 1) + '0', column * 13 + 7, 4);
+		} else {
+			DrawChar((column-1) + '0', column * 13 + 4, 4);
+		}
+	}
+	// рисуем диагональ
+	for (uint8_t i = 0; i < 13; i++) {
+        DrawPoint(i, i, false);
+	}
+
+	// заполнение карты единицами
+	for (uint8_t row = 0; row < A; row++) {
+		for (uint8_t col = 0; col < B; col++) {
+			if (kmap[row][col] == 1) {
+				uint8_t x = 17 + 13 * col;
+				uint8_t y = 16 + 13 * row;
+				DrawChar('2', x, y); // добавляем единицу на карту
+			}
+		}
+	}
+}
+
+// Выделение склеенных единиц
+void DrawImplicant() {
+  	// отмечаем склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
     
-    // Заполнение матрицы
-    unsigned char ind = 0;
-    for (unsigned char i = 0; i < A; i++)
-        for (unsigned char j = 0; j < B; j++)
-            if (kmap[i][j] == 1) {
-                neighbors[ind][0].row = i;
-                neighbors[ind][0].col = j;
-                ind++;
-            }
-
-    return neighbors;
-}
-
-// Функция для освобождения памяти, выделенной для neighbors
-void free_neighbors() {
-    for (unsigned char i = 0; i < n_ones; i++) {
-        free(neighbors[i]); // Освобождаем каждую строку
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+	    DrawHorizontalLine(x1, x2, y, false);  
     }
-    free(neighbors); // Освобождаем массив указателей
-}
-*/
+	
+	RefreshDisplay();     // Обновляем дисплей из буфера
 
-//---------------------------------------- ОТЛАДОЧНЫЕ ФУНКЦИИ ----------------------------------------
-void TestStack();                                                          // функция тестирования стека
-void printOnes();                                                          // Фукнция для вывода массива единиц
-void print_karnaugh_map();                                                 // Функция для печати карты Карно
-void print_karnaugh_map_bool(unsigned char A, unsigned char  B);           // Функция для печати логической карты Карно
-void print_gray_matrix();                                                  // Функция для печати матрицы кода Грея
-void TestBitCountFunc();                                                   // функция тестирования подсчета одинаковых бит
-
-int main()
-{
-    setlocale(LC_ALL, "Rus");
-
-    // вводимая пользователем строка
-    char str[10][40] = {
-    "4 0 2 8 10 1 5",
-    "4 3 7 11 15", // 3 столбец
-    "4 2 6 10 14", // 4 столбец
-    "4 1 5 9 13",  // 2 столбец
-    "4 0 4 8 12"   // 1 столбец
-    };
-
-
-    for (int i = 0; i < 1; i++)
-    {
-
-        printf("\nВведённая строка: %s\n", str[i]);
-
-        if (!parse_numbers(str[i])) {   // получена некорректная строка
-            // ОТЛАДКА
-            printf("Ошибка в строке:\n");
-
-            continue;
-        }
-
-        // печать единиц
-        printOnes();
-
-        // Размеры карты Карно
-        A = (N / 2) * 2;         // количество строк массива для N переменных
-        B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
-
-        generate_gray_code_matrix();  // Генерация и вывод матрицы кода Грея
-
-        // Заполнение карты Карно
-        fill_karnaugh_map();
-
-        _Bool f_const = true;
-
-        // Проверка на функцию-константу
-        for (int i = 0; i < A; i++)
-            for (int j = 0; j < B; j++)
-                if (kmap[i][j] == 0) {
-                    f_const = false;  // значит, f != C
-                    break;
-                }
-
-        // ОТЛАДКА
-        print_gray_matrix();
-        print_karnaugh_map();
-
-        // ОСНОВНОЙ АЛГОРИТМ
-        if (!f_const) {
-            initStack(&pt); // инициализация стека
-            init_neighbors();
-
-            char implicant[9]; // массив для результата
-
-
-            int num = 1; // ОТЛАДКА
-
-            // основной алгоритм
-            for (int i = 0; i < A; i++) {
-                for (int j = 0; j < B; j++) {
-                    if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
-                        printf("Вызвана функция минимизации:\n");
-                        if (minimize(i, j)) {
-
-                            count_common_bits();
-                            generate_implicant_string(implicant);
-
-
-                            // ОТЛАДКА
-                            printf("Получена импликанта %d: %s\n", num++, implicant);;
-                            // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
-                            printf("Stack: \n");
-                            for (unsigned char i = 0; i <= pt.top; i++) {
-                                printf("%d", pt.items[i].row);
-                                printf("%d\n", pt.items[i].col);
-                            }
-                            printf("Массив совпадений: ");
-                            for (unsigned char i = 0; i < N; i++) {
-                                printf("%d ", values[i]);
-                            }
-                            printf("\n\n");
-
-                            init_neighbors();             // очистка матрицы соседних единиц
-                            clear(&pt);                   // очистка стека
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            printf("Введённая функция f = 1:\n");
-        }
-
-        // ОТЛАДКА
-        if (kmap_bool != NULL) {
-            printf("Карта Карно (в виде бинарной логической матрицы):\n");
-            print_karnaugh_map_bool(A, B);
-        }
+	// убираем отмеченные склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+	    DrawHorizontalLine(x1, x2, y, true);  
     }
-    return 0;
+
 }
 
-//------------------------------------------реализация------------------------------------------
-// Фукнция для вывода массива единиц
-void printOnes()
-{
-    printf("Массив единиц: ");
-    for (int i = 0; i < MAX_ONES; i++) {
-        if (ones[i] != INVALID_VALUE) {
-            printf("%d ", ones[i]);
+// Функция для очистки буфера
+void ClearDisplayBuffer() {
+    for (uint8_t page = 0; page < 8; page++) {
+        for (uint8_t column = 0; column < 64; column++) {
+            displayBuffer[page][column] = 0x00; // Обнуляем каждый байт буфера
         }
-    }
-    printf("\n");
-}
-
-// Функция для печати матрицы кода Грея
-void print_gray_matrix() {
-    printf("Матрица кода Грея:\n");
-    for (unsigned char i = 0; i < A; i++) {
-        for (unsigned char j = 0; j < B; j++) {
-            // Преобразуем значение в двоичный вид вручную
-            for (int bit = N - 1; bit >= 0; bit--) {
-                putchar((gray_matrix[i][j] & (1 << bit)) ? '1' : '0');
-            }
-            printf(" "); // Разделяем элементы пробелом
-        }
-        printf("\n");
     }
 }
 
+// -------------------------------------- Реализация работы с кнопками ------------------------------------------
 
-// Функция для печати карты Карно
-void print_karnaugh_map() {
-    printf("Карта Карно:\n");
-    for (unsigned char i = 0; i < A; i++) {
-        for (unsigned char j = 0; j < B; j++) {
-            printf("%d ", kmap[i][j]);
-        }
-        printf("\n");
+
+// проверка нажатия кнопки STEP(PD4)
+_Bool stepButtonPressed() {
+    return !(PIND & (1 << PIND4)); // Кнопка подключена к PIND4
+}
+
+void buttonInit() {
+    DDRD &= ~(1 << PD4);  // Устанавливаем PD4 как вход
+    PORTD |= (1 << PD4);  // Включаем внутренний подтягивающий резистор
+}
+
+volatile _Bool step_flag = false; // Переменная-флаг
+
+void setup_interrupts() {
+    // Настройка INT0 и INT1 на низкий уровень
+    MCUCR |= (1 << ISC01) | (1 << ISC11); // INT0 и INT1 реагируют на спад
+    GICR |= (1 << INT0) | (1 << INT1);   // Разрешаем прерывания INT0 и INT1
+
+    // Настройка PD2 и PD3 как входы
+    DDRD &= ~((1 << PD2) | (1 << PD3));  // Устанавливаем PD2 и PD3 как входы
+    PORTD |= (1 << PD2) | (1 << PD3);    // Включаем подтяжку к Vcc
+}
+
+// прерывание по сигналу 0 на PD2
+ISR(INT0_vect) {
+    step_flag = true;  // Устанавливаем флаг
+	USARTTransmitStringLn("Пошаговый режим: Включен\r");
+}
+
+// прерывание по сигналу 0 на PD3
+ISR(INT1_vect) {
+    step_flag = false; // Сбрасываем флаг
+	USARTTransmitStringLn("Пошаговый режим: Выключен\r");
+}
+
+int main(void) {
+	// Инициализация UART
+  	USARTInit(MYUBRR);
+  	USARTTransmitStringLn("Это программа минимизации БФ\r");
+
+	KS0108_Init();       // Инициализация дисплея
+    KS0108_Clear();      // Очистка дисплея
+
+
+	buttonInit();        // Инициализация кнопки PD4
+	setup_interrupts();  // Настройка прерываний
+    sei(); // Глобальное разрешение прерываний
+
+	uint8_t strSize = 50;  // Макс. размер строки
+	char str[strSize];     // Массив для принимаемой строки
+	char digit[2];		   // Буфер для вывода цифр
+
+	while (1) {
+		USARTTransmitStringLn("Введите функцию для минимизации\r");
+    	USARTReceiveString(str, strSize); // Получение строки по UART
+
+		USARTTransmitString("Введенная строка: ");
+    	USARTTransmitStringLn(str);
+
+		if (!parse_numbers(str)) {   // получена некорректная строка
+    		USARTTransmitStringLn("Строка с ошибками. Повторите ввод!");
+			USARTTransmitStringLn("");
+			continue;
+		}
+
+		digit_to_string(digit, N);
+
+		USARTTransmitString("Запущен процесс минимизации функции от ");
+		USARTTransmitString(digit);
+		USARTTransmitStringLn(" переменных");
+
+	    // Размеры карты Карно
+	    A = (N / 2) * 2;         // количество строк массива для N переменных
+	    B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
+
+	    _Bool f_const = true;
+
+		generate_gray_code_matrix(); // Генерация и вывод матрицы кода Грея
+		fill_karnaugh_map();         // Заполнение карты Карно
+
+		// Работа с дисплеем
+		KS0108_Clear();       // Очистка дисплея
+		ClearDisplayBuffer(); // очистка буфера дисплея
+		DrawKarno(N);      	  // вызов функции для рисования карты Карно
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+	        for (uint8_t j = 0; j < B; j++)
+	            if (kmap[i][j] == 0) {
+	                f_const = false;  // значит, f != C
+	                break;
+	            }
+		}	
+
+	    // ОСНОВНОЙ АЛГОРИТМ
+	    if (!f_const) {
+	        initStack(&pt); 	         // инициализация стека
+			init_neighbors();			 // инициализация матрицы соседних единиц
+			uint8_t line = 0;			
+
+	        char implicant[9]; // массив для результата	
+
+	        for (uint8_t i = 0; i < A; i++) {
+	            for (uint8_t j = 0; j < B; j++) {
+	                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+	                    // USARTTransmitStringLn("Вызвана функция минимизации:\n");
+	                    if (minimize(i, j)) {
+							count_common_bits();
+							generate_implicant_string(implicant);
+
+							// пошаговый вывод на дисплей
+							if (step_flag) {
+								// Ждём, пока кнопка будет отпущена
+	            				while (stepButtonPressed()) {
+	                				// Небольшая задержка для уменьшения нагрузки
+	                				_delay_ms(10);
+	            				}
+							
+								// Ждём, пока кнопка будет отпущена
+								while (!stepButtonPressed()) {
+	                				// Небольшая задержка для уменьшения нагрузки
+	                				_delay_ms(10);
+	            				}
+								_delay_ms(100); // Задержка перед выводом
+
+								
+								// рисование импликанты на карте
+								DrawImplicant();
+							}
+
+							KS0108_WriteString(implicant, 80, line++); // вывод выражения на дисплей
+
+							// ОТЛАДКА
+							USARTTransmitString("\rПолучена");
+							//digit_to_string(digit, ++num);
+							//USARTTransmitString(digit);
+							USARTTransmitString(" импликанта ");
+							USARTTransmitStringLn(implicant);
+							
+							// Вывод стека
+							USARTTransmitString("Stack: ");
+						    for (uint8_t i = 0; i <= pt.top; i++) {
+
+								digit_to_string(digit, pt.items[i].row);
+								USARTTransmitString(digit); // Отправляем строку по UART
+
+								digit_to_string(digit, pt.items[i].col);
+								USARTTransmitString(digit); // Отправляем строку по UART
+								USARTTransmitString(" ");
+							}	
+							USARTTransmitString("\r");						
+
+							init_neighbors();             // очистка матрицы соседних единиц
+	                        clear(&pt);                   // очистка стека
+	                    }
+	                }
+	            }
+	        }
+			USARTTransmitStringLn("\rМинимизация завершена\r");
+	    }
+	    else
+	    {
+	        USARTTransmitStringLn("\rВведённая функция f = 1\r"); // ОТЛАДКА
+	    }	
     }
+
+	return 0;
 }
-
-// Функция для печати логической карты Карно (для отладки)
-void print_karnaugh_map_bool(unsigned char A, int B) {
-    for (int i = 0; i < A; i++) {
-        for (int j = 0; j < B; j++) {
-            printf("%5s ", kmap_bool[i][j] ? "true" : "false");
-        }
-        printf("\n");
-    }
-}
-
-void TestBitCountFunc()
-{
-    printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
-
-    Stack sp;
-
-    initStack(&sp);
-
-    // Добавления координат в стек
-    push(&sp, (IndexPair) { 0, 0 });
-    push(&sp, (IndexPair) { 1, 0 });
-    push(&sp, (IndexPair) { 2, 0 });
-    push(&sp, (IndexPair) { 3, 0 });
-
-    // Проверка функции подсчёта
-    printf("одинаковых бит: %d\n", count_common_bits());
-    printf("Массив совпадений: ");
-    for (unsigned char i = 0; i < 4; i++) {
-        printf("%d ", values[i]);
-    }
-    printf("\n");
-
-    // Удаление элементов из стека
-    pop(&sp);
-    pop(&sp);
-    pop(&sp);
-    pop(&sp);
-
-    // Освобождение памяти
-}
-
-// функция тестирования стека (можно удалить)
-void TestStack()
-{
-    printf("-----ТЕСТИРОВАНИЕ стека-----\n");
-    Stack sp;
-
-    initStack(&sp);
-
-    // Пример добавления координат в стек
-    push(&sp, (IndexPair) { 1, 2 });
-    push(&sp, (IndexPair) { 3, 4 });
-    push(&sp, (IndexPair) { 5, 6 });
-
-    // Проверка, содержит ли стек определенную позицию
-    _Bool res = include(&pt, (IndexPair) { 3, 4 });
-    printf("%s\n", res ? "найден" : "не найден");
-
-    printf("The stack size is %d\n", size(&pt));
-
-    // Удаление элементов из стека
-    pop(&pt);
-    pop(&pt);
-    pop(&pt);
-}
-
-/*
-clear(&pt);
-push(&pt, (IndexPair) { 0, 0 });
-push(&pt, (IndexPair) { 1, 0 });
-push(&pt, (IndexPair) { 2, 0 });
-push(&pt, (IndexPair) { 3, 0 });
-
-printf("\n-----ТЕСТИРОВАНИЕ подсчёта бит-----\n");
-
-// Проверка функции подсчёта
-printf("одинаковых бит: %d\n", count_common_bits());
-printf("Массив совпадений: ");
-for (unsigned char i = 0; i < 4; i++) {
-    printf("%d ", values[i]);
-}
-printf("\n");
-*/
-// ТЕСТ
-
-// линейный поиск импликант
-
-            /*
-            if (N == 4) {
-                _Bool full_line;
-                unsigned char find[4] = { {0} };
-
-                // по строкам
-            printf("-----------------------ПОИСК ПО СТРОКАМ\n");
-            for (unsigned char row = 0; row < 4; row++) {
-                full_line = true;
-                for (unsigned char col = 0; col < 4; col++) {
-                    if (kmap[row][col] != 1) {
-                        full_line = false;
-                        break;
-                    }
-                }
-                if (full_line) {
-                    find[row] = 1;
-                }
-            }
-
-            // отмечаем импликанты
-            for (unsigned char i = 0; i < 4; i++) {
-                if (find[i] == 1 && find[(i + 1) % 4] != 1 && find[(i + 3) % 4] != 1) {
-                    for (unsigned char j = 0; j < 4; j++) {
-                        kmap_bool[i][j] = true;
-                        push(&pt, (IndexPair) { i, j });
-                    }
-
-                    count_common_bits();
-                    generate_implicant_string(implicant);
-
-                    // ОТЛАДКА
-                    printf("Получена импликанта %d: %s\n", num++, implicant);;
-                    // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
-                    printf("Stack: \n");
-                    for (unsigned char i = 0; i <= pt.top; i++) {
-                        printf("%d", pt.items[i].row);
-                        printf("%d\n", pt.items[i].col);
-                    }
-                    printf("Массив совпадений: ");
-                    for (unsigned char i = 0; i < N; i++) {
-                        printf("%d ", values[i]);
-                    }
-                    printf("\n");
-
-                    clear(&pt);
-                }
-            }
-            // отладка
-            printf("Массив подходящих строк: ");
-            for (int i = 0; i < 4; i++) {
-                printf("%d ", find[i]);
-                find[i] = 0;
-            }
-
-            // по столбцам
-
-                printf("\n\n-----------------------ПОИСК ПО СТОЛБЦАМ\n");
-                for (unsigned char col = 0; col < 4; col++) {
-                    full_line = true;
-                    for (unsigned char row = 0; row < 4; row++) {
-                        if (kmap[row][col] != 1) {
-                            full_line = false;
-                            break;
-                        }
-                    }
-                    if (full_line) {
-                        find[col] = 1;
-                    }
-                }
-
-                // отмечаем импликанты
-                for (unsigned char col = 0; col < 4; col++) {
-                    if (find[col] == 1 && find[(col + 1) % 4] != 1 && find[(col + 3) % 4] != 1) {
-                        for (unsigned char row = 0; row < 4; row++) {
-                            kmap_bool[row][col] = true;
-                            push(&pt, (IndexPair) { row, col });
-                        }
-
-                        count_common_bits();
-                        generate_implicant_string(implicant);
-
-                        // ОТЛАДКА
-                        printf("Получена импликанта %d: %s\n", num++, implicant);;
-                        // ОТЛАДОЧНЫЙ ВЫВОД СТЕКА
-                        printf("Stack: \n");
-                        for (unsigned char i = 0; i <= pt.top; i++) {
-                            printf("%d", pt.items[i].row);
-                            printf("%d\n", pt.items[i].col);
-                        }
-                        printf("Массив совпадений: ");
-                        for (unsigned char i = 0; i < N; i++) {
-                            printf("%d ", values[i]);
-                        }
-                        printf("\n");
-
-                        clear(&pt);
-                    }
-                }
-                printf("Массив подходящих столбцов: ");
-                for (int i = 0; i < 4; i++) {
-                    printf("%d ", find[i]);
-                }
-
-                printf("\n\n-----------------------ПОИСК ПО СТОЛБЦАМ\n\n");
-            }
-            */

@@ -6,7 +6,8 @@
 #define true  1
 #define false 0
 
-#include <stdio.h>
+// #include <stdio.h>
+#include "Uart.h" // ИСКЛЮЧИТЬ
 
 // Максимальный размер стека
 #define STACK_CAPACITY 8

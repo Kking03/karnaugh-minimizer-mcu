@@ -1,0 +1,4180 @@
+
+Karno.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00001374  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000013c  00800060  00001374  00001408  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          000002aa  0080019c  0080019c  00001544  2**0
+                  ALLOC
+  3 .stab         000006cc  00000000  00000000  00001544  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000097  00000000  00000000  00001c10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_aranges 00000060  00000000  00000000  00001ca7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_pubnames 000003c4  00000000  00000000  00001d07  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   00001876  00000000  00000000  000020cb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 00000600  00000000  00000000  00003941  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   0000143c  00000000  00000000  00003f41  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  000002d0  00000000  00000000  00005380  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    00000540  00000000  00000000  00005650  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    0000158e  00000000  00000000  00005b90  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_pubtypes 000000ac  00000000  00000000  0000711e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_ranges 00000318  00000000  00000000  000071ca  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+       0:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__ctors_end>
+       4:	0c 94 29 07 	jmp	0xe52	; 0xe52 <__vector_1>
+       8:	0c 94 52 07 	jmp	0xea4	; 0xea4 <__vector_2>
+       c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      10:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      14:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      18:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      1c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      20:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      24:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      28:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      2c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      30:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      34:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      38:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      3c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      40:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      44:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      48:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      4c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+      50:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+
+00000054 <customFont>:
+      54:	00 3e 41 41 3e 00 42 7f 40 00 00 00 7e 00 00 7e     .>AA>.B.@...~..~
+      64:	11 11 11 7e 7f 49 49 49 36 3e 41 41 41 22 7f 41     ...~.III6>AAA".A
+      74:	41 22 1c 00 06 00 00 00                             A"......
+
+0000007c <__ctors_end>:
+      7c:	11 24       	eor	r1, r1
+      7e:	1f be       	out	0x3f, r1	; 63
+      80:	cf e5       	ldi	r28, 0x5F	; 95
+      82:	d8 e0       	ldi	r29, 0x08	; 8
+      84:	de bf       	out	0x3e, r29	; 62
+      86:	cd bf       	out	0x3d, r28	; 61
+
+00000088 <__do_copy_data>:
+      88:	11 e0       	ldi	r17, 0x01	; 1
+      8a:	a0 e6       	ldi	r26, 0x60	; 96
+      8c:	b0 e0       	ldi	r27, 0x00	; 0
+      8e:	e4 e7       	ldi	r30, 0x74	; 116
+      90:	f3 e1       	ldi	r31, 0x13	; 19
+      92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
+      94:	05 90       	lpm	r0, Z+
+      96:	0d 92       	st	X+, r0
+      98:	ac 39       	cpi	r26, 0x9C	; 156
+      9a:	b1 07       	cpc	r27, r17
+      9c:	d9 f7       	brne	.-10     	; 0x94 <__do_copy_data+0xc>
+
+0000009e <__do_clear_bss>:
+      9e:	14 e0       	ldi	r17, 0x04	; 4
+      a0:	ac e9       	ldi	r26, 0x9C	; 156
+      a2:	b1 e0       	ldi	r27, 0x01	; 1
+      a4:	01 c0       	rjmp	.+2      	; 0xa8 <.do_clear_bss_start>
+
+000000a6 <.do_clear_bss_loop>:
+      a6:	1d 92       	st	X+, r1
+
+000000a8 <.do_clear_bss_start>:
+      a8:	a6 34       	cpi	r26, 0x46	; 70
+      aa:	b1 07       	cpc	r27, r17
+      ac:	e1 f7       	brne	.-8      	; 0xa6 <.do_clear_bss_loop>
+      ae:	0e 94 7a 07 	call	0xef4	; 0xef4 <main>
+      b2:	0c 94 b8 09 	jmp	0x1370	; 0x1370 <_exit>
+
+000000b6 <__bad_interrupt>:
+      b6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000ba <parse_numbers>:
+unsigned char values[4];                               // Глобальный массив для хранения совпадающих бит
+Stack pt;                                              // глобальное объявление указателя стека
+
+// -------------------------------------- Реализация алгоритма минимизации --------------------------------------
+// функция для создания массива единиц булевой функции
+_Bool parse_numbers(char input[]) {
+      ba:	cf 93       	push	r28
+      bc:	df 93       	push	r29
+      be:	e0 ed       	ldi	r30, 0xD0	; 208
+      c0:	f3 e0       	ldi	r31, 0x03	; 3
+
+    unsigned char index = 0; // индекс для массива 'ones'
+
+    // Заполняем массив ones флагами
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+        ones[i] = INVALID_VALUE;
+      c2:	2f ef       	ldi	r18, 0xFF	; 255
+      c4:	21 93       	st	Z+, r18
+	// USARTTransmitString(input);
+
+    unsigned char index = 0; // индекс для массива 'ones'
+
+    // Заполняем массив ones флагами
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+      c6:	33 e0       	ldi	r19, 0x03	; 3
+      c8:	e0 3e       	cpi	r30, 0xE0	; 224
+      ca:	f3 07       	cpc	r31, r19
+      cc:	d9 f7       	brne	.-10     	; 0xc4 <parse_numbers+0xa>
+      ce:	e8 2f       	mov	r30, r24
+      d0:	f9 2f       	mov	r31, r25
+      d2:	cf 01       	movw	r24, r30
+        ones[i] = INVALID_VALUE;
+    }
+
+    // пропуск пробелов в начале строки
+    while (*input == ' ') input++;
+      d4:	31 91       	ld	r19, Z+
+      d6:	30 32       	cpi	r19, 0x20	; 32
+      d8:	e1 f3       	breq	.-8      	; 0xd2 <parse_numbers+0x18>
+
+    // проверка на цифру
+    if (!isdigit(*input)) {
+      da:	23 2f       	mov	r18, r19
+      dc:	20 53       	subi	r18, 0x30	; 48
+      de:	2a 30       	cpi	r18, 0x0A	; 10
+      e0:	08 f0       	brcs	.+2      	; 0xe4 <parse_numbers+0x2a>
+      e2:	45 c0       	rjmp	.+138    	; 0x16e <parse_numbers+0xb4>
+		// USARTTransmitStringLn("Выход 1");   // ОТЛАДКА
+        return false;       // некорректное количество переменных
+    }
+    N = *input - '0';       // преобразование символа в число
+      e4:	20 93 ad 03 	sts	0x03AD, r18
+    if (N < 2 || N > 4) {
+      e8:	32 53       	subi	r19, 0x32	; 50
+      ea:	33 30       	cpi	r19, 0x03	; 3
+      ec:	08 f0       	brcs	.+2      	; 0xf0 <parse_numbers+0x36>
+      ee:	3f c0       	rjmp	.+126    	; 0x16e <parse_numbers+0xb4>
+		// USARTTransmitStringLn("Выход 2"); // ОТЛАДКА
+        return false;       // некорректное количество переменных
+    }
+    input++; // переходим к следующему символу
+      f0:	01 96       	adiw	r24, 0x01	; 1
+
+    // пропускаем пробелов
+    while (*input == ' ') input++;
+      f2:	fc 01       	movw	r30, r24
+      f4:	30 81       	ld	r19, Z
+      f6:	01 96       	adiw	r24, 0x01	; 1
+      f8:	30 32       	cpi	r19, 0x20	; 32
+      fa:	d9 f3       	breq	.-10     	; 0xf2 <parse_numbers+0x38>
+
+    // Максимальная позиция для единицы: 2^N - 1
+    unsigned char max_position = (1 << N) - 1;
+      fc:	81 e0       	ldi	r24, 0x01	; 1
+      fe:	90 e0       	ldi	r25, 0x00	; 0
+     100:	02 c0       	rjmp	.+4      	; 0x106 <parse_numbers+0x4c>
+     102:	88 0f       	add	r24, r24
+     104:	99 1f       	adc	r25, r25
+     106:	2a 95       	dec	r18
+     108:	e2 f7       	brpl	.-8      	; 0x102 <parse_numbers+0x48>
+     10a:	81 50       	subi	r24, 0x01	; 1
+
+    // Читаем позиции единиц
+    while (*input != '\0') {
+     10c:	c0 ed       	ldi	r28, 0xD0	; 208
+     10e:	d3 e0       	ldi	r29, 0x03	; 3
+_Bool parse_numbers(char input[]) {
+
+	// USARTTransmitStringLn("Вызвана функция для строки: ");
+	// USARTTransmitString(input);
+
+    unsigned char index = 0; // индекс для массива 'ones'
+     110:	20 e0       	ldi	r18, 0x00	; 0
+
+    // Максимальная позиция для единицы: 2^N - 1
+    unsigned char max_position = (1 << N) - 1;
+
+    // Читаем позиции единиц
+    while (*input != '\0') {
+     112:	28 c0       	rjmp	.+80     	; 0x164 <parse_numbers+0xaa>
+        // Проверяем, является ли текущий символ цифрой
+        if (!isdigit(*input)) {
+     114:	90 53       	subi	r25, 0x30	; 48
+     116:	9a 30       	cpi	r25, 0x0A	; 10
+     118:	50 f5       	brcc	.+84     	; 0x16e <parse_numbers+0xb4>
+     11a:	90 e0       	ldi	r25, 0x00	; 0
+     11c:	07 c0       	rjmp	.+14     	; 0x12c <parse_numbers+0x72>
+        }
+
+        // Преобразуем число
+        unsigned char value = 0;
+        while (isdigit(*input)) {
+            value = value * 10 + (*input - '0');
+     11e:	49 2f       	mov	r20, r25
+     120:	44 0f       	add	r20, r20
+     122:	94 2f       	mov	r25, r20
+     124:	99 0f       	add	r25, r25
+     126:	99 0f       	add	r25, r25
+     128:	94 0f       	add	r25, r20
+     12a:	93 0f       	add	r25, r19
+     12c:	5e 2f       	mov	r21, r30
+     12e:	4f 2f       	mov	r20, r31
+            return false;
+        }
+
+        // Преобразуем число
+        unsigned char value = 0;
+        while (isdigit(*input)) {
+     130:	31 91       	ld	r19, Z+
+     132:	30 53       	subi	r19, 0x30	; 48
+     134:	3a 30       	cpi	r19, 0x0A	; 10
+     136:	98 f3       	brcs	.-26     	; 0x11e <parse_numbers+0x64>
+            value = value * 10 + (*input - '0');
+            input++;
+        }
+
+        // Проверяем, что значение в допустимом диапазоне
+        if (value < 0 || value > max_position) {
+     138:	89 17       	cp	r24, r25
+     13a:	c8 f0       	brcs	.+50     	; 0x16e <parse_numbers+0xb4>
+     13c:	e0 ed       	ldi	r30, 0xD0	; 208
+     13e:	f3 e0       	ldi	r31, 0x03	; 3
+     140:	30 e0       	ldi	r19, 0x00	; 0
+     142:	04 c0       	rjmp	.+8      	; 0x14c <parse_numbers+0x92>
+            return false;
+        }
+
+        // Проверяем на дублирование
+        for (unsigned char i = 0; i < index; i++) {
+            if (ones[i] == value) {
+     144:	61 91       	ld	r22, Z+
+     146:	69 17       	cp	r22, r25
+     148:	91 f0       	breq	.+36     	; 0x16e <parse_numbers+0xb4>
+			// USARTTransmitStringLn("Выход 4"); // ОТЛАДКА
+            return false;
+        }
+
+        // Проверяем на дублирование
+        for (unsigned char i = 0; i < index; i++) {
+     14a:	3f 5f       	subi	r19, 0xFF	; 255
+     14c:	32 17       	cp	r19, r18
+     14e:	d0 f3       	brcs	.-12     	; 0x144 <parse_numbers+0x8a>
+                return false;
+            }
+        }
+
+        // Сохраняем значение в массив 'ones'
+        if (index >= MAX_ONES) {
+     150:	20 31       	cpi	r18, 0x10	; 16
+     152:	69 f0       	breq	.+26     	; 0x16e <parse_numbers+0xb4>
+            // printf("Ошибка: слишком много единиц (максимум %d)\n", MAX_ONES);
+			// USARTTransmitStringLn("Выход 6"); // ОТЛАДКА
+            return false;
+        }
+        ones[index++] = value;
+     154:	99 93       	st	Y+, r25
+     156:	2f 5f       	subi	r18, 0xFF	; 255
+     158:	a5 2f       	mov	r26, r21
+     15a:	b4 2f       	mov	r27, r20
+
+        // Пропускаем пробелы
+        while (*input == ' ') input++;
+     15c:	fd 01       	movw	r30, r26
+     15e:	9d 91       	ld	r25, X+
+     160:	90 32       	cpi	r25, 0x20	; 32
+     162:	e1 f3       	breq	.-8      	; 0x15c <parse_numbers+0xa2>
+
+    // Максимальная позиция для единицы: 2^N - 1
+    unsigned char max_position = (1 << N) - 1;
+
+    // Читаем позиции единиц
+    while (*input != '\0') {
+     164:	90 81       	ld	r25, Z
+     166:	99 23       	and	r25, r25
+     168:	a9 f6       	brne	.-86     	; 0x114 <parse_numbers+0x5a>
+
+        // Пропускаем пробелы
+        while (*input == ' ') input++;
+    }
+
+    return true;
+     16a:	81 e0       	ldi	r24, 0x01	; 1
+     16c:	01 c0       	rjmp	.+2      	; 0x170 <parse_numbers+0xb6>
+
+        // Сохраняем значение в массив 'ones'
+        if (index >= MAX_ONES) {
+            // printf("Ошибка: слишком много единиц (максимум %d)\n", MAX_ONES);
+			// USARTTransmitStringLn("Выход 6"); // ОТЛАДКА
+            return false;
+     16e:	80 e0       	ldi	r24, 0x00	; 0
+        // Пропускаем пробелы
+        while (*input == ' ') input++;
+    }
+
+    return true;
+}
+     170:	df 91       	pop	r29
+     172:	cf 91       	pop	r28
+     174:	08 95       	ret
+
+00000176 <generate_gray_code_matrix>:
+
+// Функция для создания двумерной матрицы кода Грея для карты Карно
+void generate_gray_code_matrix() {
+     176:	af 92       	push	r10
+     178:	bf 92       	push	r11
+     17a:	df 92       	push	r13
+     17c:	ef 92       	push	r14
+     17e:	ff 92       	push	r15
+     180:	0f 93       	push	r16
+     182:	1f 93       	push	r17
+     184:	df 93       	push	r29
+     186:	cf 93       	push	r28
+     188:	00 d0       	rcall	.+0      	; 0x18a <generate_gray_code_matrix+0x14>
+     18a:	00 d0       	rcall	.+0      	; 0x18c <generate_gray_code_matrix+0x16>
+     18c:	cd b7       	in	r28, 0x3d	; 61
+     18e:	de b7       	in	r29, 0x3e	; 62
+    // Массив для генерации кода Грея
+    const unsigned char code_gray[] = { 0b00, 0b01, 0b11, 0b10 };
+     190:	19 82       	std	Y+1, r1	; 0x01
+     192:	81 e0       	ldi	r24, 0x01	; 1
+     194:	8a 83       	std	Y+2, r24	; 0x02
+     196:	83 e0       	ldi	r24, 0x03	; 3
+     198:	8b 83       	std	Y+3, r24	; 0x03
+     19a:	82 e0       	ldi	r24, 0x02	; 2
+     19c:	8c 83       	std	Y+4, r24	; 0x04
+
+    // Размеры карты Карно
+    unsigned char A = (N / 2) * 2;   // количество строк
+     19e:	10 91 ad 03 	lds	r17, 0x03AD
+     1a2:	81 2f       	mov	r24, r17
+     1a4:	86 95       	lsr	r24
+     1a6:	e8 2e       	mov	r14, r24
+     1a8:	ee 0c       	add	r14, r14
+    unsigned char B = (N - (N / 2)) * 2; // количество столбцов
+     1aa:	01 2f       	mov	r16, r17
+     1ac:	08 1b       	sub	r16, r24
+     1ae:	00 0f       	add	r16, r16
+
+    // Инициализация всей матрицы нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            gray_matrix[i][j] = 0;
+     1b0:	10 92 f6 03 	sts	0x03F6, r1
+     1b4:	10 92 f7 03 	sts	0x03F7, r1
+     1b8:	10 92 f8 03 	sts	0x03F8, r1
+     1bc:	10 92 f9 03 	sts	0x03F9, r1
+     1c0:	10 92 fa 03 	sts	0x03FA, r1
+     1c4:	10 92 fb 03 	sts	0x03FB, r1
+     1c8:	10 92 fc 03 	sts	0x03FC, r1
+     1cc:	10 92 fd 03 	sts	0x03FD, r1
+     1d0:	10 92 fe 03 	sts	0x03FE, r1
+     1d4:	10 92 ff 03 	sts	0x03FF, r1
+     1d8:	10 92 00 04 	sts	0x0400, r1
+     1dc:	10 92 01 04 	sts	0x0401, r1
+     1e0:	10 92 02 04 	sts	0x0402, r1
+     1e4:	10 92 03 04 	sts	0x0403, r1
+     1e8:	10 92 04 04 	sts	0x0404, r1
+     1ec:	10 92 05 04 	sts	0x0405, r1
+    }
+
+    // Заполнение матрицы в зависимости от количества переменных
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+            if (N == 2) {
+     1f0:	80 e0       	ldi	r24, 0x00	; 0
+     1f2:	90 e0       	ldi	r25, 0x00	; 0
+                // Для 2 переменных используем последовательность 00, 01, 10, 11
+                gray_matrix[i][j] = i * 2 + j;
+            }
+            else {
+                // Для 3 и 4 переменных используем `code_gray` для строк и столбцов
+                unsigned char row_code = code_gray[i]; // Код строки
+     1f4:	ae 01       	movw	r20, r28
+     1f6:	4f 5f       	subi	r20, 0xFF	; 255
+     1f8:	5f 4f       	sbci	r21, 0xFF	; 255
+     1fa:	1b c0       	rjmp	.+54     	; 0x232 <generate_gray_code_matrix+0xbc>
+    }
+
+    // Заполнение матрицы в зависимости от количества переменных
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+            if (N == 2) {
+     1fc:	12 30       	cpi	r17, 0x02	; 2
+     1fe:	11 f4       	brne	.+4      	; 0x204 <generate_gray_code_matrix+0x8e>
+                // Для 2 переменных используем последовательность 00, 01, 10, 11
+                gray_matrix[i][j] = i * 2 + j;
+     200:	6d 0d       	add	r22, r13
+     202:	0f c0       	rjmp	.+30     	; 0x222 <generate_gray_code_matrix+0xac>
+            }
+            else {
+                // Для 3 и 4 переменных используем `code_gray` для строк и столбцов
+                unsigned char row_code = code_gray[i]; // Код строки
+     204:	d5 01       	movw	r26, r10
+     206:	fc 90       	ld	r15, X
+
+    return true;
+}
+
+// Функция для создания двумерной матрицы кода Грея для карты Карно
+void generate_gray_code_matrix() {
+     208:	ba 01       	movw	r22, r20
+     20a:	62 0f       	add	r22, r18
+     20c:	73 1f       	adc	r23, r19
+                gray_matrix[i][j] = i * 2 + j;
+            }
+            else {
+                // Для 3 и 4 переменных используем `code_gray` для строк и столбцов
+                unsigned char row_code = code_gray[i]; // Код строки
+                unsigned char col_code = code_gray[j]; // Код столбца
+     20e:	db 01       	movw	r26, r22
+     210:	7c 91       	ld	r23, X
+
+                // Для 3 переменных объединяем 1 бит строки и 2 бита столбца
+                if (N == 3) {
+     212:	13 30       	cpi	r17, 0x03	; 3
+     214:	11 f0       	breq	.+4      	; 0x21a <generate_gray_code_matrix+0xa4>
+                    gray_matrix[i][j] = (row_code << 2) | col_code;
+                }
+
+                // Для 4 переменных объединяем 2 бита строки и 2 бита столбца
+                if (N == 4) {
+     216:	14 30       	cpi	r17, 0x04	; 4
+     218:	29 f4       	brne	.+10     	; 0x224 <generate_gray_code_matrix+0xae>
+                    gray_matrix[i][j] = (row_code << 2) | col_code;
+     21a:	6f 2d       	mov	r22, r15
+     21c:	66 0f       	add	r22, r22
+     21e:	66 0f       	add	r22, r22
+     220:	67 2b       	or	r22, r23
+     222:	60 83       	st	Z, r22
+     224:	2f 5f       	subi	r18, 0xFF	; 255
+     226:	3f 4f       	sbci	r19, 0xFF	; 255
+     228:	31 96       	adiw	r30, 0x01	; 1
+     22a:	62 2f       	mov	r22, r18
+        }
+    }
+
+    // Заполнение матрицы в зависимости от количества переменных
+    for (unsigned char i = 0; i < A; i++) {
+        for (unsigned char j = 0; j < B; j++) {
+     22c:	20 17       	cp	r18, r16
+     22e:	30 f3       	brcs	.-52     	; 0x1fc <generate_gray_code_matrix+0x86>
+     230:	01 96       	adiw	r24, 0x01	; 1
+            gray_matrix[i][j] = 0;
+        }
+    }
+
+    // Заполнение матрицы в зависимости от количества переменных
+    for (unsigned char i = 0; i < A; i++) {
+     232:	8e 15       	cp	r24, r14
+     234:	78 f4       	brcc	.+30     	; 0x254 <generate_gray_code_matrix+0xde>
+     236:	d8 2e       	mov	r13, r24
+     238:	dd 0c       	add	r13, r13
+
+    return true;
+}
+
+// Функция для создания двумерной матрицы кода Грея для карты Карно
+void generate_gray_code_matrix() {
+     23a:	fc 01       	movw	r30, r24
+     23c:	ee 0f       	add	r30, r30
+     23e:	ff 1f       	adc	r31, r31
+     240:	ee 0f       	add	r30, r30
+     242:	ff 1f       	adc	r31, r31
+     244:	ea 50       	subi	r30, 0x0A	; 10
+     246:	fc 4f       	sbci	r31, 0xFC	; 252
+     248:	20 e0       	ldi	r18, 0x00	; 0
+     24a:	30 e0       	ldi	r19, 0x00	; 0
+                // Для 2 переменных используем последовательность 00, 01, 10, 11
+                gray_matrix[i][j] = i * 2 + j;
+            }
+            else {
+                // Для 3 и 4 переменных используем `code_gray` для строк и столбцов
+                unsigned char row_code = code_gray[i]; // Код строки
+     24c:	5a 01       	movw	r10, r20
+     24e:	a8 0e       	add	r10, r24
+     250:	b1 1c       	adc	r11, r1
+     252:	eb cf       	rjmp	.-42     	; 0x22a <generate_gray_code_matrix+0xb4>
+                    gray_matrix[i][j] = (row_code << 2) | col_code;
+                }
+            }
+        }
+    }
+}
+     254:	0f 90       	pop	r0
+     256:	0f 90       	pop	r0
+     258:	0f 90       	pop	r0
+     25a:	0f 90       	pop	r0
+     25c:	cf 91       	pop	r28
+     25e:	df 91       	pop	r29
+     260:	1f 91       	pop	r17
+     262:	0f 91       	pop	r16
+     264:	ff 90       	pop	r15
+     266:	ef 90       	pop	r14
+     268:	df 90       	pop	r13
+     26a:	bf 90       	pop	r11
+     26c:	af 90       	pop	r10
+     26e:	08 95       	ret
+
+00000270 <fill_karnaugh_map>:
+
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+     270:	ff 92       	push	r15
+     272:	0f 93       	push	r16
+     274:	1f 93       	push	r17
+     276:	cf 93       	push	r28
+     278:	df 93       	push	r29
+     27a:	e5 ee       	ldi	r30, 0xE5	; 229
+     27c:	f3 e0       	ldi	r31, 0x03	; 3
+     27e:	ac e9       	ldi	r26, 0x9C	; 156
+     280:	b1 e0       	ldi	r27, 0x01	; 1
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            kmap[i][j] = 0;
+     282:	10 82       	st	Z, r1
+			kmap_bool[i][j] = 0;
+     284:	1c 92       	st	X, r1
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            kmap[i][j] = 0;
+     286:	11 82       	std	Z+1, r1	; 0x01
+			kmap_bool[i][j] = 0;
+     288:	11 96       	adiw	r26, 0x01	; 1
+     28a:	1c 92       	st	X, r1
+     28c:	11 97       	sbiw	r26, 0x01	; 1
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            kmap[i][j] = 0;
+     28e:	12 82       	std	Z+2, r1	; 0x02
+			kmap_bool[i][j] = 0;
+     290:	12 96       	adiw	r26, 0x02	; 2
+     292:	1c 92       	st	X, r1
+     294:	12 97       	sbiw	r26, 0x02	; 2
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            kmap[i][j] = 0;
+     296:	13 82       	std	Z+3, r1	; 0x03
+			kmap_bool[i][j] = 0;
+     298:	13 96       	adiw	r26, 0x03	; 3
+     29a:	1c 92       	st	X, r1
+     29c:	13 97       	sbiw	r26, 0x03	; 3
+     29e:	34 96       	adiw	r30, 0x04	; 4
+     2a0:	14 96       	adiw	r26, 0x04	; 4
+}
+
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+    // Инициализация всей карты Карно нулями
+    for (unsigned char i = 0; i < MAX_SIZE; i++) {
+     2a2:	83 e0       	ldi	r24, 0x03	; 3
+     2a4:	e5 3f       	cpi	r30, 0xF5	; 245
+     2a6:	f8 07       	cpc	r31, r24
+     2a8:	61 f7       	brne	.-40     	; 0x282 <fill_karnaugh_map+0x12>
+    // Устанавливаем единицы в соответствии с массивом ones
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+     2aa:	00 91 e4 03 	lds	r16, 0x03E4
+            for (unsigned char j = 0; j < B; j++) {
+     2ae:	10 91 f5 03 	lds	r17, 0x03F5
+     2b2:	c0 ed       	ldi	r28, 0xD0	; 208
+     2b4:	d3 e0       	ldi	r29, 0x03	; 3
+                if (gray_matrix[i][j] == target_index) {
+                    kmap[i][j] = 1; // Устанавливаем единицу
+     2b6:	71 e0       	ldi	r23, 0x01	; 1
+        }
+    }
+
+    // Устанавливаем единицы в соответствии с массивом ones
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+     2b8:	69 91       	ld	r22, Y+
+     2ba:	6f 3f       	cpi	r22, 0xFF	; 255
+     2bc:	41 f1       	breq	.+80     	; 0x30e <fill_karnaugh_map+0x9e>
+     2be:	80 e0       	ldi	r24, 0x00	; 0
+     2c0:	90 e0       	ldi	r25, 0x00	; 0
+     2c2:	13 c0       	rjmp	.+38     	; 0x2ea <fill_karnaugh_map+0x7a>
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+            for (unsigned char j = 0; j < B; j++) {
+                if (gray_matrix[i][j] == target_index) {
+     2c4:	a9 01       	movw	r20, r18
+     2c6:	fd 90       	ld	r15, X+
+     2c8:	2f 5f       	subi	r18, 0xFF	; 255
+     2ca:	3f 4f       	sbci	r19, 0xFF	; 255
+     2cc:	f6 16       	cp	r15, r22
+     2ce:	51 f4       	brne	.+20     	; 0x2e4 <fill_karnaugh_map+0x74>
+                    kmap[i][j] = 1; // Устанавливаем единицу
+     2d0:	ee 0f       	add	r30, r30
+     2d2:	ff 1f       	adc	r31, r31
+     2d4:	ee 0f       	add	r30, r30
+     2d6:	ff 1f       	adc	r31, r31
+     2d8:	e4 0f       	add	r30, r20
+     2da:	f5 1f       	adc	r31, r21
+     2dc:	eb 51       	subi	r30, 0x1B	; 27
+     2de:	fc 4f       	sbci	r31, 0xFC	; 252
+     2e0:	70 83       	st	Z, r23
+                    break;
+     2e2:	02 c0       	rjmp	.+4      	; 0x2e8 <fill_karnaugh_map+0x78>
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+            for (unsigned char j = 0; j < B; j++) {
+     2e4:	21 17       	cp	r18, r17
+     2e6:	70 f3       	brcs	.-36     	; 0x2c4 <fill_karnaugh_map+0x54>
+     2e8:	01 96       	adiw	r24, 0x01	; 1
+     2ea:	e8 2f       	mov	r30, r24
+    // Устанавливаем единицы в соответствии с массивом ones
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+     2ec:	80 17       	cp	r24, r16
+     2ee:	58 f4       	brcc	.+22     	; 0x306 <fill_karnaugh_map+0x96>
+        }
+    }
+}
+
+// Функция для заполнения карты Карно
+void fill_karnaugh_map() {
+     2f0:	dc 01       	movw	r26, r24
+     2f2:	aa 0f       	add	r26, r26
+     2f4:	bb 1f       	adc	r27, r27
+     2f6:	aa 0f       	add	r26, r26
+     2f8:	bb 1f       	adc	r27, r27
+     2fa:	aa 50       	subi	r26, 0x0A	; 10
+     2fc:	bc 4f       	sbci	r27, 0xFC	; 252
+     2fe:	20 e0       	ldi	r18, 0x00	; 0
+     300:	30 e0       	ldi	r19, 0x00	; 0
+        if (ones[k] == INVALID_VALUE) break; // Прекращаем, если достигли конца значимых значений
+
+        unsigned char target_index = ones[k];
+        for (unsigned char i = 0; i < A; i++) {
+            for (unsigned char j = 0; j < B; j++) {
+                if (gray_matrix[i][j] == target_index) {
+     302:	f0 e0       	ldi	r31, 0x00	; 0
+     304:	ef cf       	rjmp	.-34     	; 0x2e4 <fill_karnaugh_map+0x74>
+			kmap_bool[i][j] = 0;
+        }
+    }
+
+    // Устанавливаем единицы в соответствии с массивом ones
+    for (unsigned char k = 0; k < MAX_ONES; k++) {
+     306:	83 e0       	ldi	r24, 0x03	; 3
+     308:	c0 3e       	cpi	r28, 0xE0	; 224
+     30a:	d8 07       	cpc	r29, r24
+     30c:	a9 f6       	brne	.-86     	; 0x2b8 <fill_karnaugh_map+0x48>
+                    break;
+                }
+            }
+        }
+    }
+}
+     30e:	df 91       	pop	r29
+     310:	cf 91       	pop	r28
+     312:	1f 91       	pop	r17
+     314:	0f 91       	pop	r16
+     316:	ff 90       	pop	r15
+     318:	08 95       	ret
+
+0000031a <init_neighbors>:
+
+// инициализации матрицы соседних единиц
+void init_neighbors() {
+     31a:	e6 e0       	ldi	r30, 0x06	; 6
+     31c:	f4 e0       	ldi	r31, 0x04	; 4
+    // Обнуление матрицы соседей
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            neighbors[i][j] = 0;
+     31e:	10 82       	st	Z, r1
+     320:	11 82       	std	Z+1, r1	; 0x01
+     322:	12 82       	std	Z+2, r1	; 0x02
+     324:	13 82       	std	Z+3, r1	; 0x03
+     326:	34 96       	adiw	r30, 0x04	; 4
+}
+
+// инициализации матрицы соседних единиц
+void init_neighbors() {
+    // Обнуление матрицы соседей
+    for (unsigned char i = 0; i < MAX_ONES; i++) {
+     328:	84 e0       	ldi	r24, 0x04	; 4
+     32a:	e6 34       	cpi	r30, 0x46	; 70
+     32c:	f8 07       	cpc	r31, r24
+     32e:	b9 f7       	brne	.-18     	; 0x31e <init_neighbors+0x4>
+        for (unsigned char j = 0; j < MAX_SIZE; j++) {
+            neighbors[i][j] = 0;
+        }
+    }
+}
+     330:	08 95       	ret
+
+00000332 <count_common_bits>:
+
+// Функция для подсчета количества одинаковых битов во всех строках из стека
+uint8_t count_common_bits() {
+     332:	af 92       	push	r10
+     334:	bf 92       	push	r11
+     336:	cf 92       	push	r12
+     338:	df 92       	push	r13
+     33a:	ef 92       	push	r14
+     33c:	ff 92       	push	r15
+     33e:	0f 93       	push	r16
+     340:	1f 93       	push	r17
+     342:	df 93       	push	r29
+     344:	cf 93       	push	r28
+     346:	0f 92       	push	r0
+     348:	cd b7       	in	r28, 0x3d	; 61
+     34a:	de b7       	in	r29, 0x3e	; 62
+     uint8_t common_bits_count = 0;
+
+    // Инициализация массива values нулями
+    for (unsigned char i = 0; i < 4; i++) {
+        values[i] = 0;
+     34c:	10 92 e0 03 	sts	0x03E0, r1
+     350:	10 92 e1 03 	sts	0x03E1, r1
+     354:	10 92 e2 03 	sts	0x03E2, r1
+     358:	10 92 e3 03 	sts	0x03E3, r1
+     35c:	ff 24       	eor	r15, r15
+     35e:	ee 24       	eor	r14, r14
+        unsigned char first_bit = (first_value >> bit) & 1;
+
+        _Bool all_match = true;
+
+        // Проверяем этот бит у всех элементов стека
+        for (unsigned char i = 1; i < size(&pt); i++) {
+     360:	dd 24       	eor	r13, r13
+     362:	d3 94       	inc	r13
+     364:	53 c0       	rjmp	.+166    	; 0x40c <count_common_bits+0xda>
+
+    // Проверяем каждый бит (позицию) в строках кода Грея
+    for (unsigned char bit = 0; bit < N; bit++) {
+        // Получаем значение первого элемента из стека
+        unsigned char first_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+        unsigned char first_bit = (first_value >> bit) & 1;
+     366:	0f 2d       	mov	r16, r15
+     368:	10 e0       	ldi	r17, 0x00	; 0
+    }
+
+    // Проверяем каждый бит (позицию) в строках кода Грея
+    for (unsigned char bit = 0; bit < N; bit++) {
+        // Получаем значение первого элемента из стека
+        unsigned char first_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+     36a:	e0 91 b0 03 	lds	r30, 0x03B0
+     36e:	f0 91 b1 03 	lds	r31, 0x03B1
+     372:	ee 0f       	add	r30, r30
+     374:	ff 1f       	adc	r31, r31
+     376:	ee 0f       	add	r30, r30
+     378:	ff 1f       	adc	r31, r31
+     37a:	80 91 b2 03 	lds	r24, 0x03B2
+     37e:	90 91 b3 03 	lds	r25, 0x03B3
+     382:	e8 0f       	add	r30, r24
+     384:	f9 1f       	adc	r31, r25
+     386:	ea 50       	subi	r30, 0x0A	; 10
+     388:	fc 4f       	sbci	r31, 0xFC	; 252
+        unsigned char first_bit = (first_value >> bit) & 1;
+     38a:	20 81       	ld	r18, Z
+     38c:	30 e0       	ldi	r19, 0x00	; 0
+     38e:	0f 2c       	mov	r0, r15
+     390:	02 c0       	rjmp	.+4      	; 0x396 <count_common_bits+0x64>
+     392:	35 95       	asr	r19
+     394:	27 95       	ror	r18
+     396:	0a 94       	dec	r0
+     398:	e2 f7       	brpl	.-8      	; 0x392 <count_common_bits+0x60>
+     39a:	21 70       	andi	r18, 0x01	; 1
+
+        _Bool all_match = true;
+
+        // Проверяем этот бит у всех элементов стека
+        for (unsigned char i = 1; i < size(&pt); i++) {
+     39c:	cc 24       	eor	r12, r12
+     39e:	c3 94       	inc	r12
+     3a0:	28 c0       	rjmp	.+80     	; 0x3f2 <count_common_bits+0xc0>
+            unsigned char current_value = gray_matrix[pt.items[i].row][pt.items[i].col];
+     3a2:	d5 01       	movw	r26, r10
+     3a4:	aa 0f       	add	r26, r26
+     3a6:	bb 1f       	adc	r27, r27
+     3a8:	aa 0f       	add	r26, r26
+     3aa:	bb 1f       	adc	r27, r27
+     3ac:	ae 54       	subi	r26, 0x4E	; 78
+     3ae:	bc 4f       	sbci	r27, 0xFC	; 252
+     3b0:	f5 01       	movw	r30, r10
+     3b2:	ee 0f       	add	r30, r30
+     3b4:	ff 1f       	adc	r31, r31
+     3b6:	ee 0f       	add	r30, r30
+     3b8:	ff 1f       	adc	r31, r31
+     3ba:	e2 55       	subi	r30, 0x52	; 82
+     3bc:	fc 4f       	sbci	r31, 0xFC	; 252
+     3be:	02 80       	ldd	r0, Z+2	; 0x02
+     3c0:	f3 81       	ldd	r31, Z+3	; 0x03
+     3c2:	e0 2d       	mov	r30, r0
+     3c4:	ee 0f       	add	r30, r30
+     3c6:	ff 1f       	adc	r31, r31
+     3c8:	ee 0f       	add	r30, r30
+     3ca:	ff 1f       	adc	r31, r31
+     3cc:	8d 91       	ld	r24, X+
+     3ce:	9c 91       	ld	r25, X
+     3d0:	11 97       	sbiw	r26, 0x01	; 1
+     3d2:	e8 0f       	add	r30, r24
+     3d4:	f9 1f       	adc	r31, r25
+     3d6:	ea 50       	subi	r30, 0x0A	; 10
+     3d8:	fc 4f       	sbci	r31, 0xFC	; 252
+            unsigned char current_bit = (current_value >> bit) & 1;
+     3da:	80 81       	ld	r24, Z
+     3dc:	90 e0       	ldi	r25, 0x00	; 0
+     3de:	00 2e       	mov	r0, r16
+     3e0:	02 c0       	rjmp	.+4      	; 0x3e6 <count_common_bits+0xb4>
+     3e2:	95 95       	asr	r25
+     3e4:	87 95       	ror	r24
+     3e6:	0a 94       	dec	r0
+     3e8:	e2 f7       	brpl	.-8      	; 0x3e2 <count_common_bits+0xb0>
+     3ea:	81 70       	andi	r24, 0x01	; 1
+
+            if (current_bit != first_bit) {
+     3ec:	82 17       	cp	r24, r18
+     3ee:	69 f4       	brne	.+26     	; 0x40a <count_common_bits+0xd8>
+        unsigned char first_bit = (first_value >> bit) & 1;
+
+        _Bool all_match = true;
+
+        // Проверяем этот бит у всех элементов стека
+        for (unsigned char i = 1; i < size(&pt); i++) {
+     3f0:	c3 94       	inc	r12
+     3f2:	ac 2c       	mov	r10, r12
+     3f4:	bb 24       	eor	r11, r11
+     3f6:	8e ea       	ldi	r24, 0xAE	; 174
+     3f8:	93 e0       	ldi	r25, 0x03	; 3
+     3fa:	29 83       	std	Y+1, r18	; 0x01
+     3fc:	0e 94 d6 08 	call	0x11ac	; 0x11ac <size>
+     400:	29 81       	ldd	r18, Y+1	; 0x01
+     402:	a8 16       	cp	r10, r24
+     404:	b9 06       	cpc	r11, r25
+     406:	6c f2       	brlt	.-102    	; 0x3a2 <count_common_bits+0x70>
+     408:	13 c0       	rjmp	.+38     	; 0x430 <count_common_bits+0xfe>
+    for (unsigned char i = 0; i < 4; i++) {
+        values[i] = 0;
+    }
+
+    // Проверяем каждый бит (позицию) в строках кода Грея
+    for (unsigned char bit = 0; bit < N; bit++) {
+     40a:	f3 94       	inc	r15
+     40c:	80 91 ad 03 	lds	r24, 0x03AD
+     410:	f8 16       	cp	r15, r24
+     412:	08 f4       	brcc	.+2      	; 0x416 <count_common_bits+0xe4>
+     414:	a8 cf       	rjmp	.-176    	; 0x366 <count_common_bits+0x34>
+            common_bits_count++;
+        }
+    }
+
+    return common_bits_count;
+}
+     416:	8e 2d       	mov	r24, r14
+     418:	0f 90       	pop	r0
+     41a:	cf 91       	pop	r28
+     41c:	df 91       	pop	r29
+     41e:	1f 91       	pop	r17
+     420:	0f 91       	pop	r16
+     422:	ff 90       	pop	r15
+     424:	ef 90       	pop	r14
+     426:	df 90       	pop	r13
+     428:	cf 90       	pop	r12
+     42a:	bf 90       	pop	r11
+     42c:	af 90       	pop	r10
+     42e:	08 95       	ret
+            }
+        }
+
+        // Если на данной позиции биты совпадают у всех, обновляем values и счётчик
+        if (all_match) {
+            values[N - 1 - bit] = 1;
+     430:	e0 91 ad 03 	lds	r30, 0x03AD
+     434:	f0 e0       	ldi	r31, 0x00	; 0
+     436:	31 97       	sbiw	r30, 0x01	; 1
+     438:	e0 1b       	sub	r30, r16
+     43a:	f1 0b       	sbc	r31, r17
+     43c:	e0 52       	subi	r30, 0x20	; 32
+     43e:	fc 4f       	sbci	r31, 0xFC	; 252
+     440:	d0 82       	st	Z, r13
+            common_bits_count++;
+     442:	e3 94       	inc	r14
+     444:	e2 cf       	rjmp	.-60     	; 0x40a <count_common_bits+0xd8>
+
+00000446 <generate_implicant_string>:
+    }
+
+    return common_bits_count;
+}
+
+void generate_implicant_string(char result[9]) {
+     446:	1f 93       	push	r17
+
+    // Получаем код Грея из первого элемента стека
+    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+     448:	fc 01       	movw	r30, r24
+    }
+
+    return common_bits_count;
+}
+
+void generate_implicant_string(char result[9]) {
+     44a:	28 e0       	ldi	r18, 0x08	; 8
+    // Инициализация строки как пустой
+    for (unsigned char i = 0; i < 8; i++) {
+        result[i] = '0';
+     44c:	30 e3       	ldi	r19, 0x30	; 48
+     44e:	31 93       	st	Z+, r19
+     450:	21 50       	subi	r18, 0x01	; 1
+    return common_bits_count;
+}
+
+void generate_implicant_string(char result[9]) {
+    // Инициализация строки как пустой
+    for (unsigned char i = 0; i < 8; i++) {
+     452:	e9 f7       	brne	.-6      	; 0x44e <generate_implicant_string+0x8>
+        result[i] = '0';
+    }
+
+	// Помечаем единицы как склеенные
+    for (unsigned char i = 0; i <= pt.top; i++) {
+     454:	40 91 ae 03 	lds	r20, 0x03AE
+     458:	50 91 af 03 	lds	r21, 0x03AF
+     45c:	60 e0       	ldi	r22, 0x00	; 0
+        unsigned char row = pt.items[i].row;
+        unsigned char col = pt.items[i].col;
+        kmap_bool[row][col] = true;
+     45e:	71 e0       	ldi	r23, 0x01	; 1
+     460:	1b c0       	rjmp	.+54     	; 0x498 <generate_implicant_string+0x52>
+    }
+
+	// Помечаем единицы как склеенные
+    for (unsigned char i = 0; i <= pt.top; i++) {
+        unsigned char row = pt.items[i].row;
+        unsigned char col = pt.items[i].col;
+     462:	f9 01       	movw	r30, r18
+     464:	ee 0f       	add	r30, r30
+     466:	ff 1f       	adc	r31, r31
+     468:	ee 0f       	add	r30, r30
+     46a:	ff 1f       	adc	r31, r31
+     46c:	ee 54       	subi	r30, 0x4E	; 78
+     46e:	fc 4f       	sbci	r31, 0xFC	; 252
+        kmap_bool[row][col] = true;
+     470:	a0 81       	ld	r26, Z
+        result[i] = '0';
+    }
+
+	// Помечаем единицы как склеенные
+    for (unsigned char i = 0; i <= pt.top; i++) {
+        unsigned char row = pt.items[i].row;
+     472:	f9 01       	movw	r30, r18
+     474:	ee 0f       	add	r30, r30
+     476:	ff 1f       	adc	r31, r31
+     478:	ee 0f       	add	r30, r30
+     47a:	ff 1f       	adc	r31, r31
+     47c:	e2 55       	subi	r30, 0x52	; 82
+     47e:	fc 4f       	sbci	r31, 0xFC	; 252
+        unsigned char col = pt.items[i].col;
+        kmap_bool[row][col] = true;
+     480:	e2 81       	ldd	r30, Z+2	; 0x02
+     482:	f0 e0       	ldi	r31, 0x00	; 0
+     484:	ee 0f       	add	r30, r30
+     486:	ff 1f       	adc	r31, r31
+     488:	ee 0f       	add	r30, r30
+     48a:	ff 1f       	adc	r31, r31
+     48c:	ea 0f       	add	r30, r26
+     48e:	f1 1d       	adc	r31, r1
+     490:	e4 56       	subi	r30, 0x64	; 100
+     492:	fe 4f       	sbci	r31, 0xFE	; 254
+     494:	70 83       	st	Z, r23
+    for (unsigned char i = 0; i < 8; i++) {
+        result[i] = '0';
+    }
+
+	// Помечаем единицы как склеенные
+    for (unsigned char i = 0; i <= pt.top; i++) {
+     496:	6f 5f       	subi	r22, 0xFF	; 255
+     498:	26 2f       	mov	r18, r22
+     49a:	30 e0       	ldi	r19, 0x00	; 0
+     49c:	42 17       	cp	r20, r18
+     49e:	53 07       	cpc	r21, r19
+     4a0:	04 f7       	brge	.-64     	; 0x462 <generate_implicant_string+0x1c>
+        unsigned char col = pt.items[i].col;
+        kmap_bool[row][col] = true;
+    }
+
+    // Получаем код Грея из первого элемента стека
+    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+     4a2:	e0 91 b0 03 	lds	r30, 0x03B0
+     4a6:	f0 91 b1 03 	lds	r31, 0x03B1
+     4aa:	ee 0f       	add	r30, r30
+     4ac:	ff 1f       	adc	r31, r31
+     4ae:	ee 0f       	add	r30, r30
+     4b0:	ff 1f       	adc	r31, r31
+     4b2:	20 91 b2 03 	lds	r18, 0x03B2
+     4b6:	30 91 b3 03 	lds	r19, 0x03B3
+     4ba:	e2 0f       	add	r30, r18
+     4bc:	f3 1f       	adc	r31, r19
+     4be:	ea 50       	subi	r30, 0x0A	; 10
+     4c0:	fc 4f       	sbci	r31, 0xFC	; 252
+     4c2:	60 81       	ld	r22, Z
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+     4c4:	b0 e0       	ldi	r27, 0x00	; 0
+
+    // Получаем код Грея из первого элемента стека
+    unsigned char gray_value = gray_matrix[pt.items[0].row][pt.items[0].col];
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+     4c6:	a0 e0       	ldi	r26, 0x00	; 0
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+        if (values[i] == 1) {
+            result[index++] = 'A' + i; // Добавляем переменную
+            if (((gray_value >> (N - 1 - i)) & 1) == 0) { // Проверяем бит переменной
+     4c8:	70 e0       	ldi	r23, 0x00	; 0
+                result[index++] = '\''; // Добавляем апостроф, если бит == 0
+     4ca:	17 e2       	ldi	r17, 0x27	; 39
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+     4cc:	24 c0       	rjmp	.+72     	; 0x516 <generate_implicant_string+0xd0>
+        if (values[i] == 1) {
+     4ce:	4b 2f       	mov	r20, r27
+     4d0:	50 e0       	ldi	r21, 0x00	; 0
+     4d2:	fa 01       	movw	r30, r20
+     4d4:	e0 52       	subi	r30, 0x20	; 32
+     4d6:	fc 4f       	sbci	r31, 0xFC	; 252
+     4d8:	20 81       	ld	r18, Z
+     4da:	21 30       	cpi	r18, 0x01	; 1
+     4dc:	d9 f4       	brne	.+54     	; 0x514 <generate_implicant_string+0xce>
+            result[index++] = 'A' + i; // Добавляем переменную
+     4de:	fc 01       	movw	r30, r24
+     4e0:	ea 0f       	add	r30, r26
+     4e2:	f1 1d       	adc	r31, r1
+     4e4:	2b 2f       	mov	r18, r27
+     4e6:	2f 5b       	subi	r18, 0xBF	; 191
+     4e8:	20 83       	st	Z, r18
+     4ea:	af 5f       	subi	r26, 0xFF	; 255
+            if (((gray_value >> (N - 1 - i)) & 1) == 0) { // Проверяем бит переменной
+     4ec:	20 91 ad 03 	lds	r18, 0x03AD
+     4f0:	30 e0       	ldi	r19, 0x00	; 0
+     4f2:	21 50       	subi	r18, 0x01	; 1
+     4f4:	30 40       	sbci	r19, 0x00	; 0
+     4f6:	24 1b       	sub	r18, r20
+     4f8:	35 0b       	sbc	r19, r21
+     4fa:	ab 01       	movw	r20, r22
+     4fc:	02 c0       	rjmp	.+4      	; 0x502 <generate_implicant_string+0xbc>
+     4fe:	55 95       	asr	r21
+     500:	47 95       	ror	r20
+     502:	2a 95       	dec	r18
+     504:	e2 f7       	brpl	.-8      	; 0x4fe <generate_implicant_string+0xb8>
+     506:	40 fd       	sbrc	r20, 0
+     508:	05 c0       	rjmp	.+10     	; 0x514 <generate_implicant_string+0xce>
+                result[index++] = '\''; // Добавляем апостроф, если бит == 0
+     50a:	fc 01       	movw	r30, r24
+     50c:	ea 0f       	add	r30, r26
+     50e:	f1 1d       	adc	r31, r1
+     510:	10 83       	st	Z, r17
+     512:	af 5f       	subi	r26, 0xFF	; 255
+
+    // Индекс для записи в строку
+    unsigned char index = 0;
+
+    // Формируем строку на основе values и gray_value
+    for (unsigned char i = 0; i < N; i++) {
+     514:	bf 5f       	subi	r27, 0xFF	; 255
+     516:	20 91 ad 03 	lds	r18, 0x03AD
+     51a:	b2 17       	cp	r27, r18
+     51c:	c0 f2       	brcs	.-80     	; 0x4ce <generate_implicant_string+0x88>
+            }
+        }
+    }
+
+    // Завершаем строку символом конца строки
+    result[index] = '\0';
+     51e:	8a 0f       	add	r24, r26
+     520:	91 1d       	adc	r25, r1
+     522:	fc 01       	movw	r30, r24
+     524:	10 82       	st	Z, r1
+}
+     526:	1f 91       	pop	r17
+     528:	08 95       	ret
+
+0000052a <minimize>:
+
+// Функция для поиска импликант (цикл)
+_Bool minimize(unsigned char x, unsigned char y)
+{
+     52a:	2f 92       	push	r2
+     52c:	3f 92       	push	r3
+     52e:	4f 92       	push	r4
+     530:	5f 92       	push	r5
+     532:	6f 92       	push	r6
+     534:	7f 92       	push	r7
+     536:	8f 92       	push	r8
+     538:	9f 92       	push	r9
+     53a:	af 92       	push	r10
+     53c:	bf 92       	push	r11
+     53e:	cf 92       	push	r12
+     540:	df 92       	push	r13
+     542:	ef 92       	push	r14
+     544:	ff 92       	push	r15
+     546:	0f 93       	push	r16
+     548:	1f 93       	push	r17
+     54a:	df 93       	push	r29
+     54c:	cf 93       	push	r28
+     54e:	cd b7       	in	r28, 0x3d	; 61
+     550:	de b7       	in	r29, 0x3e	; 62
+     552:	68 97       	sbiw	r28, 0x18	; 24
+     554:	0f b6       	in	r0, 0x3f	; 63
+     556:	f8 94       	cli
+     558:	de bf       	out	0x3e, r29	; 62
+     55a:	0f be       	out	0x3f, r0	; 63
+     55c:	cd bf       	out	0x3d, r28	; 61
+     55e:	78 2e       	mov	r7, r24
+     560:	96 2e       	mov	r9, r22
+    IndexPair coord;              // координаты единицы
+    _Bool added_flag = false;     // флаг, что элемент уже в стеке
+	_Bool twoOnes_flag = false;   // флаг разрешения склеики двух единиц
+     562:	88 24       	eor	r8, r8
+        }
+
+        added_flag = false;
+
+        unsigned char bits;                             // число одинаковых бит
+        _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+     564:	66 24       	eor	r6, r6
+     566:	63 94       	inc	r6
+            // Проходим по направлению несклеенных единиц
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
+                unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
+                unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+     568:	f5 e0       	ldi	r31, 0x05	; 5
+     56a:	2f 2e       	mov	r2, r31
+     56c:	31 2c       	mov	r3, r1
+     56e:	2c 0e       	add	r2, r28
+     570:	3d 1e       	adc	r3, r29
+                    next_flag = true; // продолжить поиск для соседней единицы
+                    break;
+                }
+                if (priority_flag && k == 3) { // попытка поиска без приоритета
+                    priority_flag = false;
+                    k = -1;
+     572:	55 24       	eor	r5, r5
+     574:	5a 94       	dec	r5
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
+                unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
+                unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+
+                if ((kmap[nx][ny] == 1) && (!kmap_bool[nx][ny] + !priority_flag) && (!include(&pt, (IndexPair) { nx, ny })) && (neighbors[ind][k] == 0)) {
+     576:	44 24       	eor	r4, r4
+     578:	43 94       	inc	r4
+	_Bool twoOnes_flag = false;   // флаг разрешения склеики двух единиц
+
+    while (1) {
+        // добавление элемента в стек
+        if (!added_flag) {
+            push(&pt, (IndexPair) { x, y });
+     57a:	47 2d       	mov	r20, r7
+     57c:	69 2d       	mov	r22, r9
+     57e:	8e ea       	ldi	r24, 0xAE	; 174
+     580:	93 e0       	ldi	r25, 0x03	; 3
+     582:	50 e0       	ldi	r21, 0x00	; 0
+     584:	70 e0       	ldi	r23, 0x00	; 0
+     586:	0e 94 dd 08 	call	0x11ba	; 0x11ba <push>
+        }
+
+        added_flag = false;
+
+        unsigned char bits;                             // число одинаковых бит
+        _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+     58a:	8e ea       	ldi	r24, 0xAE	; 174
+     58c:	93 e0       	ldi	r25, 0x03	; 3
+     58e:	0e 94 d6 08 	call	0x11ac	; 0x11ac <size>
+     592:	bb 24       	eor	r11, r11
+     594:	b3 94       	inc	r11
+     596:	81 30       	cpi	r24, 0x01	; 1
+     598:	91 05       	cpc	r25, r1
+     59a:	09 f0       	breq	.+2      	; 0x59e <minimize+0x74>
+     59c:	bb 24       	eor	r11, r11
+        _Bool break_flag = false;                       // флаг устанавливается для тупиковой единицы
+        _Bool next_flag = false;                        // флаг для продолжения поиска
+        unsigned char ind = x * 4 + y;                  // Индекс для массива соседей
+     59e:	07 2d       	mov	r16, r7
+     5a0:	00 0f       	add	r16, r16
+     5a2:	00 0f       	add	r16, r16
+     5a4:	09 0d       	add	r16, r9
+
+        bits = (size(&pt) == 1) ? N : count_common_bits();  // проверяем количество совпадаемых бит
+     5a6:	8e ea       	ldi	r24, 0xAE	; 174
+     5a8:	93 e0       	ldi	r25, 0x03	; 3
+     5aa:	0e 94 d6 08 	call	0x11ac	; 0x11ac <size>
+     5ae:	81 30       	cpi	r24, 0x01	; 1
+     5b0:	91 05       	cpc	r25, r1
+     5b2:	19 f4       	brne	.+6      	; 0x5ba <minimize+0x90>
+     5b4:	10 91 ad 03 	lds	r17, 0x03AD
+     5b8:	03 c0       	rjmp	.+6      	; 0x5c0 <minimize+0x96>
+     5ba:	0e 94 99 01 	call	0x332	; 0x332 <count_common_bits>
+     5be:	18 2f       	mov	r17, r24
+        if (bits == 0)
+     5c0:	11 23       	and	r17, r17
+     5c2:	09 f4       	brne	.+2      	; 0x5c6 <minimize+0x9c>
+     5c4:	de c0       	rjmp	.+444    	; 0x782 <minimize+0x258>
+            break_flag = true;         // единица не подходит
+        else
+            switch (size(&pt))
+     5c6:	8e ea       	ldi	r24, 0xAE	; 174
+     5c8:	93 e0       	ldi	r25, 0x03	; 3
+     5ca:	0e 94 d6 08 	call	0x11ac	; 0x11ac <size>
+     5ce:	84 30       	cpi	r24, 0x04	; 4
+     5d0:	91 05       	cpc	r25, r1
+     5d2:	91 f0       	breq	.+36     	; 0x5f8 <minimize+0xce>
+     5d4:	88 30       	cpi	r24, 0x08	; 8
+     5d6:	91 05       	cpc	r25, r1
+     5d8:	e9 f0       	breq	.+58     	; 0x614 <minimize+0xea>
+     5da:	82 30       	cpi	r24, 0x02	; 2
+     5dc:	91 05       	cpc	r25, r1
+     5de:	09 f5       	brne	.+66     	; 0x622 <minimize+0xf8>
+            {
+            case 2:
+            	if (twoOnes_flag) { // разрешаем скелить две единицы
+     5e0:	88 20       	and	r8, r8
+     5e2:	11 f4       	brne	.+4      	; 0x5e8 <minimize+0xbe>
+
+        added_flag = false;
+
+        unsigned char bits;                             // число одинаковых бит
+        _Bool match = (size(&pt) == 1) ? true : false;  // флаг, указывающий, что единица подходит для склейки
+        _Bool break_flag = false;                       // флаг устанавливается для тупиковой единицы
+     5e4:	80 e0       	ldi	r24, 0x00	; 0
+     5e6:	03 c0       	rjmp	.+6      	; 0x5ee <minimize+0xc4>
+            switch (size(&pt))
+            {
+            case 2:
+            	if (twoOnes_flag) { // разрешаем скелить две единицы
+                    match = true;      
+                    break_flag = true;
+     5e8:	81 e0       	ldi	r24, 0x01	; 1
+        else
+            switch (size(&pt))
+            {
+            case 2:
+            	if (twoOnes_flag) { // разрешаем скелить две единицы
+                    match = true;      
+     5ea:	bb 24       	eor	r11, r11
+     5ec:	b3 94       	inc	r11
+                    break_flag = true;
+                }
+                if (N == 2) break_flag = true;  // для двух переменных
+     5ee:	90 91 ad 03 	lds	r25, 0x03AD
+     5f2:	92 30       	cpi	r25, 0x02	; 2
+     5f4:	99 f4       	brne	.+38     	; 0x61c <minimize+0xf2>
+     5f6:	c5 c0       	rjmp	.+394    	; 0x782 <minimize+0x258>
+                break;
+            case 4:
+                if (bits == 1 && N == 3)        // для трёх переменных
+     5f8:	11 30       	cpi	r17, 0x01	; 1
+     5fa:	29 f4       	brne	.+10     	; 0x606 <minimize+0xdc>
+     5fc:	80 91 ad 03 	lds	r24, 0x03AD
+     600:	83 30       	cpi	r24, 0x03	; 3
+     602:	79 f4       	brne	.+30     	; 0x622 <minimize+0xf8>
+     604:	d7 c0       	rjmp	.+430    	; 0x7b4 <minimize+0x28a>
+                {
+                    match = true;
+                    break_flag = true;
+                }
+                if (bits == 2 && N == 4)        // для четырёх переменных
+     606:	12 30       	cpi	r17, 0x02	; 2
+     608:	61 f4       	brne	.+24     	; 0x622 <minimize+0xf8>
+     60a:	80 91 ad 03 	lds	r24, 0x03AD
+     60e:	84 30       	cpi	r24, 0x04	; 4
+     610:	41 f4       	brne	.+16     	; 0x622 <minimize+0xf8>
+     612:	ea c0       	rjmp	.+468    	; 0x7e8 <minimize+0x2be>
+                    match = true;
+                break;
+            case 8:
+                if (bits == 1)
+     614:	11 30       	cpi	r17, 0x01	; 1
+     616:	09 f0       	breq	.+2      	; 0x61a <minimize+0xf0>
+     618:	b4 c0       	rjmp	.+360    	; 0x782 <minimize+0x258>
+     61a:	cc c0       	rjmp	.+408    	; 0x7b4 <minimize+0x28a>
+                    match = true;
+                break_flag = true;    // тупик, дальше 8 единиц не ищем
+                break;
+            }
+
+        if (!break_flag) // можно продолжить поиск
+     61c:	88 23       	and	r24, r24
+     61e:	09 f0       	breq	.+2      	; 0x622 <minimize+0xf8>
+     620:	b0 c0       	rjmp	.+352    	; 0x782 <minimize+0x258>
+        {
+			 _Bool priority_flag;	// если включен, то в приоритете несклееные единицы
+
+            // Смещения для четырех направлений: вправо, вниз, влево, вверх
+            unsigned char dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
+     622:	19 82       	std	Y+1, r1	; 0x01
+     624:	4a 82       	std	Y+2, r4	; 0x02
+     626:	1b 82       	std	Y+3, r1	; 0x03
+     628:	5c 82       	std	Y+4, r5	; 0x04
+            unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+     62a:	4d 82       	std	Y+5, r4	; 0x05
+     62c:	1e 82       	std	Y+6, r1	; 0x06
+     62e:	5f 82       	std	Y+7, r5	; 0x07
+     630:	18 86       	std	Y+8, r1	; 0x08
+
+            // Проходим по направлению несклеенных единиц
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
+                unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
+     632:	87 2d       	mov	r24, r7
+     634:	90 e0       	ldi	r25, 0x00	; 0
+     636:	98 8b       	std	Y+16, r25	; 0x10
+     638:	8f 87       	std	Y+15, r24	; 0x0f
+                unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+     63a:	e9 2d       	mov	r30, r9
+     63c:	f0 e0       	ldi	r31, 0x00	; 0
+     63e:	fa 8b       	std	Y+18, r31	; 0x12
+     640:	e9 8b       	std	Y+17, r30	; 0x11
+
+                if ((kmap[nx][ny] == 1) && (!kmap_bool[nx][ny] + !priority_flag) && (!include(&pt, (IndexPair) { nx, ny })) && (neighbors[ind][k] == 0)) {
+     642:	e0 2e       	mov	r14, r16
+     644:	ff 24       	eor	r15, r15
+     646:	ee 0c       	add	r14, r14
+     648:	ff 1c       	adc	r15, r15
+     64a:	ee 0c       	add	r14, r14
+     64c:	ff 1c       	adc	r15, r15
+			// склейка для двух единиц
+            if ((size(&pt)) == 1 && !twoOnes_flag) {
+                twoOnes_flag = true;
+                // удаление просмотренных соседей
+                for (unsigned char i = 0; i < 4; i++) {
+                    neighbors[ind][i] = 0;
+     64e:	76 e0       	ldi	r23, 0x06	; 6
+     650:	c7 2e       	mov	r12, r23
+     652:	74 e0       	ldi	r23, 0x04	; 4
+     654:	d7 2e       	mov	r13, r23
+     656:	ce 0c       	add	r12, r14
+     658:	df 1c       	adc	r13, r15
+     65a:	c6 01       	movw	r24, r12
+     65c:	01 96       	adiw	r24, 0x01	; 1
+     65e:	9c 8b       	std	Y+20, r25	; 0x14
+     660:	8b 8b       	std	Y+19, r24	; 0x13
+     662:	f6 01       	movw	r30, r12
+     664:	32 96       	adiw	r30, 0x02	; 2
+     666:	fe 8b       	std	Y+22, r31	; 0x16
+     668:	ed 8b       	std	Y+21, r30	; 0x15
+     66a:	c6 01       	movw	r24, r12
+     66c:	03 96       	adiw	r24, 0x03	; 3
+     66e:	98 8f       	std	Y+24, r25	; 0x18
+     670:	8f 8b       	std	Y+23, r24	; 0x17
+     672:	bd 86       	std	Y+13, r11	; 0x0d
+     674:	0e 87       	std	Y+14, r16	; 0x0e
+            unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+            // Проходим по направлению несклеенных единиц
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
+     676:	10 e0       	ldi	r17, 0x00	; 0
+            unsigned char dx[4] = { 0, 1, 0, -1 };  // Смещение по строкам
+            unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+            // Проходим по направлению несклеенных единиц
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+     678:	01 e0       	ldi	r16, 0x01	; 1
+     67a:	56 01       	movw	r10, r12
+            for (unsigned char k = 0; k < 4; k++) {
+                unsigned char nx = (x + dx[k] + A) % A;  // Новая координата по строке
+     67c:	c1 2e       	mov	r12, r17
+     67e:	dd 24       	eor	r13, r13
+     680:	60 91 e4 03 	lds	r22, 0x03E4
+     684:	70 e0       	ldi	r23, 0x00	; 0
+     686:	8f 85       	ldd	r24, Y+15	; 0x0f
+     688:	98 89       	ldd	r25, Y+16	; 0x10
+     68a:	86 0f       	add	r24, r22
+     68c:	97 1f       	adc	r25, r23
+     68e:	e1 e0       	ldi	r30, 0x01	; 1
+     690:	f0 e0       	ldi	r31, 0x00	; 0
+     692:	ec 0f       	add	r30, r28
+     694:	fd 1f       	adc	r31, r29
+     696:	ec 0d       	add	r30, r12
+     698:	fd 1d       	adc	r31, r13
+     69a:	20 81       	ld	r18, Z
+     69c:	82 0f       	add	r24, r18
+     69e:	91 1d       	adc	r25, r1
+     6a0:	0e 94 91 09 	call	0x1322	; 0x1322 <__divmodhi4>
+     6a4:	78 2e       	mov	r7, r24
+                unsigned char ny = (y + dy[k] + B) % B;  // Новая координата по столбцу
+     6a6:	60 91 f5 03 	lds	r22, 0x03F5
+     6aa:	70 e0       	ldi	r23, 0x00	; 0
+     6ac:	89 89       	ldd	r24, Y+17	; 0x11
+     6ae:	9a 89       	ldd	r25, Y+18	; 0x12
+     6b0:	86 0f       	add	r24, r22
+     6b2:	97 1f       	adc	r25, r23
+     6b4:	f1 01       	movw	r30, r2
+     6b6:	ec 0d       	add	r30, r12
+     6b8:	fd 1d       	adc	r31, r13
+     6ba:	20 81       	ld	r18, Z
+     6bc:	82 0f       	add	r24, r18
+     6be:	91 1d       	adc	r25, r1
+     6c0:	0e 94 91 09 	call	0x1322	; 0x1322 <__divmodhi4>
+     6c4:	98 2e       	mov	r9, r24
+
+                if ((kmap[nx][ny] == 1) && (!kmap_bool[nx][ny] + !priority_flag) && (!include(&pt, (IndexPair) { nx, ny })) && (neighbors[ind][k] == 0)) {
+     6c6:	27 2d       	mov	r18, r7
+     6c8:	30 e0       	ldi	r19, 0x00	; 0
+     6ca:	48 2f       	mov	r20, r24
+     6cc:	50 e0       	ldi	r21, 0x00	; 0
+     6ce:	c9 01       	movw	r24, r18
+     6d0:	88 0f       	add	r24, r24
+     6d2:	99 1f       	adc	r25, r25
+     6d4:	88 0f       	add	r24, r24
+     6d6:	99 1f       	adc	r25, r25
+     6d8:	84 0f       	add	r24, r20
+     6da:	95 1f       	adc	r25, r21
+     6dc:	fc 01       	movw	r30, r24
+     6de:	eb 51       	subi	r30, 0x1B	; 27
+     6e0:	fc 4f       	sbci	r31, 0xFC	; 252
+     6e2:	60 81       	ld	r22, Z
+     6e4:	61 30       	cpi	r22, 0x01	; 1
+     6e6:	49 f5       	brne	.+82     	; 0x73a <minimize+0x210>
+     6e8:	fc 01       	movw	r30, r24
+     6ea:	e4 56       	subi	r30, 0x64	; 100
+     6ec:	fe 4f       	sbci	r31, 0xFE	; 254
+     6ee:	81 e0       	ldi	r24, 0x01	; 1
+     6f0:	90 e0       	ldi	r25, 0x00	; 0
+     6f2:	60 81       	ld	r22, Z
+     6f4:	66 23       	and	r22, r22
+     6f6:	11 f0       	breq	.+4      	; 0x6fc <minimize+0x1d2>
+     6f8:	80 e0       	ldi	r24, 0x00	; 0
+     6fa:	90 e0       	ldi	r25, 0x00	; 0
+     6fc:	60 2f       	mov	r22, r16
+     6fe:	66 25       	eor	r22, r6
+     700:	86 0f       	add	r24, r22
+     702:	91 1d       	adc	r25, r1
+     704:	00 97       	sbiw	r24, 0x00	; 0
+     706:	c9 f0       	breq	.+50     	; 0x73a <minimize+0x210>
+     708:	3a 87       	std	Y+10, r19	; 0x0a
+     70a:	29 87       	std	Y+9, r18	; 0x09
+     70c:	5c 87       	std	Y+12, r21	; 0x0c
+     70e:	4b 87       	std	Y+11, r20	; 0x0b
+     710:	8e ea       	ldi	r24, 0xAE	; 174
+     712:	93 e0       	ldi	r25, 0x03	; 3
+     714:	49 85       	ldd	r20, Y+9	; 0x09
+     716:	5a 85       	ldd	r21, Y+10	; 0x0a
+     718:	6b 85       	ldd	r22, Y+11	; 0x0b
+     71a:	7c 85       	ldd	r23, Y+12	; 0x0c
+     71c:	0e 94 24 09 	call	0x1248	; 0x1248 <include>
+     720:	88 23       	and	r24, r24
+     722:	59 f4       	brne	.+22     	; 0x73a <minimize+0x210>
+     724:	f7 01       	movw	r30, r14
+     726:	ec 0d       	add	r30, r12
+     728:	fd 1d       	adc	r31, r13
+     72a:	ea 5f       	subi	r30, 0xFA	; 250
+     72c:	fb 4f       	sbci	r31, 0xFB	; 251
+     72e:	80 81       	ld	r24, Z
+     730:	88 23       	and	r24, r24
+     732:	19 f4       	brne	.+6      	; 0x73a <minimize+0x210>
+
+                    // запоминаем соседей
+                    neighbors[ind][k] = 1;
+     734:	91 e0       	ldi	r25, 0x01	; 1
+     736:	90 83       	st	Z, r25
+     738:	20 cf       	rjmp	.-448    	; 0x57a <minimize+0x50>
+                    x = nx;
+                    y = ny;
+                    next_flag = true; // продолжить поиск для соседней единицы
+                    break;
+                }
+                if (priority_flag && k == 3) { // попытка поиска без приоритета
+     73a:	00 23       	and	r16, r16
+     73c:	21 f0       	breq	.+8      	; 0x746 <minimize+0x21c>
+     73e:	13 30       	cpi	r17, 0x03	; 3
+     740:	11 f4       	brne	.+4      	; 0x746 <minimize+0x21c>
+                    priority_flag = false;
+                    k = -1;
+     742:	1f ef       	ldi	r17, 0xFF	; 255
+                    y = ny;
+                    next_flag = true; // продолжить поиск для соседней единицы
+                    break;
+                }
+                if (priority_flag && k == 3) { // попытка поиска без приоритета
+                    priority_flag = false;
+     744:	00 e0       	ldi	r16, 0x00	; 0
+            unsigned char dy[4] = { 1, 0, -1, 0 };  // Смещение по столбцам
+
+            // Проходим по направлению несклеенных единиц
+	two_ones:
+            priority_flag = true;                  // в приоритете несклееные единицы
+            for (unsigned char k = 0; k < 4; k++) {
+     746:	1f 5f       	subi	r17, 0xFF	; 255
+     748:	14 30       	cpi	r17, 0x04	; 4
+     74a:	08 f4       	brcc	.+2      	; 0x74e <minimize+0x224>
+     74c:	97 cf       	rjmp	.-210    	; 0x67c <minimize+0x152>
+     74e:	65 01       	movw	r12, r10
+            }
+
+            if (next_flag) continue;
+
+			// склейка для двух единиц
+            if ((size(&pt)) == 1 && !twoOnes_flag) {
+     750:	8e ea       	ldi	r24, 0xAE	; 174
+     752:	93 e0       	ldi	r25, 0x03	; 3
+     754:	0e 94 d6 08 	call	0x11ac	; 0x11ac <size>
+     758:	81 30       	cpi	r24, 0x01	; 1
+     75a:	91 05       	cpc	r25, r1
+     75c:	81 f4       	brne	.+32     	; 0x77e <minimize+0x254>
+     75e:	88 20       	and	r8, r8
+     760:	71 f4       	brne	.+28     	; 0x77e <minimize+0x254>
+                twoOnes_flag = true;
+                // удаление просмотренных соседей
+                for (unsigned char i = 0; i < 4; i++) {
+                    neighbors[ind][i] = 0;
+     762:	f5 01       	movw	r30, r10
+     764:	10 82       	st	Z, r1
+     766:	eb 89       	ldd	r30, Y+19	; 0x13
+     768:	fc 89       	ldd	r31, Y+20	; 0x14
+     76a:	10 82       	st	Z, r1
+     76c:	ed 89       	ldd	r30, Y+21	; 0x15
+     76e:	fe 89       	ldd	r31, Y+22	; 0x16
+     770:	10 82       	st	Z, r1
+     772:	ef 89       	ldd	r30, Y+23	; 0x17
+     774:	f8 8d       	ldd	r31, Y+24	; 0x18
+     776:	10 82       	st	Z, r1
+
+            if (next_flag) continue;
+
+			// склейка для двух единиц
+            if ((size(&pt)) == 1 && !twoOnes_flag) {
+                twoOnes_flag = true;
+     778:	88 24       	eor	r8, r8
+     77a:	83 94       	inc	r8
+     77c:	7c cf       	rjmp	.-264    	; 0x676 <minimize+0x14c>
+     77e:	bd 84       	ldd	r11, Y+13	; 0x0d
+     780:	0e 85       	ldd	r16, Y+14	; 0x0e
+                goto two_ones;
+            }
+        }
+
+        // найдена наибольшая импликанта
+        if (match) {
+     782:	bb 20       	and	r11, r11
+     784:	b9 f4       	brne	.+46     	; 0x7b4 <minimize+0x28a>
+        }
+
+        // push(&invalid, pop(&pt));  // помечаем как неподходящий и удаляем элемент
+        // удаление просмотренных соседей
+        for (unsigned char i = 0; i < 4; i++) {
+            neighbors[ind][i] = 0;
+     786:	e0 2f       	mov	r30, r16
+     788:	f0 e0       	ldi	r31, 0x00	; 0
+     78a:	ee 0f       	add	r30, r30
+     78c:	ff 1f       	adc	r31, r31
+     78e:	ee 0f       	add	r30, r30
+     790:	ff 1f       	adc	r31, r31
+     792:	ea 5f       	subi	r30, 0xFA	; 250
+     794:	fb 4f       	sbci	r31, 0xFB	; 251
+     796:	10 82       	st	Z, r1
+     798:	11 82       	std	Z+1, r1	; 0x01
+     79a:	12 82       	std	Z+2, r1	; 0x02
+     79c:	13 82       	std	Z+3, r1	; 0x03
+        }
+        pop(&pt);                  // удаление неподходящего элемента
+     79e:	8e ea       	ldi	r24, 0xAE	; 174
+     7a0:	93 e0       	ldi	r25, 0x03	; 3
+     7a2:	0e 94 03 09 	call	0x1206	; 0x1206 <pop>
+
+        coord = peek(&pt);         // вовзращаемся к предыдущей единице
+     7a6:	8e ea       	ldi	r24, 0xAE	; 174
+     7a8:	93 e0       	ldi	r25, 0x03	; 3
+     7aa:	0e 94 f1 08 	call	0x11e2	; 0x11e2 <peek>
+        x = coord.row;
+     7ae:	76 2e       	mov	r7, r22
+        y = coord.col;
+     7b0:	98 2e       	mov	r9, r24
+     7b2:	eb ce       	rjmp	.-554    	; 0x58a <minimize+0x60>
+        added_flag = true;
+    }
+}
+     7b4:	81 e0       	ldi	r24, 0x01	; 1
+     7b6:	68 96       	adiw	r28, 0x18	; 24
+     7b8:	0f b6       	in	r0, 0x3f	; 63
+     7ba:	f8 94       	cli
+     7bc:	de bf       	out	0x3e, r29	; 62
+     7be:	0f be       	out	0x3f, r0	; 63
+     7c0:	cd bf       	out	0x3d, r28	; 61
+     7c2:	cf 91       	pop	r28
+     7c4:	df 91       	pop	r29
+     7c6:	1f 91       	pop	r17
+     7c8:	0f 91       	pop	r16
+     7ca:	ff 90       	pop	r15
+     7cc:	ef 90       	pop	r14
+     7ce:	df 90       	pop	r13
+     7d0:	cf 90       	pop	r12
+     7d2:	bf 90       	pop	r11
+     7d4:	af 90       	pop	r10
+     7d6:	9f 90       	pop	r9
+     7d8:	8f 90       	pop	r8
+     7da:	7f 90       	pop	r7
+     7dc:	6f 90       	pop	r6
+     7de:	5f 90       	pop	r5
+     7e0:	4f 90       	pop	r4
+     7e2:	3f 90       	pop	r3
+     7e4:	2f 90       	pop	r2
+     7e6:	08 95       	ret
+                {
+                    match = true;
+                    break_flag = true;
+                }
+                if (bits == 2 && N == 4)        // для четырёх переменных
+                    match = true;
+     7e8:	bb 24       	eor	r11, r11
+     7ea:	b3 94       	inc	r11
+     7ec:	1a cf       	rjmp	.-460    	; 0x622 <minimize+0xf8>
+
+000007ee <digit_to_string>:
+        added_flag = true;
+    }
+}
+
+// Функция для перевода цифру в строку
+void digit_to_string(char* digit, uint8_t num) {
+     7ee:	fc 01       	movw	r30, r24
+    digit[0] = num + '0';
+     7f0:	60 5d       	subi	r22, 0xD0	; 208
+     7f2:	60 83       	st	Z, r22
+    digit[1] = '\0';
+     7f4:	11 82       	std	Z+1, r1	; 0x01
+}
+     7f6:	08 95       	ret
+
+000007f8 <KS0108_Command>:
+// Маппинг символов к индексу массива
+const char validChars[] = {'0', '1', '2', 'A', 'B', 'C', 'D', '\''}; // выводимые символы
+
+// Отправка команды
+void KS0108_Command(uint8_t cmd, uint8_t chip) {
+    DATA_PORT = cmd;             // Отправляем команду
+     7f8:	8b bb       	out	0x1b, r24	; 27
+    CONTROL_PORT &= ~(1 << RS);  // RS = 0 (команда), исп. побитовую маску
+     7fa:	a8 98       	cbi	0x15, 0	; 21
+    CONTROL_PORT &= ~(1 << RW);  // RW = 0 (запись)
+     7fc:	a9 98       	cbi	0x15, 1	; 21
+
+    // Выбираем чип
+    if (chip == 1) {
+     7fe:	61 30       	cpi	r22, 0x01	; 1
+     800:	19 f4       	brne	.+6      	; 0x808 <KS0108_Command+0x10>
+        CONTROL_PORT |= (1 << CS1);
+     802:	ab 9a       	sbi	0x15, 3	; 21
+        CONTROL_PORT &= ~(1 << CS2);
+     804:	ac 98       	cbi	0x15, 4	; 21
+     806:	02 c0       	rjmp	.+4      	; 0x80c <KS0108_Command+0x14>
+    } else {
+        CONTROL_PORT |= (1 << CS2);
+     808:	ac 9a       	sbi	0x15, 4	; 21
+        CONTROL_PORT &= ~(1 << CS1);
+     80a:	ab 98       	cbi	0x15, 3	; 21
+    }
+
+    // Строб для записи готовой команды
+    CONTROL_PORT |= (1 << E);
+     80c:	aa 9a       	sbi	0x15, 2	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     80e:	82 e0       	ldi	r24, 0x02	; 2
+     810:	8a 95       	dec	r24
+     812:	f1 f7       	brne	.-4      	; 0x810 <KS0108_Command+0x18>
+     814:	00 c0       	rjmp	.+0      	; 0x816 <KS0108_Command+0x1e>
+    _delay_us(1);
+    CONTROL_PORT &= ~(1 << E);
+     816:	aa 98       	cbi	0x15, 2	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     818:	8f ec       	ldi	r24, 0xCF	; 207
+     81a:	97 e0       	ldi	r25, 0x07	; 7
+     81c:	01 97       	sbiw	r24, 0x01	; 1
+     81e:	f1 f7       	brne	.-4      	; 0x81c <KS0108_Command+0x24>
+     820:	00 c0       	rjmp	.+0      	; 0x822 <KS0108_Command+0x2a>
+     822:	00 00       	nop
+
+    // Задержка для выполнения команды контроллером дисплея
+    _delay_ms(1);
+}
+     824:	08 95       	ret
+
+00000826 <KS0108_Data>:
+
+// Отправка данных
+void KS0108_Data(uint8_t data, uint8_t chip) {
+    DATA_PORT = data;            // Отправляем данные
+     826:	8b bb       	out	0x1b, r24	; 27
+    CONTROL_PORT |= (1 << RS);   // RS = 1 (данные)
+     828:	a8 9a       	sbi	0x15, 0	; 21
+    CONTROL_PORT &= ~(1 << RW);  // RW = 0 (запись)
+     82a:	a9 98       	cbi	0x15, 1	; 21
+
+    // Выбираем чип
+    if (chip == 1) {
+     82c:	61 30       	cpi	r22, 0x01	; 1
+     82e:	19 f4       	brne	.+6      	; 0x836 <KS0108_Data+0x10>
+        CONTROL_PORT |= (1 << CS1);
+     830:	ab 9a       	sbi	0x15, 3	; 21
+        CONTROL_PORT &= ~(1 << CS2);
+     832:	ac 98       	cbi	0x15, 4	; 21
+     834:	02 c0       	rjmp	.+4      	; 0x83a <KS0108_Data+0x14>
+    } else {
+        CONTROL_PORT |= (1 << CS2);
+     836:	ac 9a       	sbi	0x15, 4	; 21
+        CONTROL_PORT &= ~(1 << CS1);
+     838:	ab 98       	cbi	0x15, 3	; 21
+    }
+
+    // Строб
+    CONTROL_PORT |= (1 << E);
+     83a:	aa 9a       	sbi	0x15, 2	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     83c:	82 e0       	ldi	r24, 0x02	; 2
+     83e:	8a 95       	dec	r24
+     840:	f1 f7       	brne	.-4      	; 0x83e <KS0108_Data+0x18>
+     842:	00 c0       	rjmp	.+0      	; 0x844 <KS0108_Data+0x1e>
+    _delay_us(1);
+    CONTROL_PORT &= ~(1 << E);
+     844:	aa 98       	cbi	0x15, 2	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+     846:	8f ec       	ldi	r24, 0xCF	; 207
+     848:	97 e0       	ldi	r25, 0x07	; 7
+     84a:	01 97       	sbiw	r24, 0x01	; 1
+     84c:	f1 f7       	brne	.-4      	; 0x84a <KS0108_Data+0x24>
+     84e:	00 c0       	rjmp	.+0      	; 0x850 <KS0108_Data+0x2a>
+     850:	00 00       	nop
+
+    // Задержка
+    _delay_ms(1);
+}
+     852:	08 95       	ret
+
+00000854 <KS0108_Init>:
+
+// Инициализация дисплея
+void KS0108_Init() {
+	// Порт D и C на выход
+    DATA_DDR = 0xFF;
+     854:	8f ef       	ldi	r24, 0xFF	; 255
+     856:	8a bb       	out	0x1a, r24	; 26
+    CONTROL_DDR |= (1 << RS) | (1 << RW) | (1 << E) | (1 << CS1) | (1 << CS2);
+     858:	84 b3       	in	r24, 0x14	; 20
+     85a:	8f 61       	ori	r24, 0x1F	; 31
+     85c:	84 bb       	out	0x14, r24	; 20
+
+    KS0108_Command(0x3F, 1); // Включение первого чипа
+     85e:	8f e3       	ldi	r24, 0x3F	; 63
+     860:	61 e0       	ldi	r22, 0x01	; 1
+     862:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+    KS0108_Command(0x3F, 2); // Включение второго чипа
+     866:	8f e3       	ldi	r24, 0x3F	; 63
+     868:	62 e0       	ldi	r22, 0x02	; 2
+     86a:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+}
+     86e:	08 95       	ret
+
+00000870 <KS0108_Clear>:
+
+// Очистка дисплея
+void KS0108_Clear() {
+     870:	0f 93       	push	r16
+     872:	1f 93       	push	r17
+     874:	18 eb       	ldi	r17, 0xB8	; 184
+    for (uint8_t page = 0; page < 8; page++) {
+        KS0108_Command(0xB8 + page, 1); // Устанавливаем страницу на первом чипе
+     876:	81 2f       	mov	r24, r17
+     878:	61 e0       	ldi	r22, 0x01	; 1
+     87a:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+        KS0108_Command(0x40, 1);       // Адрес столбца 0
+     87e:	80 e4       	ldi	r24, 0x40	; 64
+     880:	61 e0       	ldi	r22, 0x01	; 1
+     882:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+     886:	00 e4       	ldi	r16, 0x40	; 64
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 1);
+     888:	80 e0       	ldi	r24, 0x00	; 0
+     88a:	61 e0       	ldi	r22, 0x01	; 1
+     88c:	0e 94 13 04 	call	0x826	; 0x826 <KS0108_Data>
+     890:	01 50       	subi	r16, 0x01	; 1
+// Очистка дисплея
+void KS0108_Clear() {
+    for (uint8_t page = 0; page < 8; page++) {
+        KS0108_Command(0xB8 + page, 1); // Устанавливаем страницу на первом чипе
+        KS0108_Command(0x40, 1);       // Адрес столбца 0
+        for (uint8_t col = 0; col < 64; col++) {
+     892:	d1 f7       	brne	.-12     	; 0x888 <KS0108_Clear+0x18>
+            KS0108_Data(0x00, 1);
+        }
+        KS0108_Command(0xB8 + page, 2); // Устанавливаем страницу на втором чипе
+     894:	81 2f       	mov	r24, r17
+     896:	62 e0       	ldi	r22, 0x02	; 2
+     898:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+        KS0108_Command(0x40, 2);       // Адрес столбца 0
+     89c:	80 e4       	ldi	r24, 0x40	; 64
+     89e:	62 e0       	ldi	r22, 0x02	; 2
+     8a0:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+     8a4:	00 e4       	ldi	r16, 0x40	; 64
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 2);
+     8a6:	80 e0       	ldi	r24, 0x00	; 0
+     8a8:	62 e0       	ldi	r22, 0x02	; 2
+     8aa:	0e 94 13 04 	call	0x826	; 0x826 <KS0108_Data>
+     8ae:	01 50       	subi	r16, 0x01	; 1
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 1);
+        }
+        KS0108_Command(0xB8 + page, 2); // Устанавливаем страницу на втором чипе
+        KS0108_Command(0x40, 2);       // Адрес столбца 0
+        for (uint8_t col = 0; col < 64; col++) {
+     8b0:	d1 f7       	brne	.-12     	; 0x8a6 <KS0108_Clear+0x36>
+     8b2:	1f 5f       	subi	r17, 0xFF	; 255
+    KS0108_Command(0x3F, 2); // Включение второго чипа
+}
+
+// Очистка дисплея
+void KS0108_Clear() {
+    for (uint8_t page = 0; page < 8; page++) {
+     8b4:	10 3c       	cpi	r17, 0xC0	; 192
+     8b6:	f9 f6       	brne	.-66     	; 0x876 <KS0108_Clear+0x6>
+        KS0108_Command(0x40, 2);       // Адрес столбца 0
+        for (uint8_t col = 0; col < 64; col++) {
+            KS0108_Data(0x00, 2);
+        }
+    }
+}
+     8b8:	1f 91       	pop	r17
+     8ba:	0f 91       	pop	r16
+     8bc:	08 95       	ret
+
+000008be <KS0108_SetCursor>:
+
+// Установка курсора
+void KS0108_SetCursor(uint8_t x, uint8_t line) {
+     8be:	0f 93       	push	r16
+     8c0:	1f 93       	push	r17
+     8c2:	08 2f       	mov	r16, r24
+    uint8_t chip = (x < 64) ? 1 : 2;
+     8c4:	80 34       	cpi	r24, 0x40	; 64
+     8c6:	70 f4       	brcc	.+28     	; 0x8e4 <KS0108_SetCursor+0x26>
+     8c8:	11 e0       	ldi	r17, 0x01	; 1
+    uint8_t address = (x < 64) ? x : (x - 64);
+
+    KS0108_Command(0xB8 + line, chip);
+     8ca:	86 2f       	mov	r24, r22
+     8cc:	88 54       	subi	r24, 0x48	; 72
+     8ce:	61 2f       	mov	r22, r17
+     8d0:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+    KS0108_Command(0x40 + address, chip);
+     8d4:	80 2f       	mov	r24, r16
+     8d6:	80 5c       	subi	r24, 0xC0	; 192
+     8d8:	61 2f       	mov	r22, r17
+     8da:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+}
+     8de:	1f 91       	pop	r17
+     8e0:	0f 91       	pop	r16
+     8e2:	08 95       	ret
+}
+
+// Установка курсора
+void KS0108_SetCursor(uint8_t x, uint8_t line) {
+    uint8_t chip = (x < 64) ? 1 : 2;
+    uint8_t address = (x < 64) ? x : (x - 64);
+     8e4:	00 54       	subi	r16, 0x40	; 64
+    }
+}
+
+// Установка курсора
+void KS0108_SetCursor(uint8_t x, uint8_t line) {
+    uint8_t chip = (x < 64) ? 1 : 2;
+     8e6:	12 e0       	ldi	r17, 0x02	; 2
+     8e8:	f0 cf       	rjmp	.-32     	; 0x8ca <KS0108_SetCursor+0xc>
+
+000008ea <RefreshDisplay>:
+    KS0108_Command(0xB8 + line, chip);
+    KS0108_Command(0x40 + address, chip);
+}
+
+// Функция для вывода буфера на дисплей
+void RefreshDisplay() {
+     8ea:	ef 92       	push	r14
+     8ec:	ff 92       	push	r15
+     8ee:	0f 93       	push	r16
+     8f0:	1f 93       	push	r17
+     8f2:	cf 93       	push	r28
+     8f4:	df 93       	push	r29
+     8f6:	1c ee       	ldi	r17, 0xEC	; 236
+     8f8:	e1 2e       	mov	r14, r17
+     8fa:	11 e0       	ldi	r17, 0x01	; 1
+     8fc:	f1 2e       	mov	r15, r17
+     8fe:	00 e0       	ldi	r16, 0x00	; 0
+     900:	10 e0       	ldi	r17, 0x00	; 0
+    for (uint8_t page = 0; page < 8; page++) {        // Проходим по всем страницам
+        KS0108_Command(0xB8 + page, 1);              // Устанавливаем страницу
+     902:	80 2f       	mov	r24, r16
+     904:	88 54       	subi	r24, 0x48	; 72
+     906:	61 e0       	ldi	r22, 0x01	; 1
+     908:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+        KS0108_Command(0x40, 1);                     // Устанавливаем столбец 0
+     90c:	80 e4       	ldi	r24, 0x40	; 64
+     90e:	61 e0       	ldi	r22, 0x01	; 1
+     910:	0e 94 fc 03 	call	0x7f8	; 0x7f8 <KS0108_Command>
+    KS0108_Command(0xB8 + line, chip);
+    KS0108_Command(0x40 + address, chip);
+}
+
+// Функция для вывода буфера на дисплей
+void RefreshDisplay() {
+     914:	e8 01       	movw	r28, r16
+     916:	b6 e0       	ldi	r27, 0x06	; 6
+     918:	cc 0f       	add	r28, r28
+     91a:	dd 1f       	adc	r29, r29
+     91c:	ba 95       	dec	r27
+     91e:	e1 f7       	brne	.-8      	; 0x918 <RefreshDisplay+0x2e>
+     920:	c4 55       	subi	r28, 0x54	; 84
+     922:	de 4f       	sbci	r29, 0xFE	; 254
+    for (uint8_t page = 0; page < 8; page++) {        // Проходим по всем страницам
+        KS0108_Command(0xB8 + page, 1);              // Устанавливаем страницу
+        KS0108_Command(0x40, 1);                     // Устанавливаем столбец 0
+
+        for (uint8_t column = 0; column < 64; column++) {
+            KS0108_Data(displayBuffer[page][column], 1); // Отправляем данные столбца
+     924:	89 91       	ld	r24, Y+
+     926:	61 e0       	ldi	r22, 0x01	; 1
+     928:	0e 94 13 04 	call	0x826	; 0x826 <KS0108_Data>
+void RefreshDisplay() {
+    for (uint8_t page = 0; page < 8; page++) {        // Проходим по всем страницам
+        KS0108_Command(0xB8 + page, 1);              // Устанавливаем страницу
+        KS0108_Command(0x40, 1);                     // Устанавливаем столбец 0
+
+        for (uint8_t column = 0; column < 64; column++) {
+     92c:	ce 15       	cp	r28, r14
+     92e:	df 05       	cpc	r29, r15
+     930:	c9 f7       	brne	.-14     	; 0x924 <RefreshDisplay+0x3a>
+     932:	0f 5f       	subi	r16, 0xFF	; 255
+     934:	1f 4f       	sbci	r17, 0xFF	; 255
+     936:	a0 e4       	ldi	r26, 0x40	; 64
+     938:	ea 2e       	mov	r14, r26
+     93a:	f1 2c       	mov	r15, r1
+     93c:	ec 0e       	add	r14, r28
+     93e:	fd 1e       	adc	r15, r29
+    KS0108_Command(0x40 + address, chip);
+}
+
+// Функция для вывода буфера на дисплей
+void RefreshDisplay() {
+    for (uint8_t page = 0; page < 8; page++) {        // Проходим по всем страницам
+     940:	08 30       	cpi	r16, 0x08	; 8
+     942:	11 05       	cpc	r17, r1
+     944:	f1 f6       	brne	.-68     	; 0x902 <RefreshDisplay+0x18>
+
+        for (uint8_t column = 0; column < 64; column++) {
+            KS0108_Data(displayBuffer[page][column], 1); // Отправляем данные столбца
+        }
+    }
+}
+     946:	df 91       	pop	r29
+     948:	cf 91       	pop	r28
+     94a:	1f 91       	pop	r17
+     94c:	0f 91       	pop	r16
+     94e:	ff 90       	pop	r15
+     950:	ef 90       	pop	r14
+     952:	08 95       	ret
+
+00000954 <KS0108_WriteChar>:
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+     954:	0f 93       	push	r16
+     956:	1f 93       	push	r17
+     958:	cf 93       	push	r28
+     95a:	df 93       	push	r29
+     95c:	16 2f       	mov	r17, r22
+    for (uint8_t i = 0; i < 5; i++) {
+        uint8_t line = pgm_read_byte(&customFont[found][i]);
+        KS0108_Data(line, (x < 64) ? 1 : 2); // Отправляем данные
+    }
+
+    KS0108_Data(0x00, (x < 64) ? 1 : 2); // Пробел между символами
+     95e:	e4 e9       	ldi	r30, 0x94	; 148
+     960:	f1 e0       	ldi	r31, 0x01	; 1
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+    // Проверяем, является ли символ допустимым
+    uint8_t found = 0xFF;
+    for (uint8_t i = 0; i < sizeof(validChars); i++) {
+     962:	00 e0       	ldi	r16, 0x00	; 0
+        if (c == validChars[i]) {
+     964:	91 91       	ld	r25, Z+
+     966:	89 17       	cp	r24, r25
+     968:	21 f0       	breq	.+8      	; 0x972 <KS0108_WriteChar+0x1e>
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+    // Проверяем, является ли символ допустимым
+    uint8_t found = 0xFF;
+    for (uint8_t i = 0; i < sizeof(validChars); i++) {
+     96a:	0f 5f       	subi	r16, 0xFF	; 255
+     96c:	08 30       	cpi	r16, 0x08	; 8
+     96e:	d1 f7       	brne	.-12     	; 0x964 <KS0108_WriteChar+0x10>
+}
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+    // Проверяем, является ли символ допустимым
+    uint8_t found = 0xFF;
+     970:	0f ef       	ldi	r16, 0xFF	; 255
+            found = i;
+            break;
+        }
+    }
+
+    KS0108_SetCursor(x, y); // Устанавливаем курсор
+     972:	81 2f       	mov	r24, r17
+     974:	64 2f       	mov	r22, r20
+     976:	0e 94 5f 04 	call	0x8be	; 0x8be <KS0108_SetCursor>
+
+    // Выводим символ из массива customFont
+    for (uint8_t i = 0; i < 5; i++) {
+        uint8_t line = pgm_read_byte(&customFont[found][i]);
+     97a:	85 e0       	ldi	r24, 0x05	; 5
+     97c:	08 9f       	mul	r16, r24
+     97e:	e0 01       	movw	r28, r0
+     980:	11 24       	eor	r1, r1
+        }
+    }
+}
+
+// Вывод символа
+void KS0108_WriteChar(char c, uint8_t x, uint8_t y) {
+     982:	cc 5a       	subi	r28, 0xAC	; 172
+     984:	df 4f       	sbci	r29, 0xFF	; 255
+    }
+
+    KS0108_SetCursor(x, y); // Устанавливаем курсор
+
+    // Выводим символ из массива customFont
+    for (uint8_t i = 0; i < 5; i++) {
+     986:	00 e0       	ldi	r16, 0x00	; 0
+        uint8_t line = pgm_read_byte(&customFont[found][i]);
+     988:	fe 01       	movw	r30, r28
+     98a:	84 91       	lpm	r24, Z+
+        KS0108_Data(line, (x < 64) ? 1 : 2); // Отправляем данные
+     98c:	10 34       	cpi	r17, 0x40	; 64
+     98e:	10 f0       	brcs	.+4      	; 0x994 <KS0108_WriteChar+0x40>
+     990:	62 e0       	ldi	r22, 0x02	; 2
+     992:	01 c0       	rjmp	.+2      	; 0x996 <KS0108_WriteChar+0x42>
+     994:	61 e0       	ldi	r22, 0x01	; 1
+     996:	0e 94 13 04 	call	0x826	; 0x826 <KS0108_Data>
+    }
+
+    KS0108_SetCursor(x, y); // Устанавливаем курсор
+
+    // Выводим символ из массива customFont
+    for (uint8_t i = 0; i < 5; i++) {
+     99a:	0f 5f       	subi	r16, 0xFF	; 255
+     99c:	21 96       	adiw	r28, 0x01	; 1
+     99e:	05 30       	cpi	r16, 0x05	; 5
+     9a0:	99 f7       	brne	.-26     	; 0x988 <KS0108_WriteChar+0x34>
+        uint8_t line = pgm_read_byte(&customFont[found][i]);
+        KS0108_Data(line, (x < 64) ? 1 : 2); // Отправляем данные
+    }
+
+    KS0108_Data(0x00, (x < 64) ? 1 : 2); // Пробел между символами
+     9a2:	10 34       	cpi	r17, 0x40	; 64
+     9a4:	10 f4       	brcc	.+4      	; 0x9aa <KS0108_WriteChar+0x56>
+     9a6:	61 e0       	ldi	r22, 0x01	; 1
+     9a8:	01 c0       	rjmp	.+2      	; 0x9ac <KS0108_WriteChar+0x58>
+     9aa:	62 e0       	ldi	r22, 0x02	; 2
+     9ac:	80 e0       	ldi	r24, 0x00	; 0
+     9ae:	0e 94 13 04 	call	0x826	; 0x826 <KS0108_Data>
+}
+     9b2:	df 91       	pop	r29
+     9b4:	cf 91       	pop	r28
+     9b6:	1f 91       	pop	r17
+     9b8:	0f 91       	pop	r16
+     9ba:	08 95       	ret
+
+000009bc <KS0108_WriteString>:
+
+// вывод строки с импликантой
+void KS0108_WriteString(const char* str, uint8_t x, uint8_t y) {
+     9bc:	ef 92       	push	r14
+     9be:	ff 92       	push	r15
+     9c0:	0f 93       	push	r16
+     9c2:	1f 93       	push	r17
+     9c4:	cf 93       	push	r28
+     9c6:	df 93       	push	r29
+     9c8:	16 2f       	mov	r17, r22
+     9ca:	04 2f       	mov	r16, r20
+     9cc:	e8 2e       	mov	r14, r24
+     9ce:	e7 01       	movw	r28, r14
+     9d0:	7e 01       	movw	r14, r28
+     9d2:	f9 2e       	mov	r15, r25
+     9d4:	e7 01       	movw	r28, r14
+    while (*str) {
+     9d6:	0e c0       	rjmp	.+28     	; 0x9f4 <KS0108_WriteString+0x38>
+        char c = *str++;
+        if (c == '\'') {
+     9d8:	87 32       	cpi	r24, 0x27	; 39
+     9da:	39 f4       	brne	.+14     	; 0x9ea <KS0108_WriteString+0x2e>
+            // Выводим апостроф чуть правее предыдущего символа
+            KS0108_WriteChar(c, x - 1, y); // Апостроф ближе к букве
+     9dc:	61 2f       	mov	r22, r17
+     9de:	61 50       	subi	r22, 0x01	; 1
+     9e0:	40 2f       	mov	r20, r16
+     9e2:	0e 94 aa 04 	call	0x954	; 0x954 <KS0108_WriteChar>
+			x += 2;
+     9e6:	1e 5f       	subi	r17, 0xFE	; 254
+     9e8:	05 c0       	rjmp	.+10     	; 0x9f4 <KS0108_WriteString+0x38>
+        } else {
+            // Выводим обычный символ
+            KS0108_WriteChar(c, x, y);
+     9ea:	61 2f       	mov	r22, r17
+     9ec:	40 2f       	mov	r20, r16
+     9ee:	0e 94 aa 04 	call	0x954	; 0x954 <KS0108_WriteChar>
+            x += 6; // Сдвигаем позицию вправо для следующего символа
+     9f2:	1a 5f       	subi	r17, 0xFA	; 250
+    KS0108_Data(0x00, (x < 64) ? 1 : 2); // Пробел между символами
+}
+
+// вывод строки с импликантой
+void KS0108_WriteString(const char* str, uint8_t x, uint8_t y) {
+    while (*str) {
+     9f4:	89 91       	ld	r24, Y+
+     9f6:	88 23       	and	r24, r24
+     9f8:	79 f7       	brne	.-34     	; 0x9d8 <KS0108_WriteString+0x1c>
+            // Выводим обычный символ
+            KS0108_WriteChar(c, x, y);
+            x += 6; // Сдвигаем позицию вправо для следующего символа
+        }
+    }
+}
+     9fa:	df 91       	pop	r29
+     9fc:	cf 91       	pop	r28
+     9fe:	1f 91       	pop	r17
+     a00:	0f 91       	pop	r16
+     a02:	ff 90       	pop	r15
+     a04:	ef 90       	pop	r14
+     a06:	08 95       	ret
+
+00000a08 <DrawPoint>:
+
+// Добавление пикселя (точки) на дисплей
+void DrawPoint(uint8_t x, uint8_t y, _Bool clear) {
+    uint8_t page = y / 8;       // Определяем страницу
+     a08:	26 2f       	mov	r18, r22
+     a0a:	26 95       	lsr	r18
+     a0c:	26 95       	lsr	r18
+     a0e:	26 95       	lsr	r18
+    uint8_t bit = y % 8;        // Определяем бит в байте
+     a10:	67 70       	andi	r22, 0x07	; 7
+     a12:	30 e0       	ldi	r19, 0x00	; 0
+     a14:	90 e0       	ldi	r25, 0x00	; 0
+
+    if (clear) {
+     a16:	44 23       	and	r20, r20
+     a18:	b1 f0       	breq	.+44     	; 0xa46 <DrawPoint+0x3e>
+        displayBuffer[page][x] &= ~(1 << bit); // Сбрасываем бит в буфере
+     a1a:	f9 01       	movw	r30, r18
+     a1c:	36 e0       	ldi	r19, 0x06	; 6
+     a1e:	ee 0f       	add	r30, r30
+     a20:	ff 1f       	adc	r31, r31
+     a22:	3a 95       	dec	r19
+     a24:	e1 f7       	brne	.-8      	; 0xa1e <DrawPoint+0x16>
+     a26:	e8 0f       	add	r30, r24
+     a28:	f9 1f       	adc	r31, r25
+     a2a:	e4 55       	subi	r30, 0x54	; 84
+     a2c:	fe 4f       	sbci	r31, 0xFE	; 254
+     a2e:	81 e0       	ldi	r24, 0x01	; 1
+     a30:	90 e0       	ldi	r25, 0x00	; 0
+     a32:	02 c0       	rjmp	.+4      	; 0xa38 <DrawPoint+0x30>
+     a34:	88 0f       	add	r24, r24
+     a36:	99 1f       	adc	r25, r25
+     a38:	6a 95       	dec	r22
+     a3a:	e2 f7       	brpl	.-8      	; 0xa34 <DrawPoint+0x2c>
+     a3c:	80 95       	com	r24
+     a3e:	90 81       	ld	r25, Z
+     a40:	89 23       	and	r24, r25
+     a42:	80 83       	st	Z, r24
+     a44:	08 95       	ret
+    } else {
+        displayBuffer[page][x] |= (1 << bit); // Устанавливаем бит в буфере
+     a46:	f9 01       	movw	r30, r18
+     a48:	26 e0       	ldi	r18, 0x06	; 6
+     a4a:	ee 0f       	add	r30, r30
+     a4c:	ff 1f       	adc	r31, r31
+     a4e:	2a 95       	dec	r18
+     a50:	e1 f7       	brne	.-8      	; 0xa4a <DrawPoint+0x42>
+     a52:	e8 0f       	add	r30, r24
+     a54:	f9 1f       	adc	r31, r25
+     a56:	e4 55       	subi	r30, 0x54	; 84
+     a58:	fe 4f       	sbci	r31, 0xFE	; 254
+     a5a:	81 e0       	ldi	r24, 0x01	; 1
+     a5c:	90 e0       	ldi	r25, 0x00	; 0
+     a5e:	02 c0       	rjmp	.+4      	; 0xa64 <DrawPoint+0x5c>
+     a60:	88 0f       	add	r24, r24
+     a62:	99 1f       	adc	r25, r25
+     a64:	6a 95       	dec	r22
+     a66:	e2 f7       	brpl	.-8      	; 0xa60 <DrawPoint+0x58>
+     a68:	20 81       	ld	r18, Z
+     a6a:	28 2b       	or	r18, r24
+     a6c:	20 83       	st	Z, r18
+     a6e:	08 95       	ret
+
+00000a70 <DrawHorizontalLine>:
+    }
+}
+
+// Рисование горищонтальной линии
+void DrawHorizontalLine(uint8_t x1, uint8_t x2, uint8_t y, _Bool clear) {
+     a70:	ff 92       	push	r15
+     a72:	0f 93       	push	r16
+     a74:	1f 93       	push	r17
+     a76:	df 93       	push	r29
+     a78:	cf 93       	push	r28
+     a7a:	0f 92       	push	r0
+     a7c:	cd b7       	in	r28, 0x3d	; 61
+     a7e:	de b7       	in	r29, 0x3e	; 62
+     a80:	06 2f       	mov	r16, r22
+     a82:	14 2f       	mov	r17, r20
+    for (uint8_t x = x1; x <= x2; x++) {
+     a84:	f8 2e       	mov	r15, r24
+     a86:	08 c0       	rjmp	.+16     	; 0xa98 <DrawHorizontalLine+0x28>
+        DrawPoint(x, y, clear); // Рисуем каждую точку на линии
+     a88:	8f 2d       	mov	r24, r15
+     a8a:	61 2f       	mov	r22, r17
+     a8c:	42 2f       	mov	r20, r18
+     a8e:	29 83       	std	Y+1, r18	; 0x01
+     a90:	0e 94 04 05 	call	0xa08	; 0xa08 <DrawPoint>
+    }
+}
+
+// Рисование горищонтальной линии
+void DrawHorizontalLine(uint8_t x1, uint8_t x2, uint8_t y, _Bool clear) {
+    for (uint8_t x = x1; x <= x2; x++) {
+     a94:	f3 94       	inc	r15
+     a96:	29 81       	ldd	r18, Y+1	; 0x01
+     a98:	0f 15       	cp	r16, r15
+     a9a:	b0 f7       	brcc	.-20     	; 0xa88 <DrawHorizontalLine+0x18>
+        DrawPoint(x, y, clear); // Рисуем каждую точку на линии
+    }
+}
+     a9c:	0f 90       	pop	r0
+     a9e:	cf 91       	pop	r28
+     aa0:	df 91       	pop	r29
+     aa2:	1f 91       	pop	r17
+     aa4:	0f 91       	pop	r16
+     aa6:	ff 90       	pop	r15
+     aa8:	08 95       	ret
+
+00000aaa <DrawVerticalLine>:
+
+// Рисование вертикальной линии
+void DrawVerticalLine(uint8_t x, uint8_t y1, uint8_t y2) {
+     aaa:	ff 92       	push	r15
+     aac:	0f 93       	push	r16
+     aae:	1f 93       	push	r17
+     ab0:	f8 2e       	mov	r15, r24
+     ab2:	04 2f       	mov	r16, r20
+    for (uint8_t y = y1; y <= y2; y++) {
+     ab4:	16 2f       	mov	r17, r22
+     ab6:	06 c0       	rjmp	.+12     	; 0xac4 <DrawVerticalLine+0x1a>
+        DrawPoint(x, y, false); // Рисуем каждую точку на линии
+     ab8:	8f 2d       	mov	r24, r15
+     aba:	61 2f       	mov	r22, r17
+     abc:	40 e0       	ldi	r20, 0x00	; 0
+     abe:	0e 94 04 05 	call	0xa08	; 0xa08 <DrawPoint>
+    }
+}
+
+// Рисование вертикальной линии
+void DrawVerticalLine(uint8_t x, uint8_t y1, uint8_t y2) {
+    for (uint8_t y = y1; y <= y2; y++) {
+     ac2:	1f 5f       	subi	r17, 0xFF	; 255
+     ac4:	01 17       	cp	r16, r17
+     ac6:	c0 f7       	brcc	.-16     	; 0xab8 <DrawVerticalLine+0xe>
+        DrawPoint(x, y, false); // Рисуем каждую точку на линии
+    }
+}
+     ac8:	1f 91       	pop	r17
+     aca:	0f 91       	pop	r16
+     acc:	ff 90       	pop	r15
+     ace:	08 95       	ret
+
+00000ad0 <DrawChar>:
+
+
+// Функция для вывода символа
+void DrawChar(char c, uint8_t x, uint8_t y) {
+     ad0:	df 92       	push	r13
+     ad2:	ef 92       	push	r14
+     ad4:	ff 92       	push	r15
+     ad6:	0f 93       	push	r16
+     ad8:	1f 93       	push	r17
+     ada:	cf 93       	push	r28
+     adc:	df 93       	push	r29
+    if (c < '0' || c > '9') return; // Поддерживаются только цифры '0'-'9'
+     ade:	98 2f       	mov	r25, r24
+     ae0:	90 53       	subi	r25, 0x30	; 48
+     ae2:	9a 30       	cpi	r25, 0x0A	; 10
+     ae4:	08 f0       	brcs	.+2      	; 0xae8 <DrawChar+0x18>
+     ae6:	4c c0       	rjmp	.+152    	; 0xb80 <DrawChar+0xb0>
+
+    uint8_t basePage = y / 8;             // Нижняя страница
+     ae8:	54 2f       	mov	r21, r20
+     aea:	56 95       	lsr	r21
+     aec:	56 95       	lsr	r21
+     aee:	56 95       	lsr	r21
+    uint8_t bitOffset = y % 8;            // Смещение битов для нижней страницы
+     af0:	47 70       	andi	r20, 0x07	; 7
+
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+     af2:	95 e0       	ldi	r25, 0x05	; 5
+     af4:	89 9f       	mul	r24, r25
+     af6:	c0 01       	movw	r24, r0
+     af8:	11 24       	eor	r1, r1
+    }
+}
+
+
+// Функция для вывода символа
+void DrawChar(char c, uint8_t x, uint8_t y) {
+     afa:	fc 01       	movw	r30, r24
+     afc:	ec 59       	subi	r30, 0x9C	; 156
+     afe:	f0 40       	sbci	r31, 0x00	; 0
+     b00:	05 2f       	mov	r16, r21
+     b02:	10 e0       	ldi	r17, 0x00	; 0
+     b04:	70 e0       	ldi	r23, 0x00	; 0
+     b06:	d8 01       	movw	r26, r16
+     b08:	11 96       	adiw	r26, 0x01	; 1
+     b0a:	36 e0       	ldi	r19, 0x06	; 6
+     b0c:	aa 0f       	add	r26, r26
+     b0e:	bb 1f       	adc	r27, r27
+     b10:	3a 95       	dec	r19
+     b12:	e1 f7       	brne	.-8      	; 0xb0c <DrawChar+0x3c>
+     b14:	a6 0f       	add	r26, r22
+     b16:	b7 1f       	adc	r27, r23
+     b18:	a4 55       	subi	r26, 0x54	; 84
+     b1a:	be 4f       	sbci	r27, 0xFE	; 254
+     b1c:	e8 01       	movw	r28, r16
+     b1e:	26 e0       	ldi	r18, 0x06	; 6
+     b20:	cc 0f       	add	r28, r28
+     b22:	dd 1f       	adc	r29, r29
+     b24:	2a 95       	dec	r18
+     b26:	e1 f7       	brne	.-8      	; 0xb20 <DrawChar+0x50>
+     b28:	c6 0f       	add	r28, r22
+     b2a:	d7 1f       	adc	r29, r23
+     b2c:	c4 55       	subi	r28, 0x54	; 84
+     b2e:	de 4f       	sbci	r29, 0xFE	; 254
+     b30:	87 59       	subi	r24, 0x97	; 151
+     b32:	90 40       	sbci	r25, 0x00	; 0
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+
+        // Разделяем данные для нижней и верхней страницы
+        uint8_t lowerData = colData << bitOffset;       // Нижняя страница
+        uint8_t upperData = colData >> (8 - bitOffset); // Верхняя страница
+     b34:	28 e0       	ldi	r18, 0x08	; 8
+     b36:	30 e0       	ldi	r19, 0x00	; 0
+     b38:	24 1b       	sub	r18, r20
+     b3a:	31 09       	sbc	r19, r1
+
+    uint8_t basePage = y / 8;             // Нижняя страница
+    uint8_t bitOffset = y % 8;            // Смещение битов для нижней страницы
+
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+     b3c:	64 91       	lpm	r22, Z+
+
+        // Разделяем данные для нижней и верхней страницы
+        uint8_t lowerData = colData << bitOffset;       // Нижняя страница
+     b3e:	70 e0       	ldi	r23, 0x00	; 0
+        uint8_t upperData = colData >> (8 - bitOffset); // Верхняя страница
+
+        // Обновляем буфер для нижней страницы
+        if (basePage < 8) { // Проверка на выход за пределы
+     b40:	58 30       	cpi	r21, 0x08	; 8
+     b42:	50 f4       	brcc	.+20     	; 0xb58 <DrawChar+0x88>
+
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+
+        // Разделяем данные для нижней и верхней страницы
+        uint8_t lowerData = colData << bitOffset;       // Нижняя страница
+     b44:	7b 01       	movw	r14, r22
+     b46:	04 2e       	mov	r0, r20
+     b48:	02 c0       	rjmp	.+4      	; 0xb4e <DrawChar+0x7e>
+     b4a:	ee 0c       	add	r14, r14
+     b4c:	ff 1c       	adc	r15, r15
+     b4e:	0a 94       	dec	r0
+     b50:	e2 f7       	brpl	.-8      	; 0xb4a <DrawChar+0x7a>
+        uint8_t upperData = colData >> (8 - bitOffset); // Верхняя страница
+
+        // Обновляем буфер для нижней страницы
+        if (basePage < 8) { // Проверка на выход за пределы
+            displayBuffer[basePage][x + i] |= lowerData;
+     b52:	d8 80       	ld	r13, Y
+     b54:	de 28       	or	r13, r14
+     b56:	d8 82       	st	Y, r13
+        }
+
+        // Обновляем буфер для верхней страницы, если данные выходят за пределы
+        if (bitOffset > 0 && (basePage + 1) < 8) { // Проверка на существование верхней страницы
+     b58:	44 23       	and	r20, r20
+     b5a:	61 f0       	breq	.+24     	; 0xb74 <DrawChar+0xa4>
+     b5c:	07 30       	cpi	r16, 0x07	; 7
+     b5e:	11 05       	cpc	r17, r1
+     b60:	4c f4       	brge	.+18     	; 0xb74 <DrawChar+0xa4>
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+        uint8_t colData = pgm_read_byte(&customFont[c - '0'][i]);
+
+        // Разделяем данные для нижней и верхней страницы
+        uint8_t lowerData = colData << bitOffset;       // Нижняя страница
+        uint8_t upperData = colData >> (8 - bitOffset); // Верхняя страница
+     b62:	02 2e       	mov	r0, r18
+     b64:	02 c0       	rjmp	.+4      	; 0xb6a <DrawChar+0x9a>
+     b66:	75 95       	asr	r23
+     b68:	67 95       	ror	r22
+     b6a:	0a 94       	dec	r0
+     b6c:	e2 f7       	brpl	.-8      	; 0xb66 <DrawChar+0x96>
+            displayBuffer[basePage][x + i] |= lowerData;
+        }
+
+        // Обновляем буфер для верхней страницы, если данные выходят за пределы
+        if (bitOffset > 0 && (basePage + 1) < 8) { // Проверка на существование верхней страницы
+            displayBuffer[basePage + 1][x + i] |= upperData;
+     b6e:	ec 90       	ld	r14, X
+     b70:	e6 2a       	or	r14, r22
+     b72:	ec 92       	st	X, r14
+     b74:	31 96       	adiw	r30, 0x01	; 1
+     b76:	11 96       	adiw	r26, 0x01	; 1
+     b78:	21 96       	adiw	r28, 0x01	; 1
+    if (c < '0' || c > '9') return; // Поддерживаются только цифры '0'-'9'
+
+    uint8_t basePage = y / 8;             // Нижняя страница
+    uint8_t bitOffset = y % 8;            // Смещение битов для нижней страницы
+
+    for (uint8_t i = 0; i < 5; i++) {     // Проходим по каждому столбцу символа
+     b7a:	e8 17       	cp	r30, r24
+     b7c:	f9 07       	cpc	r31, r25
+     b7e:	f1 f6       	brne	.-68     	; 0xb3c <DrawChar+0x6c>
+        // Обновляем буфер для верхней страницы, если данные выходят за пределы
+        if (bitOffset > 0 && (basePage + 1) < 8) { // Проверка на существование верхней страницы
+            displayBuffer[basePage + 1][x + i] |= upperData;
+        }
+    }
+}
+     b80:	df 91       	pop	r29
+     b82:	cf 91       	pop	r28
+     b84:	1f 91       	pop	r17
+     b86:	0f 91       	pop	r16
+     b88:	ff 90       	pop	r15
+     b8a:	ef 90       	pop	r14
+     b8c:	df 90       	pop	r13
+     b8e:	08 95       	ret
+
+00000b90 <DrawKarno>:
+
+// Рисование карты Карно
+void DrawKarno(uint8_t N) {
+     b90:	af 92       	push	r10
+     b92:	bf 92       	push	r11
+     b94:	cf 92       	push	r12
+     b96:	df 92       	push	r13
+     b98:	ef 92       	push	r14
+     b9a:	ff 92       	push	r15
+     b9c:	0f 93       	push	r16
+     b9e:	1f 93       	push	r17
+     ba0:	df 93       	push	r29
+     ba2:	cf 93       	push	r28
+     ba4:	00 d0       	rcall	.+0      	; 0xba6 <DrawKarno+0x16>
+     ba6:	00 d0       	rcall	.+0      	; 0xba8 <DrawKarno+0x18>
+     ba8:	00 d0       	rcall	.+0      	; 0xbaa <DrawKarno+0x1a>
+     baa:	cd b7       	in	r28, 0x3d	; 61
+     bac:	de b7       	in	r29, 0x3e	; 62
+     bae:	08 2f       	mov	r16, r24
+	uint8_t A = (N / 2) * 2;                     // количество строк массива для N переменных
+     bb0:	86 95       	lsr	r24
+     bb2:	c8 2e       	mov	r12, r24
+     bb4:	cc 0c       	add	r12, r12
+	uint8_t B = (N - (N / 2)) * 2;               // количество столбцов массива для N переменных
+     bb6:	d0 2e       	mov	r13, r16
+     bb8:	d8 1a       	sub	r13, r24
+     bba:	dd 0c       	add	r13, r13
+	uint8_t end_line = min((B + 1) * 13, 63);    // координата конца горизонтальной линии
+     bbc:	2d 2d       	mov	r18, r13
+     bbe:	30 e0       	ldi	r19, 0x00	; 0
+     bc0:	2f 5f       	subi	r18, 0xFF	; 255
+     bc2:	3f 4f       	sbci	r19, 0xFF	; 255
+     bc4:	8d e0       	ldi	r24, 0x0D	; 13
+     bc6:	90 e0       	ldi	r25, 0x00	; 0
+     bc8:	28 9f       	mul	r18, r24
+     bca:	b0 01       	movw	r22, r0
+     bcc:	29 9f       	mul	r18, r25
+     bce:	70 0d       	add	r23, r0
+     bd0:	38 9f       	mul	r19, r24
+     bd2:	70 0d       	add	r23, r0
+     bd4:	11 24       	eor	r1, r1
+     bd6:	60 34       	cpi	r22, 0x40	; 64
+     bd8:	71 05       	cpc	r23, r1
+     bda:	14 f0       	brlt	.+4      	; 0xbe0 <DrawKarno+0x50>
+     bdc:	6f e3       	ldi	r22, 0x3F	; 63
+     bde:	70 e0       	ldi	r23, 0x00	; 0
+     be0:	e6 2e       	mov	r14, r22
+	uint8_t end_column = min((A + 1) * 13, 63);  // координата конца вертикальной линии
+     be2:	2c 2d       	mov	r18, r12
+     be4:	30 e0       	ldi	r19, 0x00	; 0
+     be6:	2f 5f       	subi	r18, 0xFF	; 255
+     be8:	3f 4f       	sbci	r19, 0xFF	; 255
+     bea:	8d e0       	ldi	r24, 0x0D	; 13
+     bec:	90 e0       	ldi	r25, 0x00	; 0
+     bee:	28 9f       	mul	r18, r24
+     bf0:	a0 01       	movw	r20, r0
+     bf2:	29 9f       	mul	r18, r25
+     bf4:	50 0d       	add	r21, r0
+     bf6:	38 9f       	mul	r19, r24
+     bf8:	50 0d       	add	r21, r0
+     bfa:	11 24       	eor	r1, r1
+     bfc:	40 34       	cpi	r20, 0x40	; 64
+     bfe:	51 05       	cpc	r21, r1
+     c00:	14 f0       	brlt	.+4      	; 0xc06 <DrawKarno+0x76>
+     c02:	4f e3       	ldi	r20, 0x3F	; 63
+     c04:	50 e0       	ldi	r21, 0x00	; 0
+     c06:	b4 2e       	mov	r11, r20
+	
+	uint8_t code_gray[4] = { 0b00, 0b01, 0b11, 0b10 };
+     c08:	19 82       	std	Y+1, r1	; 0x01
+     c0a:	81 e0       	ldi	r24, 0x01	; 1
+     c0c:	8a 83       	std	Y+2, r24	; 0x02
+     c0e:	83 e0       	ldi	r24, 0x03	; 3
+     c10:	8b 83       	std	Y+3, r24	; 0x03
+     c12:	82 e0       	ldi	r24, 0x02	; 2
+     c14:	8c 83       	std	Y+4, r24	; 0x04
+
+	// рисуем линии строк
+	for (uint8_t line = 1; line <= A; line++) {
+     c16:	11 e1       	ldi	r17, 0x11	; 17
+     c18:	ff 24       	eor	r15, r15
+     c1a:	f3 94       	inc	r15
+     c1c:	22 c0       	rjmp	.+68     	; 0xc62 <DrawKarno+0xd2>
+		DrawHorizontalLine(0, end_line, line * 13, false);
+     c1e:	41 2f       	mov	r20, r17
+     c20:	44 50       	subi	r20, 0x04	; 4
+     c22:	80 e0       	ldi	r24, 0x00	; 0
+     c24:	6e 2d       	mov	r22, r14
+     c26:	20 e0       	ldi	r18, 0x00	; 0
+     c28:	0e 94 38 05 	call	0xa70	; 0xa70 <DrawHorizontalLine>
+		// заполнение заголовков для строк для 4 переменных
+		if (N == 4) {
+     c2c:	04 30       	cpi	r16, 0x04	; 4
+     c2e:	89 f4       	brne	.+34     	; 0xc52 <DrawKarno+0xc2>
+			DrawChar(((code_gray[line-1] >> 1) & 1) + '0', 0, line * 13 + 4);
+     c30:	fe 01       	movw	r30, r28
+     c32:	ef 0d       	add	r30, r15
+     c34:	f1 1d       	adc	r31, r1
+     c36:	a0 80       	ld	r10, Z
+     c38:	8a 2d       	mov	r24, r10
+     c3a:	86 95       	lsr	r24
+     c3c:	81 70       	andi	r24, 0x01	; 1
+     c3e:	80 5d       	subi	r24, 0xD0	; 208
+     c40:	60 e0       	ldi	r22, 0x00	; 0
+     c42:	41 2f       	mov	r20, r17
+     c44:	0e 94 68 05 	call	0xad0	; 0xad0 <DrawChar>
+	    	DrawChar((code_gray[line-1] & 1) + '0', 5, line * 13 + 4);
+     c48:	8a 2d       	mov	r24, r10
+     c4a:	81 70       	andi	r24, 0x01	; 1
+     c4c:	80 5d       	subi	r24, 0xD0	; 208
+     c4e:	65 e0       	ldi	r22, 0x05	; 5
+     c50:	03 c0       	rjmp	.+6      	; 0xc58 <DrawKarno+0xc8>
+		} else {
+		    DrawChar((line-1) + '0', 3, line * 13 + 4);
+     c52:	8f 2d       	mov	r24, r15
+     c54:	81 5d       	subi	r24, 0xD1	; 209
+     c56:	63 e0       	ldi	r22, 0x03	; 3
+     c58:	41 2f       	mov	r20, r17
+     c5a:	0e 94 68 05 	call	0xad0	; 0xad0 <DrawChar>
+	uint8_t end_column = min((A + 1) * 13, 63);  // координата конца вертикальной линии
+	
+	uint8_t code_gray[4] = { 0b00, 0b01, 0b11, 0b10 };
+
+	// рисуем линии строк
+	for (uint8_t line = 1; line <= A; line++) {
+     c5e:	f3 94       	inc	r15
+     c60:	13 5f       	subi	r17, 0xF3	; 243
+     c62:	cf 14       	cp	r12, r15
+     c64:	e0 f6       	brcc	.-72     	; 0xc1e <DrawKarno+0x8e>
+     c66:	1f e0       	ldi	r17, 0x0F	; 15
+     c68:	ff 24       	eor	r15, r15
+     c6a:	f3 94       	inc	r15
+	}
+	 // рисуем линии столбцов
+	for (uint8_t column = 1; column <= B; column++) {
+		DrawVerticalLine(column * 13, 0, end_column);
+		// заполнение заголовков для столбцов для 3 и 4 переменных
+		if (N == 3 || N == 4) {
+     c6c:	5d ef       	ldi	r21, 0xFD	; 253
+     c6e:	e5 2e       	mov	r14, r21
+     c70:	e0 0e       	add	r14, r16
+     c72:	24 c0       	rjmp	.+72     	; 0xcbc <DrawKarno+0x12c>
+		}
+
+	}
+	 // рисуем линии столбцов
+	for (uint8_t column = 1; column <= B; column++) {
+		DrawVerticalLine(column * 13, 0, end_column);
+     c74:	81 2f       	mov	r24, r17
+     c76:	82 50       	subi	r24, 0x02	; 2
+     c78:	60 e0       	ldi	r22, 0x00	; 0
+     c7a:	4b 2d       	mov	r20, r11
+     c7c:	0e 94 55 05 	call	0xaaa	; 0xaaa <DrawVerticalLine>
+		// заполнение заголовков для столбцов для 3 и 4 переменных
+		if (N == 3 || N == 4) {
+     c80:	8e 2d       	mov	r24, r14
+     c82:	82 30       	cpi	r24, 0x02	; 2
+     c84:	90 f4       	brcc	.+36     	; 0xcaa <DrawKarno+0x11a>
+			DrawChar(((code_gray[column-1] >> 1) & 1) + '0', column * 13 + 2, 4);
+     c86:	fe 01       	movw	r30, r28
+     c88:	ef 0d       	add	r30, r15
+     c8a:	f1 1d       	adc	r31, r1
+     c8c:	00 81       	ld	r16, Z
+     c8e:	80 2f       	mov	r24, r16
+     c90:	86 95       	lsr	r24
+     c92:	81 70       	andi	r24, 0x01	; 1
+     c94:	80 5d       	subi	r24, 0xD0	; 208
+     c96:	61 2f       	mov	r22, r17
+     c98:	44 e0       	ldi	r20, 0x04	; 4
+     c9a:	0e 94 68 05 	call	0xad0	; 0xad0 <DrawChar>
+		    DrawChar((code_gray[column-1] & 1) + '0', column * 13 + 7, 4);
+     c9e:	80 2f       	mov	r24, r16
+     ca0:	81 70       	andi	r24, 0x01	; 1
+     ca2:	61 2f       	mov	r22, r17
+     ca4:	6b 5f       	subi	r22, 0xFB	; 251
+     ca6:	80 5d       	subi	r24, 0xD0	; 208
+     ca8:	04 c0       	rjmp	.+8      	; 0xcb2 <DrawKarno+0x122>
+		} else {
+			DrawChar((column-1) + '0', column * 13 + 4, 4);
+     caa:	61 2f       	mov	r22, r17
+     cac:	6e 5f       	subi	r22, 0xFE	; 254
+     cae:	8f 2d       	mov	r24, r15
+     cb0:	81 5d       	subi	r24, 0xD1	; 209
+     cb2:	44 e0       	ldi	r20, 0x04	; 4
+     cb4:	0e 94 68 05 	call	0xad0	; 0xad0 <DrawChar>
+		    DrawChar((line-1) + '0', 3, line * 13 + 4);
+		}
+
+	}
+	 // рисуем линии столбцов
+	for (uint8_t column = 1; column <= B; column++) {
+     cb8:	f3 94       	inc	r15
+     cba:	13 5f       	subi	r17, 0xF3	; 243
+     cbc:	df 14       	cp	r13, r15
+     cbe:	d0 f6       	brcc	.-76     	; 0xc74 <DrawKarno+0xe4>
+     cc0:	10 e0       	ldi	r17, 0x00	; 0
+			DrawChar((column-1) + '0', column * 13 + 4, 4);
+		}
+	}
+	// рисуем диагональ
+	for (uint8_t i = 0; i < 13; i++) {
+        DrawPoint(i, i, false);
+     cc2:	81 2f       	mov	r24, r17
+     cc4:	61 2f       	mov	r22, r17
+     cc6:	40 e0       	ldi	r20, 0x00	; 0
+     cc8:	0e 94 04 05 	call	0xa08	; 0xa08 <DrawPoint>
+		} else {
+			DrawChar((column-1) + '0', column * 13 + 4, 4);
+		}
+	}
+	// рисуем диагональ
+	for (uint8_t i = 0; i < 13; i++) {
+     ccc:	1f 5f       	subi	r17, 0xFF	; 255
+     cce:	1d 30       	cpi	r17, 0x0D	; 13
+     cd0:	c1 f7       	brne	.-16     	; 0xcc2 <DrawKarno+0x132>
+     cd2:	90 e1       	ldi	r25, 0x10	; 16
+     cd4:	ee 24       	eor	r14, r14
+     cd6:	ff 24       	eor	r15, r15
+     cd8:	16 c0       	rjmp	.+44     	; 0xd06 <DrawKarno+0x176>
+	}
+
+	// заполнение карты единицами
+	for (uint8_t row = 0; row < A; row++) {
+		for (uint8_t col = 0; col < B; col++) {
+			if (kmap[row][col] == 1) {
+     cda:	f8 01       	movw	r30, r16
+     cdc:	81 91       	ld	r24, Z+
+     cde:	8f 01       	movw	r16, r30
+     ce0:	81 30       	cpi	r24, 0x01	; 1
+     ce2:	49 f4       	brne	.+18     	; 0xcf6 <DrawKarno+0x166>
+				uint8_t x = 17 + 13 * col;
+				uint8_t y = 16 + 13 * row;
+				DrawChar('2', x, y); // добавляем единицу на карту
+     ce4:	82 e3       	ldi	r24, 0x32	; 50
+     ce6:	62 2f       	mov	r22, r18
+     ce8:	49 2f       	mov	r20, r25
+     cea:	2e 83       	std	Y+6, r18	; 0x06
+     cec:	9d 83       	std	Y+5, r25	; 0x05
+     cee:	0e 94 68 05 	call	0xad0	; 0xad0 <DrawChar>
+     cf2:	9d 81       	ldd	r25, Y+5	; 0x05
+     cf4:	2e 81       	ldd	r18, Y+6	; 0x06
+        DrawPoint(i, i, false);
+	}
+
+	// заполнение карты единицами
+	for (uint8_t row = 0; row < A; row++) {
+		for (uint8_t col = 0; col < B; col++) {
+     cf6:	b3 94       	inc	r11
+     cf8:	23 5f       	subi	r18, 0xF3	; 243
+     cfa:	bd 14       	cp	r11, r13
+     cfc:	70 f3       	brcs	.-36     	; 0xcda <DrawKarno+0x14a>
+     cfe:	08 94       	sec
+     d00:	e1 1c       	adc	r14, r1
+     d02:	f1 1c       	adc	r15, r1
+     d04:	93 5f       	subi	r25, 0xF3	; 243
+	for (uint8_t i = 0; i < 13; i++) {
+        DrawPoint(i, i, false);
+	}
+
+	// заполнение карты единицами
+	for (uint8_t row = 0; row < A; row++) {
+     d06:	ec 14       	cp	r14, r12
+     d08:	50 f4       	brcc	.+20     	; 0xd1e <DrawKarno+0x18e>
+        }
+    }
+}
+
+// Рисование карты Карно
+void DrawKarno(uint8_t N) {
+     d0a:	87 01       	movw	r16, r14
+     d0c:	00 0f       	add	r16, r16
+     d0e:	11 1f       	adc	r17, r17
+     d10:	00 0f       	add	r16, r16
+     d12:	11 1f       	adc	r17, r17
+     d14:	0b 51       	subi	r16, 0x1B	; 27
+     d16:	1c 4f       	sbci	r17, 0xFC	; 252
+     d18:	21 e1       	ldi	r18, 0x11	; 17
+     d1a:	bb 24       	eor	r11, r11
+     d1c:	ee cf       	rjmp	.-36     	; 0xcfa <DrawKarno+0x16a>
+				uint8_t y = 16 + 13 * row;
+				DrawChar('2', x, y); // добавляем единицу на карту
+			}
+		}
+	}
+}
+     d1e:	26 96       	adiw	r28, 0x06	; 6
+     d20:	0f b6       	in	r0, 0x3f	; 63
+     d22:	f8 94       	cli
+     d24:	de bf       	out	0x3e, r29	; 62
+     d26:	0f be       	out	0x3f, r0	; 63
+     d28:	cd bf       	out	0x3d, r28	; 61
+     d2a:	cf 91       	pop	r28
+     d2c:	df 91       	pop	r29
+     d2e:	1f 91       	pop	r17
+     d30:	0f 91       	pop	r16
+     d32:	ff 90       	pop	r15
+     d34:	ef 90       	pop	r14
+     d36:	df 90       	pop	r13
+     d38:	cf 90       	pop	r12
+     d3a:	bf 90       	pop	r11
+     d3c:	af 90       	pop	r10
+     d3e:	08 95       	ret
+
+00000d40 <DrawImplicant>:
+
+// Выделение склеенных единиц
+void DrawImplicant() {
+     d40:	0f 93       	push	r16
+     d42:	1f 93       	push	r17
+  	// отмечаем склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     d44:	10 e0       	ldi	r17, 0x00	; 0
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+     d46:	0d e0       	ldi	r16, 0x0D	; 13
+}
+
+// Выделение склеенных единиц
+void DrawImplicant() {
+  	// отмечаем склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     d48:	1e c0       	rjmp	.+60     	; 0xd86 <DrawImplicant+0x46>
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
+     d4a:	f9 01       	movw	r30, r18
+     d4c:	ee 0f       	add	r30, r30
+     d4e:	ff 1f       	adc	r31, r31
+     d50:	ee 0f       	add	r30, r30
+     d52:	ff 1f       	adc	r31, r31
+     d54:	ee 54       	subi	r30, 0x4E	; 78
+     d56:	fc 4f       	sbci	r31, 0xFC	; 252
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+     d58:	80 81       	ld	r24, Z
+     d5a:	80 9f       	mul	r24, r16
+     d5c:	80 2d       	mov	r24, r0
+     d5e:	11 24       	eor	r1, r1
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+     d60:	68 2f       	mov	r22, r24
+     d62:	69 5e       	subi	r22, 0xE9	; 233
+
+// Выделение склеенных единиц
+void DrawImplicant() {
+  	// отмечаем склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+        uint8_t row = pt.items[i].row; // кооридната строки
+     d64:	f9 01       	movw	r30, r18
+     d66:	ee 0f       	add	r30, r30
+     d68:	ff 1f       	adc	r31, r31
+     d6a:	ee 0f       	add	r30, r30
+     d6c:	ff 1f       	adc	r31, r31
+     d6e:	e2 55       	subi	r30, 0x52	; 82
+     d70:	fc 4f       	sbci	r31, 0xFC	; 252
+        uint8_t col = pt.items[i].col; // координата столбца
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+     d72:	42 81       	ldd	r20, Z+2	; 0x02
+     d74:	40 9f       	mul	r20, r16
+     d76:	40 2d       	mov	r20, r0
+     d78:	11 24       	eor	r1, r1
+     d7a:	48 5e       	subi	r20, 0xE8	; 232
+	    DrawHorizontalLine(x1, x2, y, false);  
+     d7c:	80 5f       	subi	r24, 0xF0	; 240
+     d7e:	20 e0       	ldi	r18, 0x00	; 0
+     d80:	0e 94 38 05 	call	0xa70	; 0xa70 <DrawHorizontalLine>
+}
+
+// Выделение склеенных единиц
+void DrawImplicant() {
+  	// отмечаем склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     d84:	1f 5f       	subi	r17, 0xFF	; 255
+     d86:	21 2f       	mov	r18, r17
+     d88:	30 e0       	ldi	r19, 0x00	; 0
+     d8a:	80 91 ae 03 	lds	r24, 0x03AE
+     d8e:	90 91 af 03 	lds	r25, 0x03AF
+     d92:	82 17       	cp	r24, r18
+     d94:	93 07       	cpc	r25, r19
+     d96:	cc f6       	brge	.-78     	; 0xd4a <DrawImplicant+0xa>
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+	    DrawHorizontalLine(x1, x2, y, false);  
+    }
+	
+	RefreshDisplay();     // Обновляем дисплей из буфера
+     d98:	0e 94 75 04 	call	0x8ea	; 0x8ea <RefreshDisplay>
+
+	// убираем отмеченные склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     d9c:	10 e0       	ldi	r17, 0x00	; 0
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+     d9e:	0d e0       	ldi	r16, 0x0D	; 13
+    }
+	
+	RefreshDisplay();     // Обновляем дисплей из буфера
+
+	// убираем отмеченные склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     da0:	1e c0       	rjmp	.+60     	; 0xdde <DrawImplicant+0x9e>
+        uint8_t row = pt.items[i].row; // кооридната строки
+        uint8_t col = pt.items[i].col; // координата столбца
+     da2:	f9 01       	movw	r30, r18
+     da4:	ee 0f       	add	r30, r30
+     da6:	ff 1f       	adc	r31, r31
+     da8:	ee 0f       	add	r30, r30
+     daa:	ff 1f       	adc	r31, r31
+     dac:	ee 54       	subi	r30, 0x4E	; 78
+     dae:	fc 4f       	sbci	r31, 0xFC	; 252
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+     db0:	80 81       	ld	r24, Z
+     db2:	80 9f       	mul	r24, r16
+     db4:	80 2d       	mov	r24, r0
+     db6:	11 24       	eor	r1, r1
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+     db8:	68 2f       	mov	r22, r24
+     dba:	69 5e       	subi	r22, 0xE9	; 233
+	
+	RefreshDisplay();     // Обновляем дисплей из буфера
+
+	// убираем отмеченные склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+        uint8_t row = pt.items[i].row; // кооридната строки
+     dbc:	f9 01       	movw	r30, r18
+     dbe:	ee 0f       	add	r30, r30
+     dc0:	ff 1f       	adc	r31, r31
+     dc2:	ee 0f       	add	r30, r30
+     dc4:	ff 1f       	adc	r31, r31
+     dc6:	e2 55       	subi	r30, 0x52	; 82
+     dc8:	fc 4f       	sbci	r31, 0xFC	; 252
+        uint8_t col = pt.items[i].col; // координата столбца
+    
+	    uint8_t x1 = 16 + 13 * col;    // начало линии
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+     dca:	42 81       	ldd	r20, Z+2	; 0x02
+     dcc:	40 9f       	mul	r20, r16
+     dce:	40 2d       	mov	r20, r0
+     dd0:	11 24       	eor	r1, r1
+     dd2:	48 5e       	subi	r20, 0xE8	; 232
+	    DrawHorizontalLine(x1, x2, y, true);  
+     dd4:	80 5f       	subi	r24, 0xF0	; 240
+     dd6:	21 e0       	ldi	r18, 0x01	; 1
+     dd8:	0e 94 38 05 	call	0xa70	; 0xa70 <DrawHorizontalLine>
+    }
+	
+	RefreshDisplay();     // Обновляем дисплей из буфера
+
+	// убираем отмеченные склеенные единицы
+	for (unsigned char i = 0; i <= pt.top; i++) {
+     ddc:	1f 5f       	subi	r17, 0xFF	; 255
+     dde:	21 2f       	mov	r18, r17
+     de0:	30 e0       	ldi	r19, 0x00	; 0
+     de2:	80 91 ae 03 	lds	r24, 0x03AE
+     de6:	90 91 af 03 	lds	r25, 0x03AF
+     dea:	82 17       	cp	r24, r18
+     dec:	93 07       	cpc	r25, r19
+     dee:	cc f6       	brge	.-78     	; 0xda2 <DrawImplicant+0x62>
+	    uint8_t x2 = 23 + 13 * col;    // конец линии
+	    uint8_t y = 24 + 13 * row;     // координата по высоте линии
+	    DrawHorizontalLine(x1, x2, y, true);  
+    }
+
+}
+     df0:	1f 91       	pop	r17
+     df2:	0f 91       	pop	r16
+     df4:	08 95       	ret
+
+00000df6 <ClearDisplayBuffer>:
+
+// Функция для очистки буфера
+void ClearDisplayBuffer() {
+     df6:	2c ee       	ldi	r18, 0xEC	; 236
+     df8:	31 e0       	ldi	r19, 0x01	; 1
+     dfa:	80 e0       	ldi	r24, 0x00	; 0
+     dfc:	90 e0       	ldi	r25, 0x00	; 0
+     dfe:	0b c0       	rjmp	.+22     	; 0xe16 <ClearDisplayBuffer+0x20>
+    for (uint8_t page = 0; page < 8; page++) {
+        for (uint8_t column = 0; column < 64; column++) {
+            displayBuffer[page][column] = 0x00; // Обнуляем каждый байт буфера
+     e00:	11 92       	st	Z+, r1
+}
+
+// Функция для очистки буфера
+void ClearDisplayBuffer() {
+    for (uint8_t page = 0; page < 8; page++) {
+        for (uint8_t column = 0; column < 64; column++) {
+     e02:	e2 17       	cp	r30, r18
+     e04:	f3 07       	cpc	r31, r19
+     e06:	e1 f7       	brne	.-8      	; 0xe00 <ClearDisplayBuffer+0xa>
+     e08:	01 96       	adiw	r24, 0x01	; 1
+     e0a:	9f 01       	movw	r18, r30
+     e0c:	20 5c       	subi	r18, 0xC0	; 192
+     e0e:	3f 4f       	sbci	r19, 0xFF	; 255
+
+}
+
+// Функция для очистки буфера
+void ClearDisplayBuffer() {
+    for (uint8_t page = 0; page < 8; page++) {
+     e10:	88 30       	cpi	r24, 0x08	; 8
+     e12:	91 05       	cpc	r25, r1
+     e14:	49 f0       	breq	.+18     	; 0xe28 <ClearDisplayBuffer+0x32>
+    }
+
+}
+
+// Функция для очистки буфера
+void ClearDisplayBuffer() {
+     e16:	fc 01       	movw	r30, r24
+     e18:	46 e0       	ldi	r20, 0x06	; 6
+     e1a:	ee 0f       	add	r30, r30
+     e1c:	ff 1f       	adc	r31, r31
+     e1e:	4a 95       	dec	r20
+     e20:	e1 f7       	brne	.-8      	; 0xe1a <ClearDisplayBuffer+0x24>
+     e22:	e4 55       	subi	r30, 0x54	; 84
+     e24:	fe 4f       	sbci	r31, 0xFE	; 254
+     e26:	ec cf       	rjmp	.-40     	; 0xe00 <ClearDisplayBuffer+0xa>
+     e28:	08 95       	ret
+
+00000e2a <stepButtonPressed>:
+// -------------------------------------- Реализация работы с кнопками ------------------------------------------
+
+
+// проверка нажатия кнопки STEP(PD4)
+_Bool stepButtonPressed() {
+    return !(PIND & (1 << PIND4)); // Кнопка подключена к PIND4
+     e2a:	81 e0       	ldi	r24, 0x01	; 1
+     e2c:	84 99       	sbic	0x10, 4	; 16
+     e2e:	80 e0       	ldi	r24, 0x00	; 0
+}
+     e30:	08 95       	ret
+
+00000e32 <buttonInit>:
+
+void buttonInit() {
+    DDRD &= ~(1 << PD4);  // Устанавливаем PD4 как вход
+     e32:	8c 98       	cbi	0x11, 4	; 17
+    PORTD |= (1 << PD4);  // Включаем внутренний подтягивающий резистор
+     e34:	94 9a       	sbi	0x12, 4	; 18
+}
+     e36:	08 95       	ret
+
+00000e38 <setup_interrupts>:
+
+volatile _Bool step_flag = false; // Переменная-флаг
+
+void setup_interrupts() {
+    // Настройка INT0 и INT1 на низкий уровень
+    MCUCR |= (1 << ISC01) | (1 << ISC11); // INT0 и INT1 реагируют на спад
+     e38:	85 b7       	in	r24, 0x35	; 53
+     e3a:	8a 60       	ori	r24, 0x0A	; 10
+     e3c:	85 bf       	out	0x35, r24	; 53
+    GICR |= (1 << INT0) | (1 << INT1);   // Разрешаем прерывания INT0 и INT1
+     e3e:	8b b7       	in	r24, 0x3b	; 59
+     e40:	80 6c       	ori	r24, 0xC0	; 192
+     e42:	8b bf       	out	0x3b, r24	; 59
+
+    // Настройка PD2 и PD3 как входы
+    DDRD &= ~((1 << PD2) | (1 << PD3));  // Устанавливаем PD2 и PD3 как входы
+     e44:	81 b3       	in	r24, 0x11	; 17
+     e46:	83 7f       	andi	r24, 0xF3	; 243
+     e48:	81 bb       	out	0x11, r24	; 17
+    PORTD |= (1 << PD2) | (1 << PD3);    // Включаем подтяжку к Vcc
+     e4a:	82 b3       	in	r24, 0x12	; 18
+     e4c:	8c 60       	ori	r24, 0x0C	; 12
+     e4e:	82 bb       	out	0x12, r24	; 18
+}
+     e50:	08 95       	ret
+
+00000e52 <__vector_1>:
+
+// прерывание по сигналу 0 на PD2
+ISR(INT0_vect) {
+     e52:	1f 92       	push	r1
+     e54:	0f 92       	push	r0
+     e56:	0f b6       	in	r0, 0x3f	; 63
+     e58:	0f 92       	push	r0
+     e5a:	11 24       	eor	r1, r1
+     e5c:	2f 93       	push	r18
+     e5e:	3f 93       	push	r19
+     e60:	4f 93       	push	r20
+     e62:	5f 93       	push	r21
+     e64:	6f 93       	push	r22
+     e66:	7f 93       	push	r23
+     e68:	8f 93       	push	r24
+     e6a:	9f 93       	push	r25
+     e6c:	af 93       	push	r26
+     e6e:	bf 93       	push	r27
+     e70:	ef 93       	push	r30
+     e72:	ff 93       	push	r31
+    step_flag = true;  // Устанавливаем флаг
+     e74:	81 e0       	ldi	r24, 0x01	; 1
+     e76:	80 93 ac 03 	sts	0x03AC, r24
+	USARTTransmitStringLn("Пошаговый режим: Включен\r");
+     e7a:	80 e6       	ldi	r24, 0x60	; 96
+     e7c:	90 e0       	ldi	r25, 0x00	; 0
+     e7e:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+}
+     e82:	ff 91       	pop	r31
+     e84:	ef 91       	pop	r30
+     e86:	bf 91       	pop	r27
+     e88:	af 91       	pop	r26
+     e8a:	9f 91       	pop	r25
+     e8c:	8f 91       	pop	r24
+     e8e:	7f 91       	pop	r23
+     e90:	6f 91       	pop	r22
+     e92:	5f 91       	pop	r21
+     e94:	4f 91       	pop	r20
+     e96:	3f 91       	pop	r19
+     e98:	2f 91       	pop	r18
+     e9a:	0f 90       	pop	r0
+     e9c:	0f be       	out	0x3f, r0	; 63
+     e9e:	0f 90       	pop	r0
+     ea0:	1f 90       	pop	r1
+     ea2:	18 95       	reti
+
+00000ea4 <__vector_2>:
+
+// прерывание по сигналу 0 на PD3
+ISR(INT1_vect) {
+     ea4:	1f 92       	push	r1
+     ea6:	0f 92       	push	r0
+     ea8:	0f b6       	in	r0, 0x3f	; 63
+     eaa:	0f 92       	push	r0
+     eac:	11 24       	eor	r1, r1
+     eae:	2f 93       	push	r18
+     eb0:	3f 93       	push	r19
+     eb2:	4f 93       	push	r20
+     eb4:	5f 93       	push	r21
+     eb6:	6f 93       	push	r22
+     eb8:	7f 93       	push	r23
+     eba:	8f 93       	push	r24
+     ebc:	9f 93       	push	r25
+     ebe:	af 93       	push	r26
+     ec0:	bf 93       	push	r27
+     ec2:	ef 93       	push	r30
+     ec4:	ff 93       	push	r31
+    step_flag = false; // Сбрасываем флаг
+     ec6:	10 92 ac 03 	sts	0x03AC, r1
+	USARTTransmitStringLn("Пошаговый режим: Выключен\r");
+     eca:	8a e7       	ldi	r24, 0x7A	; 122
+     ecc:	90 e0       	ldi	r25, 0x00	; 0
+     ece:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+}
+     ed2:	ff 91       	pop	r31
+     ed4:	ef 91       	pop	r30
+     ed6:	bf 91       	pop	r27
+     ed8:	af 91       	pop	r26
+     eda:	9f 91       	pop	r25
+     edc:	8f 91       	pop	r24
+     ede:	7f 91       	pop	r23
+     ee0:	6f 91       	pop	r22
+     ee2:	5f 91       	pop	r21
+     ee4:	4f 91       	pop	r20
+     ee6:	3f 91       	pop	r19
+     ee8:	2f 91       	pop	r18
+     eea:	0f 90       	pop	r0
+     eec:	0f be       	out	0x3f, r0	; 63
+     eee:	0f 90       	pop	r0
+     ef0:	1f 90       	pop	r1
+     ef2:	18 95       	reti
+
+00000ef4 <main>:
+
+int main(void) {
+     ef4:	4f 92       	push	r4
+     ef6:	5f 92       	push	r5
+     ef8:	6f 92       	push	r6
+     efa:	7f 92       	push	r7
+     efc:	8f 92       	push	r8
+     efe:	9f 92       	push	r9
+     f00:	af 92       	push	r10
+     f02:	bf 92       	push	r11
+     f04:	cf 92       	push	r12
+     f06:	df 92       	push	r13
+     f08:	ef 92       	push	r14
+     f0a:	ff 92       	push	r15
+     f0c:	0f 93       	push	r16
+     f0e:	1f 93       	push	r17
+     f10:	df 93       	push	r29
+     f12:	cf 93       	push	r28
+     f14:	cd b7       	in	r28, 0x3d	; 61
+     f16:	de b7       	in	r29, 0x3e	; 62
+     f18:	2b 97       	sbiw	r28, 0x0b	; 11
+     f1a:	0f b6       	in	r0, 0x3f	; 63
+     f1c:	f8 94       	cli
+     f1e:	de bf       	out	0x3e, r29	; 62
+     f20:	0f be       	out	0x3f, r0	; 63
+     f22:	cd bf       	out	0x3d, r28	; 61
+	// Инициализация UART
+  	USARTInit(MYUBRR);
+     f24:	83 e3       	ldi	r24, 0x33	; 51
+     f26:	90 e0       	ldi	r25, 0x00	; 0
+     f28:	0e 94 3f 09 	call	0x127e	; 0x127e <USARTInit>
+  	USARTTransmitStringLn("Это программа минимизации БФ\r");
+     f2c:	85 e9       	ldi	r24, 0x95	; 149
+     f2e:	90 e0       	ldi	r25, 0x00	; 0
+     f30:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+
+	KS0108_Init();       // Инициализация дисплея
+     f34:	0e 94 2a 04 	call	0x854	; 0x854 <KS0108_Init>
+    KS0108_Clear();      // Очистка дисплея
+     f38:	0e 94 38 04 	call	0x870	; 0x870 <KS0108_Clear>
+
+
+	buttonInit();        // Инициализация кнопки PD4
+     f3c:	0e 94 19 07 	call	0xe32	; 0xe32 <buttonInit>
+	setup_interrupts();  // Настройка прерываний
+     f40:	0e 94 1c 07 	call	0xe38	; 0xe38 <setup_interrupts>
+    sei(); // Глобальное разрешение прерываний
+     f44:	78 94       	sei
+
+	uint8_t strSize = 50;  // Макс. размер строки
+	char str[strSize];     // Массив для принимаемой строки
+     f46:	8d b7       	in	r24, 0x3d	; 61
+     f48:	9e b7       	in	r25, 0x3e	; 62
+     f4a:	c2 97       	sbiw	r24, 0x32	; 50
+     f4c:	0f b6       	in	r0, 0x3f	; 63
+     f4e:	f8 94       	cli
+     f50:	9e bf       	out	0x3e, r25	; 62
+     f52:	0f be       	out	0x3f, r0	; 63
+     f54:	8d bf       	out	0x3d, r24	; 61
+     f56:	01 96       	adiw	r24, 0x01	; 1
+     f58:	78 2e       	mov	r7, r24
+     f5a:	59 2e       	mov	r5, r25
+		}
+
+		digit_to_string(digit, N);
+
+		USARTTransmitString("Запущен процесс минимизации функции от ");
+		USARTTransmitString(digit);
+     f5c:	8e 01       	movw	r16, r28
+     f5e:	0f 5f       	subi	r16, 0xFF	; 255
+     f60:	1f 4f       	sbci	r17, 0xFF	; 255
+	            for (uint8_t j = 0; j < B; j++) {
+	                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+	                    // USARTTransmitStringLn("Вызвана функция минимизации:\n");
+	                    if (minimize(i, j)) {
+							count_common_bits();
+							generate_implicant_string(implicant);
+     f62:	b3 e0       	ldi	r27, 0x03	; 3
+     f64:	ab 2e       	mov	r10, r27
+     f66:	b1 2c       	mov	r11, r1
+     f68:	ac 0e       	add	r10, r28
+     f6a:	bd 1e       	adc	r11, r29
+	uint8_t strSize = 50;  // Макс. размер строки
+	char str[strSize];     // Массив для принимаемой строки
+	char digit[2];		   // Буфер для вывода цифр
+
+	while (1) {
+		USARTTransmitStringLn("Введите функцию для минимизации\r");
+     f6c:	83 eb       	ldi	r24, 0xB3	; 179
+     f6e:	90 e0       	ldi	r25, 0x00	; 0
+     f70:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+    	USARTReceiveString(str, strSize); // Получение строки по UART
+     f74:	87 2d       	mov	r24, r7
+     f76:	95 2d       	mov	r25, r5
+     f78:	62 e3       	ldi	r22, 0x32	; 50
+     f7a:	0e 94 6a 09 	call	0x12d4	; 0x12d4 <USARTReceiveString>
+
+		USARTTransmitString("Введенная строка: ");
+     f7e:	84 ed       	ldi	r24, 0xD4	; 212
+     f80:	90 e0       	ldi	r25, 0x00	; 0
+     f82:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+    	USARTTransmitStringLn(str);
+     f86:	87 2d       	mov	r24, r7
+     f88:	95 2d       	mov	r25, r5
+     f8a:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+
+		if (!parse_numbers(str)) {   // получена некорректная строка
+     f8e:	87 2d       	mov	r24, r7
+     f90:	95 2d       	mov	r25, r5
+     f92:	0e 94 5d 00 	call	0xba	; 0xba <parse_numbers>
+     f96:	88 23       	and	r24, r24
+     f98:	39 f4       	brne	.+14     	; 0xfa8 <main+0xb4>
+    		USARTTransmitStringLn("Строка с ошибками. Повторите ввод!");
+     f9a:	87 ee       	ldi	r24, 0xE7	; 231
+     f9c:	90 e0       	ldi	r25, 0x00	; 0
+     f9e:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+			USARTTransmitStringLn("");
+     fa2:	8a e0       	ldi	r24, 0x0A	; 10
+     fa4:	91 e0       	ldi	r25, 0x01	; 1
+     fa6:	f9 c0       	rjmp	.+498    	; 0x119a <main+0x2a6>
+    }
+}
+
+// Функция для перевода цифру в строку
+void digit_to_string(char* digit, uint8_t num) {
+    digit[0] = num + '0';
+     fa8:	80 91 ad 03 	lds	r24, 0x03AD
+     fac:	80 5d       	subi	r24, 0xD0	; 208
+     fae:	89 83       	std	Y+1, r24	; 0x01
+    digit[1] = '\0';
+     fb0:	1a 82       	std	Y+2, r1	; 0x02
+			continue;
+		}
+
+		digit_to_string(digit, N);
+
+		USARTTransmitString("Запущен процесс минимизации функции от ");
+     fb2:	8b e0       	ldi	r24, 0x0B	; 11
+     fb4:	91 e0       	ldi	r25, 0x01	; 1
+     fb6:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+		USARTTransmitString(digit);
+     fba:	c8 01       	movw	r24, r16
+     fbc:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+		USARTTransmitStringLn(" переменных");
+     fc0:	83 e3       	ldi	r24, 0x33	; 51
+     fc2:	91 e0       	ldi	r25, 0x01	; 1
+     fc4:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+
+	    // Размеры карты Карно
+	    A = (N / 2) * 2;         // количество строк массива для N переменных
+     fc8:	80 91 ad 03 	lds	r24, 0x03AD
+     fcc:	98 2f       	mov	r25, r24
+     fce:	96 95       	lsr	r25
+     fd0:	29 2f       	mov	r18, r25
+     fd2:	22 0f       	add	r18, r18
+     fd4:	20 93 e4 03 	sts	0x03E4, r18
+	    B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
+     fd8:	89 1b       	sub	r24, r25
+     fda:	88 0f       	add	r24, r24
+     fdc:	80 93 f5 03 	sts	0x03F5, r24
+
+	    _Bool f_const = true;
+
+		generate_gray_code_matrix(); // Генерация и вывод матрицы кода Грея
+     fe0:	0e 94 bb 00 	call	0x176	; 0x176 <generate_gray_code_matrix>
+		fill_karnaugh_map();         // Заполнение карты Карно
+     fe4:	0e 94 38 01 	call	0x270	; 0x270 <fill_karnaugh_map>
+
+		// Работа с дисплеем
+		KS0108_Clear();       // Очистка дисплея
+     fe8:	0e 94 38 04 	call	0x870	; 0x870 <KS0108_Clear>
+		ClearDisplayBuffer(); // очистка буфера дисплея
+     fec:	0e 94 fb 06 	call	0xdf6	; 0xdf6 <ClearDisplayBuffer>
+		DrawKarno(N);      	  // вызов функции для рисования карты Карно
+     ff0:	80 91 ad 03 	lds	r24, 0x03AD
+     ff4:	0e 94 c8 05 	call	0xb90	; 0xb90 <DrawKarno>
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+     ff8:	0e 94 75 04 	call	0x8ea	; 0x8ea <RefreshDisplay>
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+     ffc:	50 91 e4 03 	lds	r21, 0x03E4
+	        for (uint8_t j = 0; j < B; j++)
+    1000:	40 91 f5 03 	lds	r20, 0x03F5
+		DrawKarno(N);      	  // вызов функции для рисования карты Карно
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+    1004:	80 e0       	ldi	r24, 0x00	; 0
+    1006:	90 e0       	ldi	r25, 0x00	; 0
+
+	    // Размеры карты Карно
+	    A = (N / 2) * 2;         // количество строк массива для N переменных
+	    B = (N - (N / 2)) * 2;   // количество столбцов массива для N переменных
+
+	    _Bool f_const = true;
+    1008:	31 e0       	ldi	r19, 0x01	; 1
+		DrawKarno(N);      	  // вызов функции для рисования карты Карно
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+    100a:	09 c0       	rjmp	.+18     	; 0x101e <main+0x12a>
+	        for (uint8_t j = 0; j < B; j++)
+	            if (kmap[i][j] == 0) {
+    100c:	61 91       	ld	r22, Z+
+    100e:	66 23       	and	r22, r22
+    1010:	21 f0       	breq	.+8      	; 0x101a <main+0x126>
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+	        for (uint8_t j = 0; j < B; j++)
+    1012:	2f 5f       	subi	r18, 0xFF	; 255
+    1014:	24 17       	cp	r18, r20
+    1016:	d0 f3       	brcs	.-12     	; 0x100c <main+0x118>
+    1018:	01 c0       	rjmp	.+2      	; 0x101c <main+0x128>
+	            if (kmap[i][j] == 0) {
+	                f_const = false;  // значит, f != C
+    101a:	30 e0       	ldi	r19, 0x00	; 0
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+	        for (uint8_t j = 0; j < B; j++)
+    101c:	01 96       	adiw	r24, 0x01	; 1
+		DrawKarno(N);      	  // вызов функции для рисования карты Карно
+		// DrawRectangle(15, 15, 24, 24);     // ОТЛАДКА
+		RefreshDisplay();     // Обновляем дисплей из буфера	
+
+	    // Проверка функции на константу
+	    for (uint8_t i = 0; i < A; i++) {
+    101e:	85 17       	cp	r24, r21
+    1020:	48 f4       	brcc	.+18     	; 0x1034 <main+0x140>
+ISR(INT1_vect) {
+    step_flag = false; // Сбрасываем флаг
+	USARTTransmitStringLn("Пошаговый режим: Выключен\r");
+}
+
+int main(void) {
+    1022:	fc 01       	movw	r30, r24
+    1024:	ee 0f       	add	r30, r30
+    1026:	ff 1f       	adc	r31, r31
+    1028:	ee 0f       	add	r30, r30
+    102a:	ff 1f       	adc	r31, r31
+    102c:	eb 51       	subi	r30, 0x1B	; 27
+    102e:	fc 4f       	sbci	r31, 0xFC	; 252
+    1030:	20 e0       	ldi	r18, 0x00	; 0
+    1032:	f0 cf       	rjmp	.-32     	; 0x1014 <main+0x120>
+	                break;
+	            }
+		}	
+
+	    // ОСНОВНОЙ АЛГОРИТМ
+	    if (!f_const) {
+    1034:	33 23       	and	r19, r19
+    1036:	09 f0       	breq	.+2      	; 0x103a <main+0x146>
+    1038:	ae c0       	rjmp	.+348    	; 0x1196 <main+0x2a2>
+	        initStack(&pt); 	         // инициализация стека
+    103a:	8e ea       	ldi	r24, 0xAE	; 174
+    103c:	93 e0       	ldi	r25, 0x03	; 3
+    103e:	0e 94 d0 08 	call	0x11a0	; 0x11a0 <initStack>
+			init_neighbors();			 // инициализация матрицы соседних единиц
+    1042:	0e 94 8d 01 	call	0x31a	; 0x31a <init_neighbors>
+			uint8_t line = 0;			
+
+	        char implicant[9]; // массив для результата	
+
+	        for (uint8_t i = 0; i < A; i++) {
+    1046:	99 24       	eor	r9, r9
+
+	    // ОСНОВНОЙ АЛГОРИТМ
+	    if (!f_const) {
+	        initStack(&pt); 	         // инициализация стека
+			init_neighbors();			 // инициализация матрицы соседних единиц
+			uint8_t line = 0;			
+    1048:	ee 24       	eor	r14, r14
+
+	        char implicant[9]; // массив для результата	
+
+	        for (uint8_t i = 0; i < A; i++) {
+    104a:	96 c0       	rjmp	.+300    	; 0x1178 <main+0x284>
+	            for (uint8_t j = 0; j < B; j++) {
+	                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+    104c:	c6 01       	movw	r24, r12
+    104e:	88 0d       	add	r24, r8
+    1050:	91 1d       	adc	r25, r1
+    1052:	fc 01       	movw	r30, r24
+    1054:	eb 51       	subi	r30, 0x1B	; 27
+    1056:	fc 4f       	sbci	r31, 0xFC	; 252
+    1058:	20 81       	ld	r18, Z
+    105a:	21 30       	cpi	r18, 0x01	; 1
+    105c:	09 f0       	breq	.+2      	; 0x1060 <main+0x16c>
+    105e:	85 c0       	rjmp	.+266    	; 0x116a <main+0x276>
+    1060:	84 56       	subi	r24, 0x64	; 100
+    1062:	9e 4f       	sbci	r25, 0xFE	; 254
+    1064:	dc 01       	movw	r26, r24
+    1066:	8c 91       	ld	r24, X
+    1068:	88 23       	and	r24, r24
+    106a:	09 f0       	breq	.+2      	; 0x106e <main+0x17a>
+    106c:	7e c0       	rjmp	.+252    	; 0x116a <main+0x276>
+	                    // USARTTransmitStringLn("Вызвана функция минимизации:\n");
+	                    if (minimize(i, j)) {
+    106e:	89 2d       	mov	r24, r9
+    1070:	68 2d       	mov	r22, r8
+    1072:	0e 94 95 02 	call	0x52a	; 0x52a <minimize>
+    1076:	88 23       	and	r24, r24
+    1078:	09 f4       	brne	.+2      	; 0x107c <main+0x188>
+    107a:	77 c0       	rjmp	.+238    	; 0x116a <main+0x276>
+							count_common_bits();
+    107c:	0e 94 99 01 	call	0x332	; 0x332 <count_common_bits>
+							generate_implicant_string(implicant);
+    1080:	c5 01       	movw	r24, r10
+    1082:	0e 94 23 02 	call	0x446	; 0x446 <generate_implicant_string>
+
+							// пошаговый вывод на дисплей
+							if (step_flag) {
+    1086:	80 91 ac 03 	lds	r24, 0x03AC
+    108a:	88 23       	and	r24, r24
+    108c:	39 f4       	brne	.+14     	; 0x109c <main+0x1a8>
+    108e:	20 c0       	rjmp	.+64     	; 0x10d0 <main+0x1dc>
+    1090:	ef e1       	ldi	r30, 0x1F	; 31
+    1092:	fe e4       	ldi	r31, 0x4E	; 78
+    1094:	31 97       	sbiw	r30, 0x01	; 1
+    1096:	f1 f7       	brne	.-4      	; 0x1094 <main+0x1a0>
+    1098:	00 c0       	rjmp	.+0      	; 0x109a <main+0x1a6>
+    109a:	00 00       	nop
+								// Ждём, пока кнопка будет отпущена
+	            				while (stepButtonPressed()) {
+    109c:	0e 94 15 07 	call	0xe2a	; 0xe2a <stepButtonPressed>
+    10a0:	88 23       	and	r24, r24
+    10a2:	b1 f7       	brne	.-20     	; 0x1090 <main+0x19c>
+    10a4:	06 c0       	rjmp	.+12     	; 0x10b2 <main+0x1be>
+    10a6:	8f e1       	ldi	r24, 0x1F	; 31
+    10a8:	9e e4       	ldi	r25, 0x4E	; 78
+    10aa:	01 97       	sbiw	r24, 0x01	; 1
+    10ac:	f1 f7       	brne	.-4      	; 0x10aa <main+0x1b6>
+    10ae:	00 c0       	rjmp	.+0      	; 0x10b0 <main+0x1bc>
+    10b0:	00 00       	nop
+	                				// Небольшая задержка для уменьшения нагрузки
+	                				_delay_ms(10);
+	            				}
+							
+								// Ждём, пока кнопка будет отпущена
+								while (!stepButtonPressed()) {
+    10b2:	0e 94 15 07 	call	0xe2a	; 0xe2a <stepButtonPressed>
+    10b6:	88 23       	and	r24, r24
+    10b8:	b1 f3       	breq	.-20     	; 0x10a6 <main+0x1b2>
+    10ba:	8f ef       	ldi	r24, 0xFF	; 255
+    10bc:	90 e7       	ldi	r25, 0x70	; 112
+    10be:	a2 e0       	ldi	r26, 0x02	; 2
+    10c0:	81 50       	subi	r24, 0x01	; 1
+    10c2:	90 40       	sbci	r25, 0x00	; 0
+    10c4:	a0 40       	sbci	r26, 0x00	; 0
+    10c6:	e1 f7       	brne	.-8      	; 0x10c0 <main+0x1cc>
+    10c8:	00 c0       	rjmp	.+0      	; 0x10ca <main+0x1d6>
+    10ca:	00 00       	nop
+	            				}
+								_delay_ms(100); // Задержка перед выводом
+
+								
+								// рисование импликанты на карте
+								DrawImplicant();
+    10cc:	0e 94 a0 06 	call	0xd40	; 0xd40 <DrawImplicant>
+							}
+
+							KS0108_WriteString(implicant, 80, line++); // вывод выражения на дисплей
+    10d0:	4e 2c       	mov	r4, r14
+    10d2:	43 94       	inc	r4
+    10d4:	c5 01       	movw	r24, r10
+    10d6:	60 e5       	ldi	r22, 0x50	; 80
+    10d8:	4e 2d       	mov	r20, r14
+    10da:	0e 94 de 04 	call	0x9bc	; 0x9bc <KS0108_WriteString>
+
+							// ОТЛАДКА
+							USARTTransmitString("\rПолучена");
+    10de:	8f e3       	ldi	r24, 0x3F	; 63
+    10e0:	91 e0       	ldi	r25, 0x01	; 1
+    10e2:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+							//digit_to_string(digit, ++num);
+							//USARTTransmitString(digit);
+							USARTTransmitString(" импликанта ");
+    10e6:	89 e4       	ldi	r24, 0x49	; 73
+    10e8:	91 e0       	ldi	r25, 0x01	; 1
+    10ea:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+							USARTTransmitStringLn(implicant);
+    10ee:	c5 01       	movw	r24, r10
+    10f0:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+							
+							// Вывод стека
+							USARTTransmitString("Stack: ");
+    10f4:	86 e5       	ldi	r24, 0x56	; 86
+    10f6:	91 e0       	ldi	r25, 0x01	; 1
+    10f8:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+						    for (uint8_t i = 0; i <= pt.top; i++) {
+    10fc:	66 24       	eor	r6, r6
+    10fe:	21 c0       	rjmp	.+66     	; 0x1142 <main+0x24e>
+
+								digit_to_string(digit, pt.items[i].row);
+    1100:	f7 01       	movw	r30, r14
+    1102:	ee 0f       	add	r30, r30
+    1104:	ff 1f       	adc	r31, r31
+    1106:	ee 0f       	add	r30, r30
+    1108:	ff 1f       	adc	r31, r31
+    110a:	e2 55       	subi	r30, 0x52	; 82
+    110c:	fc 4f       	sbci	r31, 0xFC	; 252
+    }
+}
+
+// Функция для перевода цифру в строку
+void digit_to_string(char* digit, uint8_t num) {
+    digit[0] = num + '0';
+    110e:	82 81       	ldd	r24, Z+2	; 0x02
+    1110:	80 5d       	subi	r24, 0xD0	; 208
+    1112:	89 83       	std	Y+1, r24	; 0x01
+    digit[1] = '\0';
+    1114:	1a 82       	std	Y+2, r1	; 0x02
+							// Вывод стека
+							USARTTransmitString("Stack: ");
+						    for (uint8_t i = 0; i <= pt.top; i++) {
+
+								digit_to_string(digit, pt.items[i].row);
+								USARTTransmitString(digit); // Отправляем строку по UART
+    1116:	c8 01       	movw	r24, r16
+    1118:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+
+								digit_to_string(digit, pt.items[i].col);
+    111c:	f7 01       	movw	r30, r14
+    111e:	ee 0f       	add	r30, r30
+    1120:	ff 1f       	adc	r31, r31
+    1122:	ee 0f       	add	r30, r30
+    1124:	ff 1f       	adc	r31, r31
+    1126:	ee 54       	subi	r30, 0x4E	; 78
+    1128:	fc 4f       	sbci	r31, 0xFC	; 252
+    }
+}
+
+// Функция для перевода цифру в строку
+void digit_to_string(char* digit, uint8_t num) {
+    digit[0] = num + '0';
+    112a:	80 81       	ld	r24, Z
+    112c:	80 5d       	subi	r24, 0xD0	; 208
+    112e:	89 83       	std	Y+1, r24	; 0x01
+    digit[1] = '\0';
+    1130:	1a 82       	std	Y+2, r1	; 0x02
+
+								digit_to_string(digit, pt.items[i].row);
+								USARTTransmitString(digit); // Отправляем строку по UART
+
+								digit_to_string(digit, pt.items[i].col);
+								USARTTransmitString(digit); // Отправляем строку по UART
+    1132:	c8 01       	movw	r24, r16
+    1134:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+								USARTTransmitString(" ");
+    1138:	8e e5       	ldi	r24, 0x5E	; 94
+    113a:	91 e0       	ldi	r25, 0x01	; 1
+    113c:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+							USARTTransmitString(" импликанта ");
+							USARTTransmitStringLn(implicant);
+							
+							// Вывод стека
+							USARTTransmitString("Stack: ");
+						    for (uint8_t i = 0; i <= pt.top; i++) {
+    1140:	63 94       	inc	r6
+    1142:	e6 2c       	mov	r14, r6
+    1144:	ff 24       	eor	r15, r15
+    1146:	80 91 ae 03 	lds	r24, 0x03AE
+    114a:	90 91 af 03 	lds	r25, 0x03AF
+    114e:	8e 15       	cp	r24, r14
+    1150:	9f 05       	cpc	r25, r15
+    1152:	b4 f6       	brge	.-84     	; 0x1100 <main+0x20c>
+
+								digit_to_string(digit, pt.items[i].col);
+								USARTTransmitString(digit); // Отправляем строку по UART
+								USARTTransmitString(" ");
+							}	
+							USARTTransmitString("\r");						
+    1154:	80 e6       	ldi	r24, 0x60	; 96
+    1156:	91 e0       	ldi	r25, 0x01	; 1
+    1158:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+
+							init_neighbors();             // очистка матрицы соседних единиц
+    115c:	0e 94 8d 01 	call	0x31a	; 0x31a <init_neighbors>
+	                        clear(&pt);                   // очистка стека
+    1160:	8e ea       	ldi	r24, 0xAE	; 174
+    1162:	93 e0       	ldi	r25, 0x03	; 3
+    1164:	0e 94 1e 09 	call	0x123c	; 0x123c <clear>
+								
+								// рисование импликанты на карте
+								DrawImplicant();
+							}
+
+							KS0108_WriteString(implicant, 80, line++); // вывод выражения на дисплей
+    1168:	e4 2c       	mov	r14, r4
+			uint8_t line = 0;			
+
+	        char implicant[9]; // массив для результата	
+
+	        for (uint8_t i = 0; i < A; i++) {
+	            for (uint8_t j = 0; j < B; j++) {
+    116a:	83 94       	inc	r8
+    116c:	80 91 f5 03 	lds	r24, 0x03F5
+    1170:	88 16       	cp	r8, r24
+    1172:	08 f4       	brcc	.+2      	; 0x1176 <main+0x282>
+    1174:	6b cf       	rjmp	.-298    	; 0x104c <main+0x158>
+			init_neighbors();			 // инициализация матрицы соседних единиц
+			uint8_t line = 0;			
+
+	        char implicant[9]; // массив для результата	
+
+	        for (uint8_t i = 0; i < A; i++) {
+    1176:	93 94       	inc	r9
+    1178:	80 91 e4 03 	lds	r24, 0x03E4
+    117c:	98 16       	cp	r9, r24
+    117e:	40 f4       	brcc	.+16     	; 0x1190 <main+0x29c>
+    1180:	88 24       	eor	r8, r8
+	            for (uint8_t j = 0; j < B; j++) {
+	                if ((kmap[i][j] == 1) && (!kmap_bool[i][j])) {
+    1182:	c9 2c       	mov	r12, r9
+    1184:	dd 24       	eor	r13, r13
+    1186:	cc 0c       	add	r12, r12
+    1188:	dd 1c       	adc	r13, r13
+    118a:	cc 0c       	add	r12, r12
+    118c:	dd 1c       	adc	r13, r13
+    118e:	ee cf       	rjmp	.-36     	; 0x116c <main+0x278>
+	                        clear(&pt);                   // очистка стека
+	                    }
+	                }
+	            }
+	        }
+			USARTTransmitStringLn("\rМинимизация завершена\r");
+    1190:	82 e6       	ldi	r24, 0x62	; 98
+    1192:	91 e0       	ldi	r25, 0x01	; 1
+    1194:	02 c0       	rjmp	.+4      	; 0x119a <main+0x2a6>
+	    }
+	    else
+	    {
+	        USARTTransmitStringLn("\rВведённая функция f = 1\r"); // ОТЛАДКА
+    1196:	8a e7       	ldi	r24, 0x7A	; 122
+    1198:	91 e0       	ldi	r25, 0x01	; 1
+    119a:	0e 94 5d 09 	call	0x12ba	; 0x12ba <USARTTransmitStringLn>
+    119e:	e6 ce       	rjmp	.-564    	; 0xf6c <main+0x78>
+
+000011a0 <initStack>:
+
+
+
+// вспомогательная функция для инициализации stack
+void initStack(Stack* pt) {
+    pt->top = -1; // указывает на пустой стек
+    11a0:	2f ef       	ldi	r18, 0xFF	; 255
+    11a2:	3f ef       	ldi	r19, 0xFF	; 255
+    11a4:	fc 01       	movw	r30, r24
+    11a6:	31 83       	std	Z+1, r19	; 0x01
+    11a8:	20 83       	st	Z, r18
+}
+    11aa:	08 95       	ret
+
+000011ac <size>:
+
+// вспомогательная функция для возврата размера stack
+int size(const Stack* pt) {
+    return pt->top + 1;
+    11ac:	fc 01       	movw	r30, r24
+    11ae:	20 81       	ld	r18, Z
+    11b0:	31 81       	ldd	r19, Z+1	; 0x01
+    11b2:	2f 5f       	subi	r18, 0xFF	; 255
+    11b4:	3f 4f       	sbci	r19, 0xFF	; 255
+}
+    11b6:	c9 01       	movw	r24, r18
+    11b8:	08 95       	ret
+
+000011ba <push>:
+
+// вспомогательная функция для добавления элемента 'pos' в stack
+void push(Stack* pt, IndexPair pos)
+{
+    11ba:	fc 01       	movw	r30, r24
+	// USARTTransmitStringLn(buffer); // Отправляем строку по UART
+	
+    // printf("Inserting (%d, %d)\n", pos.row, pos.col);
+
+    // добавляем элемент и увеличиваем индекс вершины
+    pt->items[++pt->top] = pos;
+    11bc:	80 81       	ld	r24, Z
+    11be:	91 81       	ldd	r25, Z+1	; 0x01
+    11c0:	01 96       	adiw	r24, 0x01	; 1
+    11c2:	91 83       	std	Z+1, r25	; 0x01
+    11c4:	80 83       	st	Z, r24
+    11c6:	dc 01       	movw	r26, r24
+    11c8:	aa 0f       	add	r26, r26
+    11ca:	bb 1f       	adc	r27, r27
+    11cc:	aa 0f       	add	r26, r26
+    11ce:	bb 1f       	adc	r27, r27
+    11d0:	ae 0f       	add	r26, r30
+    11d2:	bf 1f       	adc	r27, r31
+    11d4:	12 96       	adiw	r26, 0x02	; 2
+    11d6:	4d 93       	st	X+, r20
+    11d8:	5d 93       	st	X+, r21
+    11da:	6d 93       	st	X+, r22
+    11dc:	7c 93       	st	X, r23
+    11de:	15 97       	sbiw	r26, 0x05	; 5
+}
+    11e0:	08 95       	ret
+
+000011e2 <peek>:
+IndexPair peek(Stack* pt)
+{
+    //printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
+
+    // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
+    return pt->items[pt->top];
+    11e2:	fc 01       	movw	r30, r24
+    11e4:	a0 81       	ld	r26, Z
+    11e6:	b1 81       	ldd	r27, Z+1	; 0x01
+    11e8:	aa 0f       	add	r26, r26
+    11ea:	bb 1f       	adc	r27, r27
+    11ec:	aa 0f       	add	r26, r26
+    11ee:	bb 1f       	adc	r27, r27
+    11f0:	a8 0f       	add	r26, r24
+    11f2:	b9 1f       	adc	r27, r25
+    11f4:	fd 01       	movw	r30, r26
+    11f6:	32 96       	adiw	r30, 0x02	; 2
+    11f8:	12 96       	adiw	r26, 0x02	; 2
+    11fa:	6c 91       	ld	r22, X
+    11fc:	12 97       	sbiw	r26, 0x02	; 2
+    11fe:	71 81       	ldd	r23, Z+1	; 0x01
+}
+    1200:	82 81       	ldd	r24, Z+2	; 0x02
+    1202:	93 81       	ldd	r25, Z+3	; 0x03
+    1204:	08 95       	ret
+
+00001206 <pop>:
+
+// вспомогательная функция для извлечения верхнего элемента из stack
+IndexPair pop(Stack* pt)
+{
+    1206:	cf 93       	push	r28
+    1208:	df 93       	push	r29
+    120a:	dc 01       	movw	r26, r24
+	// USARTTransmitStringLn(buffer); // Отправляем строку по UART
+
+    // printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
+
+    // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
+    return pt->items[pt->top--];
+    120c:	2d 91       	ld	r18, X+
+    120e:	3c 91       	ld	r19, X
+    1210:	11 97       	sbiw	r26, 0x01	; 1
+    1212:	f9 01       	movw	r30, r18
+    1214:	ee 0f       	add	r30, r30
+    1216:	ff 1f       	adc	r31, r31
+    1218:	ee 0f       	add	r30, r30
+    121a:	ff 1f       	adc	r31, r31
+    121c:	e8 0f       	add	r30, r24
+    121e:	f9 1f       	adc	r31, r25
+    1220:	ef 01       	movw	r28, r30
+    1222:	22 96       	adiw	r28, 0x02	; 2
+    1224:	62 81       	ldd	r22, Z+2	; 0x02
+    1226:	79 81       	ldd	r23, Y+1	; 0x01
+    1228:	8a 81       	ldd	r24, Y+2	; 0x02
+    122a:	9b 81       	ldd	r25, Y+3	; 0x03
+    122c:	21 50       	subi	r18, 0x01	; 1
+    122e:	30 40       	sbci	r19, 0x00	; 0
+    1230:	11 96       	adiw	r26, 0x01	; 1
+    1232:	3c 93       	st	X, r19
+    1234:	2e 93       	st	-X, r18
+}
+    1236:	df 91       	pop	r29
+    1238:	cf 91       	pop	r28
+    123a:	08 95       	ret
+
+0000123c <clear>:
+
+void clear(Stack* pt)
+{
+    pt->top = -1;
+    123c:	2f ef       	ldi	r18, 0xFF	; 255
+    123e:	3f ef       	ldi	r19, 0xFF	; 255
+    1240:	fc 01       	movw	r30, r24
+    1242:	31 83       	std	Z+1, r19	; 0x01
+    1244:	20 83       	st	Z, r18
+}
+    1246:	08 95       	ret
+
+00001248 <include>:
+
+// Вспомогательная функция для проверки наличия элемента в stack
+_Bool include(const Stack* pt, IndexPair pos)
+{
+    for (int i = 0; i <= pt->top; i++) {
+    1248:	fc 01       	movw	r30, r24
+    124a:	a0 81       	ld	r26, Z
+    124c:	b1 81       	ldd	r27, Z+1	; 0x01
+        if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {
+    124e:	9a 01       	movw	r18, r20
+    1250:	ab 01       	movw	r20, r22
+}
+
+// Вспомогательная функция для проверки наличия элемента в stack
+_Bool include(const Stack* pt, IndexPair pos)
+{
+    for (int i = 0; i <= pt->top; i++) {
+    1252:	80 e0       	ldi	r24, 0x00	; 0
+    1254:	90 e0       	ldi	r25, 0x00	; 0
+    1256:	0c c0       	rjmp	.+24     	; 0x1270 <include+0x28>
+        if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {
+    1258:	62 81       	ldd	r22, Z+2	; 0x02
+    125a:	73 81       	ldd	r23, Z+3	; 0x03
+    125c:	62 17       	cp	r22, r18
+    125e:	73 07       	cpc	r23, r19
+    1260:	29 f4       	brne	.+10     	; 0x126c <include+0x24>
+    1262:	64 81       	ldd	r22, Z+4	; 0x04
+    1264:	75 81       	ldd	r23, Z+5	; 0x05
+    1266:	64 17       	cp	r22, r20
+    1268:	75 07       	cpc	r23, r21
+    126a:	39 f0       	breq	.+14     	; 0x127a <include+0x32>
+}
+
+// Вспомогательная функция для проверки наличия элемента в stack
+_Bool include(const Stack* pt, IndexPair pos)
+{
+    for (int i = 0; i <= pt->top; i++) {
+    126c:	01 96       	adiw	r24, 0x01	; 1
+    126e:	34 96       	adiw	r30, 0x04	; 4
+    1270:	a8 17       	cp	r26, r24
+    1272:	b9 07       	cpc	r27, r25
+    1274:	8c f7       	brge	.-30     	; 0x1258 <include+0x10>
+        if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {
+            return true;
+        }
+    }
+    return false;
+    1276:	80 e0       	ldi	r24, 0x00	; 0
+    1278:	08 95       	ret
+// Вспомогательная функция для проверки наличия элемента в stack
+_Bool include(const Stack* pt, IndexPair pos)
+{
+    for (int i = 0; i <= pt->top; i++) {
+        if (pt->items[i].row == pos.row && pt->items[i].col == pos.col) {
+            return true;
+    127a:	81 e0       	ldi	r24, 0x01	; 1
+        }
+    }
+    return false;
+}
+    127c:	08 95       	ret
+
+0000127e <USARTInit>:
+
+void USARTInit(unsigned int ubrr) {
+  //  нормальный асинхронный двунаправленный режим работы
+  //  UBRR = f / (16 * band)
+  //  Установка скорости
+  UBRRH = (unsigned char)(ubrr>>8);
+    127e:	90 bd       	out	0x20, r25	; 32
+  UBRRL = (unsigned char)(ubrr);
+    1280:	89 b9       	out	0x09, r24	; 9
+
+  // Настройка формата кадра: 8 бит данных, 1 стоп-бит, без четности
+  UCSRC = (1 << URSEL) | (1 << UCSZ1) | (1 << UCSZ0);
+    1282:	86 e8       	ldi	r24, 0x86	; 134
+    1284:	80 bd       	out	0x20, r24	; 32
+
+  // Включение приемника и передатчика
+  UCSRB = (1 << RXEN) | (1 << TXEN);
+    1286:	88 e1       	ldi	r24, 0x18	; 24
+    1288:	8a b9       	out	0x0a, r24	; 10
+}
+    128a:	08 95       	ret
+
+0000128c <USARTTransmitChar>:
+
+//  Отправка байта
+void USARTTransmitChar(char c) {
+  //  Устанавливается, когда регистр свободен
+  while(!( UCSRA & (1<<UDRE)));
+    128c:	5d 9b       	sbis	0x0b, 5	; 11
+    128e:	fe cf       	rjmp	.-4      	; 0x128c <USARTTransmitChar>
+  UDR = c;
+    1290:	8c b9       	out	0x0c, r24	; 12
+}
+    1292:	08 95       	ret
+
+00001294 <USARTTransmitString>:
+
+//  Отправка строки
+void USARTTransmitString(char str[]) {
+    1294:	1f 93       	push	r17
+    1296:	cf 93       	push	r28
+    1298:	df 93       	push	r29
+    129a:	ec 01       	movw	r28, r24
+  register char i = 0;
+    129c:	10 e0       	ldi	r17, 0x00	; 0
+  while(str[i]) {
+    129e:	03 c0       	rjmp	.+6      	; 0x12a6 <USARTTransmitString+0x12>
+    USARTTransmitChar(str[i++]);
+    12a0:	1f 5f       	subi	r17, 0xFF	; 255
+    12a2:	0e 94 46 09 	call	0x128c	; 0x128c <USARTTransmitChar>
+}
+
+//  Отправка строки
+void USARTTransmitString(char str[]) {
+  register char i = 0;
+  while(str[i]) {
+    12a6:	fe 01       	movw	r30, r28
+    12a8:	e1 0f       	add	r30, r17
+    12aa:	f1 1d       	adc	r31, r1
+    12ac:	80 81       	ld	r24, Z
+    12ae:	88 23       	and	r24, r24
+    12b0:	b9 f7       	brne	.-18     	; 0x12a0 <USARTTransmitString+0xc>
+    USARTTransmitChar(str[i++]);
+  }
+}
+    12b2:	df 91       	pop	r29
+    12b4:	cf 91       	pop	r28
+    12b6:	1f 91       	pop	r17
+    12b8:	08 95       	ret
+
+000012ba <USARTTransmitStringLn>:
+
+//  Отправка строки
+void USARTTransmitStringLn(char str[]) {
+  USARTTransmitString(str);
+    12ba:	0e 94 4a 09 	call	0x1294	; 0x1294 <USARTTransmitString>
+  USARTTransmitChar((char)13);
+    12be:	8d e0       	ldi	r24, 0x0D	; 13
+    12c0:	0e 94 46 09 	call	0x128c	; 0x128c <USARTTransmitChar>
+  USARTTransmitChar((char)10);
+    12c4:	8a e0       	ldi	r24, 0x0A	; 10
+    12c6:	0e 94 46 09 	call	0x128c	; 0x128c <USARTTransmitChar>
+}
+    12ca:	08 95       	ret
+
+000012cc <USARTReceiveChar>:
+
+//  Получение байта
+char USARTReceiveChar(void) {
+  //  Устанавливается, когда регистр свободен
+  while(!(UCSRA & (1<<RXC)));
+    12cc:	5f 9b       	sbis	0x0b, 7	; 11
+    12ce:	fe cf       	rjmp	.-4      	; 0x12cc <USARTReceiveChar>
+  return UDR;
+    12d0:	8c b1       	in	r24, 0x0c	; 12
+}
+    12d2:	08 95       	ret
+
+000012d4 <USARTReceiveString>:
+
+// Получение строки
+void USARTReceiveString(char* buf, uint8_t n) {
+    12d4:	cf 92       	push	r12
+    12d6:	df 92       	push	r13
+    12d8:	ff 92       	push	r15
+    12da:	0f 93       	push	r16
+    12dc:	1f 93       	push	r17
+    12de:	df 93       	push	r29
+    12e0:	cf 93       	push	r28
+    12e2:	0f 92       	push	r0
+    12e4:	cd b7       	in	r28, 0x3d	; 61
+    12e6:	de b7       	in	r29, 0x3e	; 62
+    12e8:	6c 01       	movw	r12, r24
+  uint8_t bufIdx = 0;
+    12ea:	8c 01       	movw	r16, r24
+    12ec:	ff 24       	eor	r15, r15
+  char c;
+
+  do
+  {
+    c = USARTReceiveChar();   // получаем символ
+    12ee:	69 83       	std	Y+1, r22	; 0x01
+    12f0:	0e 94 66 09 	call	0x12cc	; 0x12cc <USARTReceiveChar>
+
+    buf[bufIdx++] = c; // Записываем символ в строку
+    12f4:	f8 01       	movw	r30, r16
+    12f6:	81 93       	st	Z+, r24
+    12f8:	8f 01       	movw	r16, r30
+    12fa:	f3 94       	inc	r15
+  }
+  while((bufIdx < n) && (c != '\r'));
+    12fc:	69 81       	ldd	r22, Y+1	; 0x01
+    12fe:	f6 16       	cp	r15, r22
+    1300:	10 f4       	brcc	.+4      	; 0x1306 <USARTReceiveString+0x32>
+    1302:	8d 30       	cpi	r24, 0x0D	; 13
+    1304:	a1 f7       	brne	.-24     	; 0x12ee <USARTReceiveString+0x1a>
+
+  buf[bufIdx-1] = 0;     // Завершаем строку нулём-терминатором
+    1306:	f6 01       	movw	r30, r12
+    1308:	ef 0d       	add	r30, r15
+    130a:	f1 1d       	adc	r31, r1
+    130c:	31 97       	sbiw	r30, 0x01	; 1
+    130e:	10 82       	st	Z, r1
+}
+    1310:	0f 90       	pop	r0
+    1312:	cf 91       	pop	r28
+    1314:	df 91       	pop	r29
+    1316:	1f 91       	pop	r17
+    1318:	0f 91       	pop	r16
+    131a:	ff 90       	pop	r15
+    131c:	df 90       	pop	r13
+    131e:	cf 90       	pop	r12
+    1320:	08 95       	ret
+
+00001322 <__divmodhi4>:
+    1322:	97 fb       	bst	r25, 7
+    1324:	09 2e       	mov	r0, r25
+    1326:	07 26       	eor	r0, r23
+    1328:	0a d0       	rcall	.+20     	; 0x133e <__divmodhi4_neg1>
+    132a:	77 fd       	sbrc	r23, 7
+    132c:	04 d0       	rcall	.+8      	; 0x1336 <__divmodhi4_neg2>
+    132e:	0c d0       	rcall	.+24     	; 0x1348 <__udivmodhi4>
+    1330:	06 d0       	rcall	.+12     	; 0x133e <__divmodhi4_neg1>
+    1332:	00 20       	and	r0, r0
+    1334:	1a f4       	brpl	.+6      	; 0x133c <__divmodhi4_exit>
+
+00001336 <__divmodhi4_neg2>:
+    1336:	70 95       	com	r23
+    1338:	61 95       	neg	r22
+    133a:	7f 4f       	sbci	r23, 0xFF	; 255
+
+0000133c <__divmodhi4_exit>:
+    133c:	08 95       	ret
+
+0000133e <__divmodhi4_neg1>:
+    133e:	f6 f7       	brtc	.-4      	; 0x133c <__divmodhi4_exit>
+    1340:	90 95       	com	r25
+    1342:	81 95       	neg	r24
+    1344:	9f 4f       	sbci	r25, 0xFF	; 255
+    1346:	08 95       	ret
+
+00001348 <__udivmodhi4>:
+    1348:	aa 1b       	sub	r26, r26
+    134a:	bb 1b       	sub	r27, r27
+    134c:	51 e1       	ldi	r21, 0x11	; 17
+    134e:	07 c0       	rjmp	.+14     	; 0x135e <__udivmodhi4_ep>
+
+00001350 <__udivmodhi4_loop>:
+    1350:	aa 1f       	adc	r26, r26
+    1352:	bb 1f       	adc	r27, r27
+    1354:	a6 17       	cp	r26, r22
+    1356:	b7 07       	cpc	r27, r23
+    1358:	10 f0       	brcs	.+4      	; 0x135e <__udivmodhi4_ep>
+    135a:	a6 1b       	sub	r26, r22
+    135c:	b7 0b       	sbc	r27, r23
+
+0000135e <__udivmodhi4_ep>:
+    135e:	88 1f       	adc	r24, r24
+    1360:	99 1f       	adc	r25, r25
+    1362:	5a 95       	dec	r21
+    1364:	a9 f7       	brne	.-22     	; 0x1350 <__udivmodhi4_loop>
+    1366:	80 95       	com	r24
+    1368:	90 95       	com	r25
+    136a:	bc 01       	movw	r22, r24
+    136c:	cd 01       	movw	r24, r26
+    136e:	08 95       	ret
+
+00001370 <_exit>:
+    1370:	f8 94       	cli
+
+00001372 <__stop_program>:
+    1372:	ff cf       	rjmp	.-2      	; 0x1372 <__stop_program>

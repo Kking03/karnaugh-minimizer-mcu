@@ -1,5 +1,10 @@
 #include "stack.h"
 
+// ДЛЯ ВЫВОДА 
+// char buffer[5]; // Буфер для строки (максимум 4 символа + '\0' для uint8_t)
+
+
+
 // вспомогательная функция для инициализации stack
 void initStack(Stack* pt) {
     pt->top = -1; // указывает на пустой стек
@@ -13,7 +18,16 @@ int size(const Stack* pt) {
 // вспомогательная функция для добавления элемента 'pos' в stack
 void push(Stack* pt, IndexPair pos)
 {
-    // printf("Inserting (%d, %d)\n", pos.row, pos.col);  // ОТЛАДОЧНЫЙ ВЫВОД
+	// ОТЛАДОЧНЫЙ ВЫВОД
+	// USARTTransmitString("Inserting: ");
+
+	// itoa(pos.row, buffer, 10);
+	// USARTTransmitString(buffer); // Отправляем строку по UART
+
+	// itoa(pos.col, buffer, 10);
+	// USARTTransmitStringLn(buffer); // Отправляем строку по UART
+	
+    // printf("Inserting (%d, %d)\n", pos.row, pos.col);
 
     // добавляем элемент и увеличиваем индекс вершины
     pt->items[++pt->top] = pos;
@@ -31,6 +45,15 @@ IndexPair peek(Stack* pt)
 // вспомогательная функция для извлечения верхнего элемента из stack
 IndexPair pop(Stack* pt)
 {
+	// ОТЛАДОЧНЫЙ ВЫВОД
+	// USARTTransmitString("Removing: ");
+
+	// itoa(pt->items[pt->top].row, buffer, 10);
+	// USARTTransmitString(buffer); // Отправляем строку по UART
+
+	// itoa(pt->items[pt->top].col, buffer, 10);
+	// USARTTransmitStringLn(buffer); // Отправляем строку по UART
+
     // printf("Removing (%d, %d)\n", pt->items[pt->top].row, pt->items[pt->top].col);  // ОТЛАДОЧНЫЙ ВЫВОД
 
     // уменьшаем размер stack на 1 и возвращаем извлеченный элемент
